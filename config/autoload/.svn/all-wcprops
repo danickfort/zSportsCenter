@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/tuto-zf2/!svn/ver/4/config/autoload
+END
+local.php.dist
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/tuto-zf2/!svn/ver/1/config/autoload/local.php.dist
+END
+.gitignore
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/tuto-zf2/!svn/ver/1/config/autoload/.gitignore
+END
+global.php
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/tuto-zf2/!svn/ver/1/config/autoload/global.php
+END
+README.md
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/tuto-zf2/!svn/ver/1/config/autoload/README.md
+END

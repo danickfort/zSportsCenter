@@ -1,0 +1,11 @@
+K 10
+svn:ignore
+V 57
+bin
+composer
+doctrine
+symfony
+zendframework
+autoload.php
+
+END
