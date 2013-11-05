@@ -1,0 +1,9 @@
+
+/**
+ * You can create styles for the components you add to pages. You can configure a few basic
+ * styles such as border style, stroke color, and fill color using the component properties.
+ * You can create arbitrary styles using this style sheet. Styles specified here are
+ * automatically included in every design in this project.
+ * 
+ * To learn more about Cascading Style Sheets (CSS) please visit http://www.w3.org/Style/CSS/ 
+ */
