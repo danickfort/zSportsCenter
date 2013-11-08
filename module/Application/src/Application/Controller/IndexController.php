@@ -16,13 +16,17 @@ use Application\Model\Entity\Post;
 
 class IndexController extends AbstractActionController {
 	
-    public function indexAction() {
+    public function indexAction() {	
+
         // Permet d'obtenir la liste des posts actuellement en base
          $em = $this->entity()->getEntityManager();
+
          $posts = $em->createQuery("SELECT p from Application\Model\Entity\Post p ORDER BY p.date DESC")->getResult();
 			return new ViewModel(array( 
-			'posts' => $posts 
-		)); 
+			'posts' => $posts,
+		));
+
+
     }
     
     public function addPostAction() {
