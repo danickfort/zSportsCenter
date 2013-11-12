@@ -1,5 +1,4 @@
 <?php
-// cli-config.php
 require_once 'my_bootstrap.php';
 
 $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(

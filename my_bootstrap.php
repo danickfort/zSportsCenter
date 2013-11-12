@@ -13,7 +13,7 @@ $dbParams = array(
     'driver'   => 'pdo_mysql',
     'user'     => 'root',
     'password' => 'from4ge',
-    'dbname'   => 'zscdb',
+    'dbname'   => 'arcblog',
 );
 
 $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
