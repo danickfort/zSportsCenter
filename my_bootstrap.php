@@ -12,8 +12,8 @@ $isDevMode = false;
 $dbParams = array(
     'driver'   => 'pdo_mysql',
     'user'     => 'root',
-    'password' => '',
-    'dbname'   => 'tuto',
+    'password' => 'from4ge',
+    'dbname'   => 'zscdb',
 );
 
 $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
