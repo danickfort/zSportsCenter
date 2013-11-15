@@ -38,7 +38,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 	
 	/**
      * @OneToMany(targetEntity="HourlyPrice", mappedBy="court")
-     * @var []
+     * @var HourlyPrices[]
      * */
     protected $hourlyPrices;
 	
