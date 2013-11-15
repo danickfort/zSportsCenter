@@ -36,8 +36,15 @@ use Doctrine\Common\Collections\ArrayCollection;
      * */
     protected $reservations;
 	
+	/**
+     * @OneToMany(targetEntity="HourlyPrice", mappedBy="court")
+     * @var []
+     * */
+    protected $hourlyPrices;
+	
 	public function __construct() {
 		$this->reservations = new ArrayCollection();
+		$this->hourlyPrices = new ArrayCollection();
     }
 	
 	/**
@@ -122,5 +129,19 @@ use Doctrine\Common\Collections\ArrayCollection;
      */
     public function setReservations($reservations) {
         $this->reservations = $reservations;
+    }
+	
+	/**
+     * @return ArrayCollection
+     */
+    public function getHourlyPrices() {
+        return $this->hourlyPrices;
+    }
+    
+    /**
+     * @param ArrayCollection $hourlyPrices
+     */
+    public function setHourlyPrices($hourlyPrices) {
+        $this->hourlyPrices = $hourlyPrices;
     }
 }

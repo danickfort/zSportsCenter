@@ -19,7 +19,7 @@ return array(
                     'route'    => '/[index/:action]',
                     'defaults' => array(
                         'controller' => 'Application\Controller\Index',
-                        'action'     => 'index', 'add-post',
+                        'action'     => 'index', 'add-post', 'log-in',
                     ),
                 ),
             ),
