@@ -16,16 +16,20 @@ use Application\Model\Entity\Post;
 
 class IndexController extends AbstractActionController {
 	
-    public function indexAction() {
+    public function indexAction() {	
+
         // Permet d'obtenir la liste des posts actuellement en base
          $em = $this->entity()->getEntityManager();
+
          $posts = $em->createQuery("SELECT p from Application\Model\Entity\Post p ORDER BY p.date DESC")->getResult();
 			return new ViewModel(array( 
-			'posts' => $posts 
-		)); 
+			'posts' => $posts,
+		));
+
+
     }
     
-    public function addPostAction() {
+    public function addpostAction() {
 		if($this->getRequest()->isPost()) {
 			 $postParam = $this->getRequest()->getPost(); 
              $title = $postParam['title']; 
@@ -42,5 +46,15 @@ class IndexController extends AbstractActionController {
              return $this->redirect()->toRoute('home'); 
              }
 		return new ViewModel();
+	}
+	
+	public function loginAction() {
+		// vérification champs login pass
+		// vérification dans base de données
+		// création session (voir google zf2 login action)
+		
+		// redirection vers page prec (chercher zf2 redireciton sur la page précédente)
+		
+		// dans les autres pages, traiter la session
 	}
 }
