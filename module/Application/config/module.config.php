@@ -20,7 +20,6 @@ return array(
                     'defaults' => array(
                         'controller' => 'Application\Controller\Index',
                     	'action'     => 'index', 'admin', 'contact', 'signup', 'signin',
-
                 ),
             ),
             // The following is a route to simplify getting started creating
