@@ -14,6 +14,9 @@ use Zend\View\Model\ViewModel;
 use Application\Controller\Plugin\Entity;
 use Application\Model\Entity\Post;
 
+use Application\Model\User;
+use Application\Form\RegistrationForm;
+
 class IndexController extends AbstractActionController {
 	
     public function indexAction() {	
@@ -25,9 +28,24 @@ class IndexController extends AbstractActionController {
 			return new ViewModel(array( 
 			'posts' => $posts,
 		));
-
-
     }
+	
+	public function signupAction() {
+		$form = new RegistrationForm();
+		
+		/*$request = $this->getResquest();
+		if ($request->isPost())
+		{
+			$user = new User();
+			$form->setData($request->getPost());
+			
+			// $user->exchangeArray($form->-getData());
+		}*/
+		
+		return new ViewModel(array(
+			'form' => $form,
+		));
+	}
     
     public function addpostAction() {
 		if($this->getRequest()->isPost()) {
