@@ -28,33 +28,19 @@ class IndexController extends AbstractActionController {
 
 
     }
-    
-    public function addpostAction() {
-		if($this->getRequest()->isPost()) {
-			 $postParam = $this->getRequest()->getPost(); 
-             $title = $postParam['title']; 
-             $date = $postParam['date']; 
-             $description = $postParam['description']; 
-             
-             $post = new Post(); 
-             $post->setTitle($title); 
-             $post->setDate(new \DateTime($date)); 
-             $post->setDescription($description); 
-             $this->entity()->getEntityManager()->persist($post); 
-             $this->entity()->getEntityManager()->flush();
-             
-             return $this->redirect()->toRoute('home'); 
-             }
-		return new ViewModel();
+	public function signinAction()
+	{
+		
+	}
+	public function adminAction()
+	{
+	}
+	public function contactAction()
+	{
+	}
+	public function signoutAction()
+	{
 	}
 	
-	public function loginAction() {
-		// vérification champs login pass
-		// vérification dans base de données
-		// création session (voir google zf2 login action)
-		
-		// redirection vers page prec (chercher zf2 redireciton sur la page précédente)
-		
-		// dans les autres pages, traiter la session
-	}
+
 }
