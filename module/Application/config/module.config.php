@@ -19,8 +19,8 @@ return array(
                     'route'    => '/[index/:action]',
                     'defaults' => array(
                         'controller' => 'Application\Controller\Index',
-                        'action'     => 'index', 'admin', 'contact', 'signup', 'signin',
-                    ),
+                    	'action'     => 'index', 'admin', 'contact', 'signup', 'signin',
+
                 ),
             ),
             // The following is a route to simplify getting started creating
