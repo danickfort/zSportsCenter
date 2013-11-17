@@ -20,7 +20,21 @@ return array(
                     'defaults' => array(
                         'controller' => 'Application\Controller\Index',
                     	'action'     => 'index', 'admin', 'contact', 'signup', 'signin',
-                        ),
+                    ),
+                ),
+            ),
+            'reservations_json' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/reservations[/[:action].json]',
+                    'constraints' => array (
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'rId' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Index',
+                        'action'     => 'get-reservation','del-reservation','upd-reservation','add-reservation',
+                    ),
                 ),
             ),
             // The following is a route to simplify getting started creating
@@ -85,6 +99,7 @@ return array(
                 'type'     => 'gettext',
                 'base_dir' => __DIR__ . '/../language',
                 'pattern'  => '%s.mo',
+                'text_domain' => 'evl-calendar',
             ),
         ),
     ),
