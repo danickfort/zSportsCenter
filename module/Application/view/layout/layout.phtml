@@ -20,8 +20,8 @@
       ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
       ; ?>
     </head>
-    <body>
-      <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+    <body style="padding:0px">
+      <nav class="navbar navbar-static-top navbar-inverse" role="navigation">
        <div class="container">
         <div class="navbar-header">
          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -55,48 +55,6 @@
   </nav>
   <div class="container">
    <?php echo $this->content; ?>
-   <script type="text/javascript">
-    $(".commentButton").click(function() {
-      var id = $(this).attr('data-id');
-      $('.comment-div[data-id=' + id + ']').show(200);
-      $(this).hide(200);
-    });
-
-    $(".cancelButton").click(function() {
-      var id = $(this).attr('data-id');
-      $('.comment-div[data-id=' + id + ']').hide(200);
-      $('.commentButton[data-id=' + id + ']').show(200);
-    });
-
-    $(".postButton").click(function() {
-      var id = $(this).attr('data-id');
-      var author = $('.author[data-id=' + id + ']').val();
-      var message = $('.message[data-id=' + id + ']').val();
-      if(author!=="" && message!=="") {
-        $.ajax({
-          url: '/index/add-comment',
-          type: 'POST',
-          dataType: 'JSON',
-          data: {
-            author: author,
-            message: message,
-            id: id
-          },
-          success: function(json) {
-            $('.comment-div[data-id=' + id + ']').hide(200, function() {
-              $('.author[data-id=' + id + ']').val('');
-              $('.message[data-id=' + id + ']').val('');  
-            });
-            $('.commentButton[data-id=' + id + ']').show(200);
-            $('.comments[data-id=' + id + ']').prepend(json.html);
-          }
-        });
-      }else {
-        alert('Remplissez tout les champs');
-      }
-
-    });
-  </script>
   <hr>
   <footer>
     <p>&copy; 2010 - <?php echo date('Y') ?> by HE-Arc.</p>
