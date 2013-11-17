@@ -51,26 +51,34 @@ class IndexController extends AbstractActionController {
 
 	public function adminAction()
 	{
+
 	}
+
 	public function contactAction()
 	{
+
 	}
+
 	public function signoutAction()
 	{
+
 	}
 	
 	public function getReservationAction()
 	{
 
 	}	
+
 	public function delReservationAction()
 	{
 
 	}	
+
 	public function addReservationAction()
 	{
 
 	}	
+
 	public function updReservationAction()
 	{
 
