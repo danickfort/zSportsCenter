@@ -128,7 +128,7 @@ class IndexController extends AbstractActionController {
 			'signupActive' => '',
 		));*/
 		
-		// it's depend!
+		// it depends!
 		return new ViewModel();
 	}
 	
