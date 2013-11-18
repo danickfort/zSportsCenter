@@ -11,6 +11,35 @@ class RegistrationForm extends Form
 		parent::__construct('user');
 		
 		$this->add(array(
+			'name' => 'id',
+			'type' => 'Hidden',
+		));
+		
+		$this->add(array(
+			'name' => 'nickname',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'Nickname',
+			),
+			'attributes' => array(
+				'placeholder' => 'Nickname',
+				'class' => 'form-control',
+			),
+		));
+		
+		$this->add(array(
+			'name' => 'password',
+			'type' => 'Password',
+			'options' => array(
+				'label' => 'Password',
+			),
+			'attributes' => array(
+				'placeholder' => 'Password',
+				'class' => 'form-control',
+			),
+		));
+		
+		$this->add(array(
 			'name' => 'firstName',
 			'type' => 'Text',
 			'options' => array(
@@ -18,7 +47,7 @@ class RegistrationForm extends Form
 			),
 			'attributes' => array(
 				'placeholder' => 'Firstname',
-				'class' => 'input-medium',
+				'class' => 'form-control',
 			),
 		));
 		
@@ -28,6 +57,21 @@ class RegistrationForm extends Form
 			'options' => array(
 				'label' => 'LastName',
 			),
+			'attributes' => array(
+				'placeholder' => 'Lastname',
+				'class' => 'form-control',
+			),
+		));
+		
+		$this->add(array(
+			'name' => 'dateOfBirth',
+			'type' => 'Date',
+			'options' => array(
+				'label' => 'Date of birth',
+			),
+			'attributes' => array(
+				'class' => 'date form-control',
+			),
 		));
 		
 		$this->add(array(
@@ -35,6 +79,10 @@ class RegistrationForm extends Form
 			'type' => 'Text',
 			'options' => array(
 				'label' => 'Address',
+			),
+			'attributes' => array(
+				'placeholder' => 'Address',
+				'class' => 'form-control',
 			),
 		));
 		
@@ -44,6 +92,10 @@ class RegistrationForm extends Form
 			'options' => array(
 				'label' => 'City',
 			),
+			'attributes' => array(
+				'placeholder' => 'City',
+				'class' => 'form-control',
+			),
 		));
 		
 		$this->add(array(
@@ -52,6 +104,10 @@ class RegistrationForm extends Form
 			'options' => array(
 				'label' => 'Postcode',
 			),
+			'attributes' => array(
+				'placeholder' => 'Postcode',
+				'class' => 'form-control',
+			),
 		));
 		
 		$this->add(array(
@@ -59,6 +115,10 @@ class RegistrationForm extends Form
 			'type' => 'Text',
 			'options' => array(
 				'label' => 'Phone',
+			),
+			'attributes' => array(
+				'placeholder' => 'Phone',
+				'class' => 'form-control',
 			),
 		));
 		
