@@ -10,6 +10,10 @@ class RegistrationForm extends Form
 	{
 		parent::__construct('user');
 		
+		/*$this->setAttribute('method', 'post');
+		$this->setAttribute('class', 'form-horizontal');
+		$this->setAttribute('class', 'row span6');*/
+
 		$this->add(array(
 			'name' => 'id',
 			'type' => 'Hidden',
@@ -44,7 +48,7 @@ class RegistrationForm extends Form
 			'type' => 'Text',
 			'options' => array(
 				'label' => 'Firstname',
-			),
+				),
 			'attributes' => array(
 				'placeholder' => 'Firstname',
 				'class' => 'form-control',
@@ -85,6 +89,7 @@ class RegistrationForm extends Form
 				'class' => 'form-control',
 			),
 		));
+
 		
 		$this->add(array(
 			'name' => 'city',
@@ -97,7 +102,6 @@ class RegistrationForm extends Form
 				'class' => 'form-control',
 			),
 		));
-		
 		$this->add(array(
 			'name' => 'postCode',
 			'type' => 'Text',
@@ -109,7 +113,7 @@ class RegistrationForm extends Form
 				'class' => 'form-control',
 			),
 		));
-		
+				
 		$this->add(array(
 			'name' => 'phone',
 			'type' => 'Text',
@@ -121,7 +125,6 @@ class RegistrationForm extends Form
 				'class' => 'form-control',
 			),
 		));
-		
 		// Submit button.
 		$this->add(array(
 			'name' => 'submit',
@@ -130,7 +133,8 @@ class RegistrationForm extends Form
 				'value' => 'Sign up',
 				'id' => 'submit',
 				'class' => 'btn btn-primary',
-			),
-		));
+				'id' => 'submit',
+				),
+			));
 	}
 }

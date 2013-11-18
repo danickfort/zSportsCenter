@@ -39,12 +39,7 @@ class IndexController extends AbstractActionController {
 	}
 	
     public function indexAction() {	
-         /* $em = $this->entity()->getEntityManager();
 
-         $posts = $em->createQuery("SELECT p from Application\Model\Entity\Post p ORDER BY p.date DESC")->getResult();
-			return new ViewModel(array( 
-			'posts' => $posts,
-		)); */
 		$this->setAction('');
 		
 		$this->layout()->setVariables(array(
@@ -170,22 +165,26 @@ class IndexController extends AbstractActionController {
 		return new ViewModel();
 	}
     
-    /*public function addpostAction() {
-		if($this->getRequest()->isPost()) {
-			 $postParam = $this->getRequest()->getPost(); 
-             $title = $postParam['title']; 
-             $date = $postParam['date']; 
-             $description = $postParam['description']; 
-             
-             $post = new Post(); 
-             $post->setTitle($title); 
-             $post->setDate(new \DateTime($date)); 
-             $post->setDescription($description); 
-             $this->entity()->getEntityManager()->persist($post); 
-             $this->entity()->getEntityManager()->flush();
-             
-             return $this->redirect()->toRoute('home'); 
-             }
-		return new ViewModel();
-	}*/
+
+	
+	public function getReservationAction()
+	{
+
+	}	
+
+	public function delReservationAction()
+	{
+
+	}	
+
+	public function addReservationAction()
+	{
+
+	}	
+
+	public function updReservationAction()
+	{
+
+	}
+
 }

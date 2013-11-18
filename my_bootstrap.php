@@ -13,7 +13,11 @@ $dbParams = array(
     'driver'   => 'pdo_mysql',
     'user'     => 'root',
     'password' => '',
+<<<<<<< HEAD
     'dbname'   => 'tuto',
+=======
+    'dbname'   => 'zscdb',
+>>>>>>> 72f5a3596c62e0713ea8ac07feca2eee7460d309
 );
 
 $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
