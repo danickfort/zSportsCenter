@@ -28,7 +28,7 @@
  * @param {Array} config
  */
 
-function zCalendarWrapper(config) {
+ function zCalendarWrapper(config) {
     this.constructor.population++;
 
     // ************************************************************************ 
@@ -40,8 +40,8 @@ function zCalendarWrapper(config) {
      * jQuery FullCalendar container e.g. '#calendar'
      * @private
      */
-    var container = config.container;
-    delete config.container;
+     var container = config.container;
+     delete config.container;
 
     /**
      * List of urls used to get/update/delete event(s)
@@ -54,16 +54,16 @@ function zCalendarWrapper(config) {
      * }
      * @private
      */
-    var api = config.api;
-    delete config.api;
+     var api = config.api;
+     delete config.api;
 
-    var locales = config.locales;
-    delete config.locales;
+     var locales = config.locales;
+     delete config.locales;
 
     /**
      * @private
      */
-    var defaults = {
+     var defaults = {
         header: {
             left: 'prev,next today',
             center: 'title',
@@ -94,34 +94,42 @@ function zCalendarWrapper(config) {
             clickEvent( event );
         },
         loading: function(bool) {
-            if (bool) $('#loading').show();
-            else $('#loading').hide();
+            if (bool)
+            {
+                $('#loading').show();
+                $('.container-fluid').hide();
+            }
+            else
+            {
+                $('#loading').hide();
+                $('.container-fluid').show();
+            }
         }
     };
 
     /**
      * @private
      */
-    var cfg = defaults;
-    $.extend(true, cfg, config);
+     var cfg = defaults;
+     $.extend(true, cfg, config);
 
     /**
      * @private
      */
-    var format = "yyyy-MM-dd HH:mm:ss";
+     var format = "yyyy-MM-dd HH:mm:ss";
     /**
      * jQuery FullCalendar instance
      * @private
      */
-    var calendar = $(container).fullCalendar(cfg);
+     var calendar = $(container).fullCalendar(cfg);
 
     /**
      * @private
      */
-    function createEvent( startDate, endDate, allDay, jsEvent, view ) {
+     function createEvent( startDate, endDate, allDay, jsEvent, view ) {
         var ts = new Date().getTime();
 
-        bootbox.prompt(translate('Event Title:'), translate('Cancel'), translate('OK'), function(title) {
+        bootbox.prompt(translate('Nommez votre réservato'), function(title) {
             if (title) {
                 startDate = $.fullCalendar.formatDate(startDate, format);
                 endDate = $.fullCalendar.formatDate(endDate, format);
@@ -155,22 +163,22 @@ function zCalendarWrapper(config) {
                         bootbox.alert('Error occured during saving event in the database', function() {});
                     }
                 });
-                calendar.fullCalendar('renderEvent', {
-                    title: title,
-                    start: startDate,
-                    end: endDate,
-                    allDay: allDay,
-                    ts: ts
+calendar.fullCalendar('renderEvent', {
+    title: title,
+    start: startDate,
+    end: endDate,
+    allDay: allDay,
+    ts: ts
                 }, true); // make the event "stick"
-            }
-        });
-        calendar.fullCalendar('unselect');
-    }
+}
+});
+calendar.fullCalendar('unselect');
+}
 
     /**
      * @private
      */
-    function updateEvent( event, revertFunc, skipConfirm, report ) {
+     function updateEvent( event, revertFunc, skipConfirm, report ) {
         var ts = new Date().getTime();
         event.ts = ts;
 
@@ -219,15 +227,15 @@ function zCalendarWrapper(config) {
                         bootbox.alert('Error occured during saving event in the database', function() {});
                     }
                 });
-            }
-        });
-    }
+}
+});
+}
 
     /**
      * @param {Array} event
      * @private
      */
-    function deleteEvent ( event ) {
+     function deleteEvent ( event ) {
         var ts = new Date().getTime();
         event.ts = ts;
 
@@ -257,13 +265,13 @@ function zCalendarWrapper(config) {
                 bootbox.alert('Error occured during deleting event in the database', function() {});
             }
         });
-    }
+}
 
     /**
      * @param {Array} event
      * @private
      */
-    function editEvent ( event ) {
+     function editEvent ( event ) {
         bootbox.prompt(translate('Event Title:'), translate('Cancel'), translate('OK'), function(title) {
             if (title) {
                 event.title = title;
@@ -276,30 +284,139 @@ function zCalendarWrapper(config) {
      * @param {Array} event
      * @private
      */
-    function clickEvent ( event ) {
-        bootbox.dialog(translate('What do you want to do with event `%s`?').replace('%s', event.title), [{
-            "label" : translate('Delete'),
-            "class" : "btn-danger",
-            "callback": function() {
-                console.log("uh oh, look out!");
-                deleteEvent ( event );
-            }
-        }, {
-            "label" : translate('Edit'),
-            "class" : "btn-primary",
-            "callback": function() {
-                console.log("Primary button");
-                editEvent ( event );
-            }
-        }, {
-            "label" : translate('Cancel')
-        }]);
-    }
+     function clickEvent ( event ) {
+        /*bootbox.dialog(
+            [{
+                "label" : translate('Delete'),
+                "class" : "btn-danger",
+                "callback": function() {
+                    console.log("uh oh, look out!");
+                    deleteEvent ( event );
+                }
+            }, {
+                "label" : translate('Edit'),
+                "class" : "btn-primary",
+                "callback": function() {
+                    console.log("Primary button");
+                    editEvent ( event );
+                }
+            }, {
+                "label" : translate('Cancel')
+            }]
+            );*/
+bootbox.dialog({
+  /**
+   * @required String|Element
+   */
+   message: "I am a custom dialog",
+   
+  /**
+   * @optional String|Element
+   * adds a header to the dialog and places this text in an h4
+   */
+   title: "Custom title",
+   
+  /**
+   * @optional Function
+   * allows the user to dismisss the dialog by hitting ESC, which
+   * will invoke this function
+   */
+   onEscape: function() {},
+   
+  /**
+   * @optional Boolean
+   * @default: true
+   * whether the dialog should be shown immediately
+   */
+   show: true,
+   
+  /**
+   * @optional Boolean
+   * @default: true
+   * whether the dialog should be have a backdrop or not
+   */
+   backdrop: true,
+   
+  /**
+   * @optional Boolean
+   * @default: true
+   * show a close button
+   */
+   closeButton: true,
+   
+  /**
+   * @optional Boolean
+   * @default: true
+   * animate the dialog in and out (not supported in < IE 10)
+   */
+   animate: true,
+   
+  /**
+   * @optional String
+   * @default: null
+   * an additional class to apply to the dialog wrapper
+   */
+   className: "my-modal",
+   
+  /**
+   * @optional Object
+   * @default: {}
+   * any buttons shown in the dialog's footer
+   */
+   buttons: {
+    
+    // For each key inside the buttons object...
+    
+    /**
+     * @required Object|Function
+     * 
+     * this first usage will ignore the `success` key
+     * provided and take all button options from the given object
+     */
+     success: {   
+      /**
+       * @required String
+       * this button's label
+       */
+       label: "Success!",
+       
+      /**
+       * @optional String
+       * an additional class to apply to the button
+       */
+       className: "btn-success",
+       
+      /**
+       * @optional Function
+       * the callback to invoke when this button is clicked
+       */
+       callback: function() {}
+   },
+   
+    /**
+     * this usage demonstrates that if no label property is
+     * supplied in the object, the key is used instead
+     */
+     "Danger!": {
+      className: "btn-danger",
+      callback: function() {}
+  },
+  
+    /**
+     * lastly, if the value supplied is a function, the options
+     * are assumed to be the short form of label -> callback
+     * this is the most condensed way of providing useful buttons
+     * but doesn't allow for any configuration
+     */
+     "Another label": function() {}
+ }
+});
+}
 
     /**
      * @private
      */
-    function translate(text) {
+     function translate(text) {
         if (typeof(locales[text]) !== 'undefined') {
             return locales[text];
         } else {
@@ -316,7 +433,7 @@ function zCalendarWrapper(config) {
     /**
      * @public
      */
-    this.getCalendar = function () {
+     this.getCalendar = function () {
         return calendar;
     }
 

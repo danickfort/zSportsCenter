@@ -5,6 +5,7 @@ $idx = 100;
 $this->headLink()->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.css')
 				 ->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.print.css', 'print')
 				 ->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap-responsive.css')
+				 ->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap.min.css')
 				;
 
 $idx = 100;
@@ -21,6 +22,8 @@ $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 
+<div id='loading' style="display:none; vertical-align:middle; text-align:center;">
+<?php echo $this->translate('Loading...'); ?></div>
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span5">
@@ -40,7 +43,6 @@ $this->headTitle($title);
   </div>
 </div>
 
-<div id='loading' style='display:none'><?php echo $this->translate('loading...'); ?></div>
 
 
 <?php $this->headStyle()->captureStart(); ?>
@@ -136,7 +138,25 @@ $(document).ready(function() {
 			week: '<?php echo $this->translate('week', 'evl-calendar'); ?>',
 			day: '<?php echo $this->translate('day', 'evl-calendar'); ?>'
 		},
-		allDayText: '<?php echo $this->translate('all-day', 'evl-calendar'); ?>'
+		allDayText: '<?php echo $this->translate('all-day', 'evl-calendar'); ?>',
+
+
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right:''
+        },
+        defaultView:'agendaWeek',
+
+        minTime: 8,
+        maxTime: 21,
+
+		firstDay:2,
+		slotMinutes:60,
+		snapMinutes:60,
+
+		aspectRatio : 1
+
 	});
 });
 <?php $this->headScript()->captureEnd(); ?>
