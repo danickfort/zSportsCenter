@@ -48,6 +48,9 @@ use Zend\InputFilter\InputFilterInterface;
 	
 	/** @Column(type="string") * */
 	protected $phone;
+
+	/** @Column(type="boolean") * */
+	protected $administrator;
 	
 	/**
      * @OneToMany(targetEntity="Reservation", mappedBy="user")
@@ -197,6 +200,20 @@ use Zend\InputFilter\InputFilterInterface;
      */
     public function setPhone($phone) {
         $this->phone = $phone;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getAdministrator() {
+        return $this->administrator;
+    }
+    
+    /**
+     * @param boolean $administrator
+     */
+    public function setAdministrator($administrator) {
+        $this->administrator = $administrator;
     }
 	
 	/**

@@ -16,11 +16,10 @@ return array(
             'home' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route'    => '/[index/:action]',
+                    'route'    => '/[index/:action[/[:message]]]',
                     'defaults' => array(
                         'controller' => 'Application\Controller\Index',
                         'action'     => 'index', 'add-post', 'signup', 'signin', 'signout', 'admin', 'contact',
-
                     ),
                 ),
             ),
