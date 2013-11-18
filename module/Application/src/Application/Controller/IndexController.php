@@ -19,9 +19,18 @@ use Application\Model\Entity\User;
 use Application\Form\RegistrationForm;
 
 class IndexController extends AbstractActionController {
+
+
+	private $message = '';
+
 	private function isUserAuth() {
 		$userAuthNamespace = new Container('userAuthNamespace');
 		return isset($userAuthNamespace->id);
+	}
+
+	private function isAdministratorUser() {
+		$userAuthNamespace = new Container('userAuthNamespace');
+		return $userAuthNamespace->isAdministrator;
 	}
 	
 	private function setAction($action) {
@@ -39,7 +48,6 @@ class IndexController extends AbstractActionController {
 	}
 	
     public function indexAction() {	
-
 		$this->setAction('');
 		
 		$this->layout()->setVariables(array(
@@ -67,9 +75,12 @@ class IndexController extends AbstractActionController {
 			
 			if ($form->isValid()) {
 				$user->exchangeArray($form->getData());
+				$user->setAdministrator(false);
 				
 				$this->entity()->getEntityManager()->persist($user);
 				$this->entity()->getEntityManager()->flush();
+
+				$this->redirect()->toRoute('home');
 			}
 		}
 		
@@ -90,8 +101,8 @@ class IndexController extends AbstractActionController {
 	public function signoutAction() {
 		$userAuthNamespace = new Container('userAuthNamespace');
 		unset($userAuthNamespace->id);
+		unset($userAuthNamespace->isAdministrator);
 		
-		// return $this->redirect()->toRoute('home', array('action' => $this->getAction()));
 		if ($this->getAction() == '')
 			return $this->redirect()->toRoute('home');
 		else
@@ -107,34 +118,31 @@ class IndexController extends AbstractActionController {
 			
 			$user = $this->entity()->getEntityManager()->getRepository('Application\Model\Entity\User')->findOneBy(array('nickname' => $nickname, 'password' => $password));
 			
-			if (!$user) {
-				return $this->redirect()->toRoute('home', array('action' => 'signin'));
-			} else {
-				$userAuthNamespace = new Container('userAuthNamespace');
-				$userAuthNamespace->id = $user->getId();
-				
-				// return $this->redirect()->toRoute('home', array('action' => $this->getAction()));
+			if (!$user) { // Login process failed
 				if ($this->getAction() == '')
 					return $this->redirect()->toRoute('home');
 				else
-					return $this->redirect()->toRoute('home', array('action' => $this->getAction()));
+					return $this->redirect()->toRoute('home', array('action' => $this->getAction(), 'message' => 'error'));
+				//return $this->redirect()->toRoute('home', array('action' => 'signin', 'message' => 'error'));
+			} else { // Login process succeeded
+				$userAuthNamespace = new Container('userAuthNamespace');
+				$userAuthNamespace->id = $user->getId();
+				$userAuthNamespace->isAdministrator = $user->getAdministrator();
+				
+				if ($this->getAction() == '')
+					return $this->redirect()->toRoute('home');
+				else
+					return $this->redirect()->toRoute('home', array('action' => $this->getAction(), 'message' => 'success'));
 			}
 		}
 		
-		/*$this->layout()->setVariables(array(
-			'homeActive' => '',
-			'contactActive' => '',
-			'administrationActive' => '',
-			'signupActive' => '',
-		));*/
-		
-		// it depends!
-		return new ViewModel();
+		return new ViewModel(array('message' => $this->params()->fromRoute('message')));
 	}
 	
 	public function contactAction() {
 		$this->setAction('contact');
 	
+	 	// PASS VARIABLE IS ADMIN !!!
 		$this->layout()->setVariables(array(
 			'homeActive' => '',
 			'contactActive' => 'active',
@@ -144,13 +152,16 @@ class IndexController extends AbstractActionController {
 		));
 	
 		// contact.phtml
-		return new ViewModel();
+		return new ViewModel(array('message' => $this->params()->fromRoute('message')));
 	}
 	
 	public function adminAction() {
 		$this->setAction('admin');
 	
 		if (!$this->isUserAuth())
+			return $this->redirect()->toRoute('home', array('action' => 'signin'));
+
+		if (!$this->isAdministratorUser())
 			return $this->redirect()->toRoute('home', array('action' => 'signin'));
 	
 		$this->layout()->setVariables(array(
