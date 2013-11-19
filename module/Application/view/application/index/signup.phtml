@@ -8,18 +8,15 @@
 		
 		foreach ($form as $element)
 		{
-			if ($element->getMessages())
-				echo '<div class="form-group has-error">';
-			else
-				echo '<div class="form-group">';
+			echo '<div class="form-group">';
 			echo '<label class="col-sm-2 control-label" for="'.$element->getAttribute('id').'">'.$element->getLabel().'</label>';
 			echo '<div class="col-sm-6">';
 			echo $this->formElement($element);
 			// echo $this->formElementErrors($element);
 			echo $this->formElementErrors()
-				->setMessageOpenFormat('<p class="text-danger">')
-				->setMessageSeparatorString('</p><p class="text-danger">')
-				->setMessageCloseString('</p>')
+				->setMessageOpenFormat('<span class="label label-danger">')
+				->setMessageSeparatorString('</span><span class="label label-danger">')
+				->setMessageCloseString('</span>')
 				->render($element);
 			echo '</div>';
 			echo '</div>';

@@ -17,7 +17,12 @@ use Application\Model\Entity\Post;
 use Application\Model\Entity\SportCenter;
 
 use Application\Model\Entity\User;
+use Application\Model\Entity\Sport;
+use Application\Model\Entity\Court;
+
 use Application\Form\RegistrationForm;
+use Application\Form\NewSportForm;
+use Application\Form\NewCourtForm;
 
 class IndexController extends AbstractActionController {
 
@@ -168,6 +173,41 @@ class IndexController extends AbstractActionController {
 
 		if (!$this->isAdministratorUser() && $this->params()->fromRoute('message') != 'notpermitted' && $this->params()->fromRoute('message') != 'notloggedin')
 			return $this->redirect()->toRoute('home', array('action' => 'admin', 'message' => 'notpermitted'));
+
+
+		$newSportForm = new NewSportForm();
+		$newCourtForm = new NewCourtForm();
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			if (isset($request->getPost()->newSportSubmit)) {
+				$sport = new Sport();
+				$newSportForm->setInputFilter($sport->getInputFilter());
+				$newSportForm->setData($request->getPost());
+				
+				if ($newSportForm->isValid()) {
+					$sport->exchangeArray($newSportForm->getData());
+					
+					$this->entity()->getEntityManager()->persist($sport);
+					$this->entity()->getEntityManager()->flush();
+				}
+			} else if (isset($request->getPost()->newCourtSubmit)) {
+				$court = new Court();
+				$newCourtForm->setInputFilter($court->getInputFilter());
+				$newCourtForm->setData($request->getPost());
+
+				if ($newCourtForm->isValid()) {
+					$court->exchangeArray($newCourtForm->getData());
+
+					$sport = $this->entity()->getEntityManager()->find('Application\Model\Entity\Sport', $newCourtForm->get('sport')->getValue());
+					$court->setSport($sport);
+
+					$this->entity()->getEntityManager()->persist($court);
+					$this->entity()->getEntityManager()->flush();
+				}
+			}
+		}
+
+		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
 	
 		$this->layout()->setVariables(array(
 			'homeActive' => '',
@@ -179,7 +219,13 @@ class IndexController extends AbstractActionController {
 		));
 	
 		// admin.phtml
-		return new ViewModel(array('message' => $this->params()->fromRoute('message')));
+
+		return new ViewModel(array(
+			'sports' => $sports,
+			'newSportForm' => $newSportForm,
+			'newCourtForm' => $newCourtForm,
+			'message' => $this->params()->fromRoute('message'),
+		));
 	}
     
 

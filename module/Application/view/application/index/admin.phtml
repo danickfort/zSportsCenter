@@ -39,26 +39,128 @@ echo <<<END
     <div class="col-md-6">
 
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#newSport" data-toggle="tab">New Sport</a></li>
-            <li><a href="#newCourt" data-toggle="tab">New Court</a></li>
-            <li><a href="#timetable" data-toggle="tab">Timetable</a></li>
+            <li class="active"><a href="#sportCenter" data-toggle="tab">Sport Center</a></li>
+            <li><a href="#contact" data-toggle="tab">Contact page</a></li>
+            <li><a href="#users" data-toggle="tab">Users Managment</a></li>
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane active" id="newSport">
-                <div class="page-header">
-                    <h1>New Sport <small>Form for add a new sport</small></h1>
-                </div>
+            <div class="tab-pane active" id="sportCenter">
+                <h2>Sport Center</h2>
             </div>
-            <div class="tab-pane" id="newCourt">
-                <div class="page-header">
-                    <h1>New Court <small>Form for add a new court</small></h1>
-                </div>
+            <div class="tab-pane" id="contact">
+                <h2>Contact page</h2>
             </div>
-            <div class="tab-pane" id="timetable">
-                <div class="page-header">
-                    <h1>Timetable<small>Form to manage timetable</small></h1>
-                </div>
+            <div class="tab-pane" id="users">
+                <h2>Users Management</h2>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs">
+            <?php
+                $active = ' class="active"';
+                foreach ($this->sports as $sport) {
+                    echo '<li'.$active.'>'.'<a href="#'.$sport->getId().'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
+                    $active = '';
+                }
+                echo '<li><a href="#newSport" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
+            ?>
+        </ul>
+
+        <div class="tab-content">
+            <?php
+                $active = ' active';
+                foreach ($this->sports as $sport) {
+                    echo '<div class="tab-pane'.$active.'" id="'.$sport->getId().'">';
+                    $active = '';
+
+                    // Displaying courts
+                    $courts = array_map(function($court) {
+                        return array(
+                            'id' => $court->getId(),
+                            'name' => $court->getName(),
+                            'description' => $court->getDescription(),
+                        );
+                    }, $sport->getCourts()->toArray());
+
+                    echo '<div class="row">';
+
+                    echo '<div class="col-md-3">';
+                    echo '<ul class="nav nav-pills nav-stacked">';
+                    $active = ' class="active"';
+                    foreach ($courts as $court) {
+                        echo '<li'.$active.'>'.'<a href="#'.$court['id'].'" data-toggle="tab">'.$court['name'].'</a>'.'</li>';
+                        $active = '';
+                    }
+                    echo '<li><a href="#newCourt'.$sport->getName().'" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
+                    echo '</ul>';
+                    echo '</div>';
+
+                    echo '<div class="col-md-9">';
+                    echo '<div class="tab-content">';
+                    $active = ' active';
+                    foreach ($courts as $court) {
+                        echo '<div class="tab-pane'.$active.'" id="'.$court['id'].'">';
+                        $active = '';
+                        echo '<p>'.$court['description'].'</p>';
+                        echo '</div>';
+                    }
+                    echo '<div class="tab-pane" id="newCourt'.$sport->getName().'">';
+                    $this->newCourtForm->setAttribute('class', 'form-horizontal');
+                    $this->newCourtForm->get('sport')->setAttribute('value', $sport->getId());
+                    $this->newCourtForm->prepare();
+                    echo $this->form()->openTag($this->newCourtForm);
+                    // echo $this->formCollection($this->newCourtForm);
+
+                    foreach ($this->newCourtForm as $element)
+                    {
+                        echo '<div class="form-group">';
+                        echo '<label class="col-md-3 control-label" for="'.$element->getAttribute('id').'">'.$element->getLabel().'</label>';
+                        echo '<div class="col-md-9">';
+                        echo $this->formElement($element);
+                        echo $this->formElementErrors()
+                            ->setMessageOpenFormat('<span class="label label-danger">')
+                            ->setMessageSeparatorString('</span><span class="label label-danger">')
+                            ->setMessageCloseString('</span>')
+                            ->render($element);
+                        echo '</div>';
+                        echo '</div>';
+                    }
+
+                    echo $this->form()->closeTag();
+                    echo '</div>';
+
+                    echo '</div>';
+
+                    echo '</div>';
+                    //Displaying courts end
+
+                    echo '</div>';
+                    echo '</div>';
+                }
+            ?>
+            <div class="tab-pane" id="newSport">
+                <h3>Add a new sport</h3>
+                <?php
+                $this->newSportForm->setAttribute('class', 'form-horizontal');
+                $this->newSportForm->prepare();
+                echo $this->form()->openTag($this->newSportForm);
+                foreach ($this->newSportForm as $element)
+                {
+                    echo '<div class="form-group">';
+                    echo '<label class="col-md-2 control-label" for="'.$element->getAttribute('id').'">'.$element->getLabel().'</label>';
+                    echo '<div class="col-md-10">';
+                    echo $this->formElement($element);
+                    echo $this->formElementErrors()
+                        ->setMessageOpenFormat('<span class="label label-danger">')
+                        ->setMessageSeparatorString('</span><span class="label label-danger">')
+                        ->setMessageCloseString('</span>')
+                        ->render($element);
+                    echo '</div>';
+                    echo '</div>';
+                }
+                echo $this->form()->closeTag();
+                ?>
             </div>
         </div>
 

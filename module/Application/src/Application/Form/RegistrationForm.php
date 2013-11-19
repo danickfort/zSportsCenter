@@ -131,9 +131,7 @@ class RegistrationForm extends Form
 			'type' => 'Submit',
 			'attributes' => array(
 				'value' => 'Sign up',
-				'id' => 'submit',
 				'class' => 'btn btn-primary',
-				'id' => 'submit',
 				),
 			));
 	}
