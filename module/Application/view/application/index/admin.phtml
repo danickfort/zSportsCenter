@@ -72,10 +72,10 @@
                     <?php
                     $active = ' class="active"';
                     foreach ($that->sports as $sport) {
-                        echo '<li'.$active.'>'.'<a href="#'.$sport->getId().'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
+                        echo '<li'.$active.'>'.'<a href="#'.$sport->getName().'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
                         $active = '';
                     }
-                    echo '<li><a data-original-title="Add a sport" class="tooltips" id="sportPlus" href="#newSport" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
+                    echo '<li><a href="#newSport" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
                     ?>
                 </ul>
 
@@ -83,7 +83,7 @@
                     <?php
                     $active = ' active';
                     foreach ($that->sports as $sport) {
-                        echo '<div class="tab-pane'.$active.'" id="'.$sport->getId().'">';
+                        echo '<div class="tab-pane'.$active.'" id="'.$sport->getName().'">';
                         $active = '';
 
                     // Displaying courts
@@ -101,10 +101,11 @@
                         echo '<ul class="nav nav-pills nav-stacked">';
                         $active = ' class="active"';
                         foreach ($courts as $court) {
-                            echo '<li'.$active.'>'.'<a href="#'.$court['id'].'" data-toggle="tab">'.$court['name'].'</a>'.'</li>';
+                            echo '<li'.$active.'>'.'<a href="#'.$court['name'].'" data-toggle="tab">'.$court['name'].'</a>'.'</li>';
                             $active = '';
                         }
-                        echo '<li><a data-original-title="Add a court" class="tooltips" id="courtPlus" href="#newCourt'.$sport->getName().'" data-toggle="tab tooltip"><span class="glyphicon glyphicon-plus"></span></a></li>';
+                        echo '<li'.$active.'><a href="#newCourt'.$sport->getName().'" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
+                        $active = '';
                         echo '</ul>';
                         echo '</div>';
 
@@ -112,12 +113,14 @@
                         echo '<div class="tab-content">';
                         $active = ' active';
                         foreach ($courts as $court) {
-                            echo '<div class="tab-pane'.$active.'" id="'.$court['id'].'">';
+                            echo '<div class="tab-pane'.$active.'" id="'.$court['name'].'">';
                             $active = '';
                             echo '<p>'.$court['description'].'</p>';
                             echo '</div>';
                         }
-                        echo '<div class="tab-pane" id="newCourt'.$sport->getName().'">';
+                        echo '<div class="tab-pane'.$active.'" id="newCourt'.$sport->getName().'">';
+                        $active = '';
+                        echo '<h3>Add a new court</h3>';
                         $that->newCourtForm->setAttribute('class', 'form-horizontal');
                         $that->newCourtForm->get('sport')->setAttribute('value', $sport->getId());
                         $that->newCourtForm->prepare();

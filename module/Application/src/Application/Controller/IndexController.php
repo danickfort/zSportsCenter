@@ -68,7 +68,7 @@ class IndexController extends AbstractActionController {
 		));
 		
 		// index.pthml
-		return new ViewModel(array('message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter));
+		return new ViewModel(array('message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
     }
 	
 	public function signupAction() {
