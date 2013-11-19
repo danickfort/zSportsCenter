@@ -1,16 +1,28 @@
- <?php echo $this->headLink()
-			->prependStylesheet($this->basePath() . '/css/signin.css')
-			;
-			?>
-<?php if ($this->message == 'error') { ?>
- <form class="form-signin" method="post" action="<?php echo $this->url('home', array('action' => 'signin')); ?>">
+
+<?php if ($this->message == 'error') {
+    echo $this->headLink()
+    ->prependStylesheet($this->basePath() . '/css/signin.css')
+    ;
+    ?>
+    <div class="alert alert-danger">Wrong log in information!</div>
+    <form class="form-signin" method="post" action="<?php echo $this->url('home', array('action' => 'signin')); ?>">
         <h2 class="form-signin-heading">Please sign in</h2>
         <input type="text" name="nickname" class="form-control" placeholder="Nickname" required autofocus>
         <input type="password" name="password" class="form-control" placeholder="Password" required>
         <label class="checkbox">
-          <input type="checkbox" value="remember-me"> Remember me
+            <input type="checkbox" value="remember-me"> Remember me
         </label>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
-</form>
-<?php } else echo $this->message; ?>
+    </form>
+    <?php } else {
+
+    if ($this->message) {
+        switch($this->message)
+        {
+            case "success":
+            ?><div class="alert alert-success">Logged in !</div><?php
+            break;
+        }
+    }
+} ?>

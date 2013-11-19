@@ -1,0 +1,18 @@
+#infobox {
+	background-image: url('../img/1.jpg');
+	padding:5px;
+	background-repeat:no-repeat;
+}
+#geninfo {
+	margin-top:10%;
+	margin-left:50%;
+}
+#timetableinfo {
+	margin-top:10%;
+	margin-left:50%;
+}
+#sportbox {
+}
+
+#calendar {
+}

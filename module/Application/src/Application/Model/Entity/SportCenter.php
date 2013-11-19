@@ -74,7 +74,7 @@ use Doctrine\Common\Collections\ArrayCollection;
      * @return string
      */
     public function getName() {
-        return $this->id;
+        return $this->name;
     }
     
     /**

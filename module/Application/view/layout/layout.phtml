@@ -40,7 +40,10 @@
 				<ul class="nav navbar-nav">
 					<li class="<?php echo $this->homeActive; ?>"><a href="<?php echo $this->url('home'); ?>">Home</a></li>
 					<li class="<?php echo $this->contactActive; ?>"><a href="<?php echo $this->url('home', array('action' => 'contact')); ?>">Contact</a></li>
-					<li class="<?php echo $this->administrationActive; ?>"><a href="<?php echo $this->url('home', array('action' => 'admin')); ?>">Administration</a></li>
+					
+				<?php if ($this->adminVisible) { ?>
+				<li class="<?php echo $this->administrationActive; ?>"><a href="<?php echo $this->url('home', array('action' => 'admin')); ?>">Administration</a></li>
+				<?php } ?>
 				</ul>
 				
 				<?php if (!$this->userAuth) { ?>

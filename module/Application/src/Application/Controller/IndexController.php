@@ -14,6 +14,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 use Application\Controller\Plugin\Entity;
 use Application\Model\Entity\Post;
+use Application\Model\Entity\SportCenter;
 
 use Application\Model\Entity\User;
 use Application\Form\RegistrationForm;
@@ -49,17 +50,20 @@ class IndexController extends AbstractActionController {
 	
     public function indexAction() {	
 		$this->setAction('');
-		
+
+		$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
+
 		$this->layout()->setVariables(array(
 			'homeActive' => 'active',
 			'contactActive' => '',
 			'administrationActive' => '',
 			'signupActive' => '',
 			'userAuth' => $this->isUserAuth(),
+			'adminVisible' => $this->isAdministratorUser(),
 		));
 		
 		// index.pthml
-		return new ViewModel();
+		return new ViewModel(array('message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter));
     }
 	
 	public function signupAction() {
@@ -90,6 +94,7 @@ class IndexController extends AbstractActionController {
 			'administrationActive' => '',
 			'signupActive' => 'active',
 			'userAuth' => $this->isUserAuth(),
+			'adminVisible' => $this->isAdministratorUser(),
 		));
 		
 		// signup.phtml
@@ -120,17 +125,16 @@ class IndexController extends AbstractActionController {
 			
 			if (!$user) { // Login process failed
 				if ($this->getAction() == '')
-					return $this->redirect()->toRoute('home');
+					return $this->redirect()->toRoute('home', array('message' => 'error'));
 				else
 					return $this->redirect()->toRoute('home', array('action' => $this->getAction(), 'message' => 'error'));
-				//return $this->redirect()->toRoute('home', array('action' => 'signin', 'message' => 'error'));
 			} else { // Login process succeeded
 				$userAuthNamespace = new Container('userAuthNamespace');
 				$userAuthNamespace->id = $user->getId();
 				$userAuthNamespace->isAdministrator = $user->getAdministrator();
 				
 				if ($this->getAction() == '')
-					return $this->redirect()->toRoute('home');
+					return $this->redirect()->toRoute('home', array('message' => 'success'));
 				else
 					return $this->redirect()->toRoute('home', array('action' => $this->getAction(), 'message' => 'success'));
 			}
@@ -149,6 +153,7 @@ class IndexController extends AbstractActionController {
 			'administrationActive' => '',
 			'signupActive' => '',
 			'userAuth' => $this->isUserAuth(),
+			'adminVisible' => $this->isAdministratorUser(),
 		));
 	
 		// contact.phtml
@@ -158,11 +163,11 @@ class IndexController extends AbstractActionController {
 	public function adminAction() {
 		$this->setAction('admin');
 	
-		if (!$this->isUserAuth())
-			return $this->redirect()->toRoute('home', array('action' => 'signin'));
+		if (!$this->isUserAuth() && $this->params()->fromRoute('message') != 'notloggedin' && $this->params()->fromRoute('message') != 'notpermitted')
+			return $this->redirect()->toRoute('home', array('action' => 'admin', 'message' => 'notloggedin'));
 
-		if (!$this->isAdministratorUser())
-			return $this->redirect()->toRoute('home', array('action' => 'signin'));
+		if (!$this->isAdministratorUser() && $this->params()->fromRoute('message') != 'notpermitted' && $this->params()->fromRoute('message') != 'notloggedin')
+			return $this->redirect()->toRoute('home', array('action' => 'admin', 'message' => 'notpermitted'));
 	
 		$this->layout()->setVariables(array(
 			'homeActive' => '',
@@ -170,10 +175,11 @@ class IndexController extends AbstractActionController {
 			'administrationActive' => 'active',
 			'signupActive' => '',
 			'userAuth' => $this->isUserAuth(),
+			'adminVisible' => $this->isAdministratorUser(),
 		));
 	
 		// admin.phtml
-		return new ViewModel();
+		return new ViewModel(array('message' => $this->params()->fromRoute('message')));
 	}
     
 
