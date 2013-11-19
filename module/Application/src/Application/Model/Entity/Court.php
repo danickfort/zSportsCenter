@@ -4,6 +4,10 @@ namespace Application\Model\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+
 /**
  * @Entity
  * @Table(name="tbl_court")
@@ -11,8 +15,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @author matthieu.rossier
  */
  
- class Court
+ class Court implements InputFilterAwareInterface
  {
+    protected $inputFilter;
+
 	/** @Id @Column(type="integer") @GeneratedValue * */
     protected $id;
 	
@@ -20,13 +26,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 	protected $name;
 	
 	/** @Column(type="string") * */
-	protected $imagePath;
-	
-	/** @Column(type="string") * */
 	protected $description;
 	
 	/**
-	 * @OneToOne(targetEntity="Sport")
+	 * @ManyToOne(targetEntity="Sport", inversedBy="getCourts")
 	 */
 	protected $sport;
 	
@@ -73,20 +76,6 @@ use Doctrine\Common\Collections\ArrayCollection;
      */
     public function setName($name) {
         $this->name = $name;
-    }
-	
-	/**
-     * @return string
-     */
-    public function getImagePath() {
-        return $this->imagePath;
-    }
-    
-    /**
-     * @param string $imagePath
-     */
-    public function setImagePath($imagePath) {
-        $this->imagePath = $imagePath;
     }
 	
 	/**
@@ -143,5 +132,71 @@ use Doctrine\Common\Collections\ArrayCollection;
      */
     public function setHourlyPrices($hourlyPrices) {
         $this->hourlyPrices = $hourlyPrices;
+    }
+
+    public function exchangeArray($data) {
+        $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->name = (isset($data['name'])) ? $data['name'] : null;
+        $this->description = (isset($data['description'])) ? $data['description'] : null;
+    }
+    
+    public function setInputFilter(InputFilterInterface $inputFilter) {
+        throw new \Exception("Not used");
+    }
+    
+    public function getInputFilter() {
+        if (!$this->inputFilter) {
+            $inputFilter = new InputFilter();
+            
+            $inputFilter->add(array(
+                'name' => 'id',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            
+            $inputFilter->add(array(
+                'name' => 'name',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'ISO-8859-1',
+                            'min' => 1,
+                            'max' => 100,
+                        ),
+                    ),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'description',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'ISO-8859-1',
+                            'min' => 1,
+                            'max' => 100,
+                        ),
+                    ),
+                ),
+            ));
+            
+            $this->inputFilter = $inputFilter;
+        }
+        
+        return $this->inputFilter;
     }
 }
