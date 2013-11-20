@@ -43,6 +43,24 @@
     } ?>
 
     <?php
+
+    function displayForm($form, $that) {
+        foreach ($form as $element)
+        {
+            echo '<div class="form-group">';
+            echo '<label class="col-md-3 control-label" for="'.$element->getAttribute('id').'">'.$element->getLabel().'</label>';
+            echo '<div class="col-md-9">';
+            echo $that->formElement($element);
+            echo $that->formElementErrors()
+                ->setMessageOpenFormat('<span class="label label-danger">')
+                ->setMessageSeparatorString('</span><span class="label label-danger">')
+                ->setMessageCloseString('</span>')
+                ->render($element);
+            echo '</div>';
+            echo '</div>';
+        }
+    }
+
     function adminContent($that) {
 
         ?>
@@ -59,6 +77,10 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="sportCenter">
                         <h2>Sport Center</h2>
+                        <form method="post">
+                            <label>SportCenter name</label><input type="text" name="name1" class="form-control" /><br />
+                            <label>SportCenter address</label><input type="text" name="name2" class="form-control" /><br />
+                        </form>
                     </div>
                     <div class="tab-pane" id="contact">
                         <h2>Contact page</h2>
@@ -75,7 +97,8 @@
                         echo '<li'.$active.'>'.'<a href="#'.$sport->getName().'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
                         $active = '';
                     }
-                    echo '<li><a href="#newSport" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
+                    echo '<li'.$active.'><a href="#newSport" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
+                    $active = '';
                     ?>
                 </ul>
 
@@ -98,6 +121,7 @@
                         echo '<div class="row">';
 
                         echo '<div class="col-md-3">';
+                        echo '<h3>'.$sport->getName().'</h3>';
                         echo '<ul class="nav nav-pills nav-stacked">';
                         $active = ' class="active"';
                         foreach ($courts as $court) {
@@ -115,33 +139,34 @@
                         foreach ($courts as $court) {
                             echo '<div class="tab-pane'.$active.'" id="'.$court['name'].'">';
                             $active = '';
-                            echo '<p>'.$court['description'].'</p>';
+                            // Affichage des terrains.
+                            $that->newCourtForm->setAttribute('class', 'form-horizontal');
+                            $that->newCourtForm->get('id')->setAttribute('value', $court['id']);
+                            $that->newCourtForm->get('name')->setAttribute('value', $court['name']);
+                            $that->newCourtForm->get('description')->setAttribute('value', $court['description']);
+                            $that->newCourtForm->get('sport')->setAttribute('value', $sport->getId());
+                            $that->newCourtForm->get('newCourtSubmit')->setAttribute('name', 'modifyCourtSubmit');
+                            $that->newCourtForm->get('newCourtSubmit')->setAttribute('value', 'Update');
+                            $that->newCourtForm->prepare();
+                            echo $that->form()->openTag($that->newCourtForm);
+                            displayForm($that->newCourtForm, $that);
+                            echo $that->form()->closeTag();
+                            // Fin affichage des terrains.
                             echo '</div>';
                         }
                         echo '<div class="tab-pane'.$active.'" id="newCourt'.$sport->getName().'">';
                         $active = '';
-                        echo '<h3>Add a new court</h3>';
+                        echo '<h3>Add a new '.$sport->getName().' court</h3>';
                         $that->newCourtForm->setAttribute('class', 'form-horizontal');
+                        $that->newCourtForm->get('id')->setAttribute('value', '');
+                        $that->newCourtForm->get('name')->setAttribute('value', '');
+                        $that->newCourtForm->get('description')->setAttribute('value', '');
                         $that->newCourtForm->get('sport')->setAttribute('value', $sport->getId());
+                        $that->newCourtForm->get('newCourtSubmit')->setAttribute('name', 'newCourtSubmit');
+                        $that->newCourtForm->get('newCourtSubmit')->setAttribute('value', 'New Court');
                         $that->newCourtForm->prepare();
                         echo $that->form()->openTag($that->newCourtForm);
-                    // echo $that->formCollection($that->newCourtForm);
-
-                        foreach ($that->newCourtForm as $element)
-                        {
-                            echo '<div class="form-group">';
-                            echo '<label class="col-md-3 control-label" for="'.$element->getAttribute('id').'">'.$element->getLabel().'</label>';
-                            echo '<div class="col-md-9">';
-                            echo $that->formElement($element);
-                            echo $that->formElementErrors()
-                            ->setMessageOpenFormat('<span class="label label-danger">')
-                            ->setMessageSeparatorString('</span><span class="label label-danger">')
-                            ->setMessageCloseString('</span>')
-                            ->render($element);
-                            echo '</div>';
-                            echo '</div>';
-                        }
-
+                        displayForm($that->newCourtForm, $that);
                         echo $that->form()->closeTag();
                         echo '</div>';
 
@@ -154,26 +179,13 @@
                         echo '</div>';
                     }
                     ?>
-                    <div class="tab-pane" id="newSport">
+                    <div class="tab-pane<?php echo $active; ?>" id="newSport">
                         <h3>Add a new sport</h3>
                         <?php
                         $that->newSportForm->setAttribute('class', 'form-horizontal');
                         $that->newSportForm->prepare();
                         echo $that->form()->openTag($that->newSportForm);
-                        foreach ($that->newSportForm as $element)
-                        {
-                            echo '<div class="form-group">';
-                            echo '<label class="col-md-2 control-label" for="'.$element->getAttribute('id').'">'.$element->getLabel().'</label>';
-                            echo '<div class="col-md-10">';
-                            echo $that->formElement($element);
-                            echo $that->formElementErrors()
-                            ->setMessageOpenFormat('<span class="label label-danger">')
-                            ->setMessageSeparatorString('</span><span class="label label-danger">')
-                            ->setMessageCloseString('</span>')
-                            ->render($element);
-                            echo '</div>';
-                            echo '</div>';
-                        }
+                        displayForm($that->newSportForm, $that);
                         echo $that->form()->closeTag();
                         ?>
                     </div>
@@ -187,4 +199,4 @@
 
         </div>
         <?php
-    }
+    } ?>

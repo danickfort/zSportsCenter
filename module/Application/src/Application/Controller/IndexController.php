@@ -179,6 +179,7 @@ class IndexController extends AbstractActionController {
 		$newCourtForm = new NewCourtForm();
 		$request = $this->getRequest();
 		if ($request->isPost()) {
+			// Add a sport
 			if (isset($request->getPost()->newSportSubmit)) {
 				$sport = new Sport();
 				$newSportForm->setInputFilter($sport->getInputFilter());
@@ -190,7 +191,8 @@ class IndexController extends AbstractActionController {
 					$this->entity()->getEntityManager()->persist($sport);
 					$this->entity()->getEntityManager()->flush();
 				}
-			} else if (isset($request->getPost()->newCourtSubmit)) {
+			// Add a court
+			} else if (isset($request->getPost()->newCourtSubmit))  {
 				$court = new Court();
 				$newCourtForm->setInputFilter($court->getInputFilter());
 				$newCourtForm->setData($request->getPost());
@@ -203,6 +205,29 @@ class IndexController extends AbstractActionController {
 
 					$this->entity()->getEntityManager()->persist($court);
 					$this->entity()->getEntityManager()->flush();
+				}
+			// Modify a court
+			} else if (isset($request->getPost()->modifyCourtSubmit)) {
+				$court = new Court();
+				$newCourtForm->setInputFilter($court->getInputFilter());
+				$newCourtForm->setData($request->getPost());
+
+				if ($newCourtForm->isValid()) {
+					$court->exchangeArray($newCourtForm->getData());
+
+					$sport = $this->entity()->getEntityManager()->find('Application\Model\Entity\Sport', $newCourtForm->get('sport')->getValue());
+					$court->setSport($sport);
+
+					$query = $this->
+							 entity()->
+							 getEntityManager()->
+							 createQuery("UPDATE Application\Model\Entity\Court c SET c.name = ?1, c.description = ?2, c.sport = ?3 WHERE c.id = ?4");
+
+					$query->setParameter(1, $court->getName());
+					$query->setParameter(2, $court->getDescription());
+					$query->setParameter(3, $court->getSport());
+					$query->setParameter(4, $court->getId());
+					$query->getResult();
 				}
 			}
 		}
