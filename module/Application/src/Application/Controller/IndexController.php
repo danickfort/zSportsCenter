@@ -23,6 +23,7 @@ use Application\Model\Entity\Court;
 use Application\Form\RegistrationForm;
 use Application\Form\NewSportForm;
 use Application\Form\NewCourtForm;
+use Application\Form\SportCenterForm;
 
 class IndexController extends AbstractActionController {
 
@@ -177,6 +178,8 @@ class IndexController extends AbstractActionController {
 
 		$newSportForm = new NewSportForm();
 		$newCourtForm = new NewCourtForm();
+		$sportCenterForm = new sportCenterForm();
+
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			// Add a sport
@@ -229,6 +232,17 @@ class IndexController extends AbstractActionController {
 					$query->setParameter(4, $court->getId());
 					$query->getResult();
 				}
+			} else if (isset($request->getPost()->sportCenterSubmit)) {
+					$sportCenter = new SportCenter();
+					$sportCenterForm->setInputFilter($sportCenter->getInputFilter());
+					$sportCenterForm->setData($request->getPost());
+
+				if ($sportCenterForm->isValid()) {
+					$sportCenter->exchangeArray($sportCenterFort->getData());
+
+					$this->entity()->getEntityManager()->persist($sportCenter);
+					$this->entity()->getEntityManager()->flush();
+				}
 			}
 		}
 
@@ -249,6 +263,7 @@ class IndexController extends AbstractActionController {
 			'sports' => $sports,
 			'newSportForm' => $newSportForm,
 			'newCourtForm' => $newCourtForm,
+			'sportCenterForm' => $sportCenterForm,
 			'message' => $this->params()->fromRoute('message'),
 		));
 	}

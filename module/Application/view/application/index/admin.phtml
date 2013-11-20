@@ -77,10 +77,29 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="sportCenter">
                         <h2>Sport Center</h2>
-                        <form method="post">
-                            <label>SportCenter name</label><input type="text" name="name1" class="form-control" /><br />
-                            <label>SportCenter address</label><input type="text" name="name2" class="form-control" /><br />
-                        </form>
+                        <?php
+                        $that->sportCenterForm->setAttribute('class', 'form-horizontal');
+                        $that->sportCenterForm->setAttribute('method', 'post');
+                        $that->sportCenterForm->prepare();
+                        echo $that->form()->openTag($that->sportCenterForm);
+                        foreach ($that->sportCenterForm as $element)
+                        {
+                            echo '<div class="form-group">';
+                            echo '<label class="col-md-4 control-label" for="'.$element->getAttribute('id').'">'.$element->getLabel().'</label>';
+                            echo '<div class="col-md-7">';
+                            echo $that->formElement($element);
+                            echo $that->formElementErrors()
+                            ->setMessageOpenFormat('<span class="label label-danger">')
+                            ->setMessageSeparatorString('</span><span class="label label-danger">')
+                            ->setMessageCloseString('</span>')
+                            ->render($element);
+                            echo '</div>';
+                            echo '</div>';
+                        }
+                        echo $that->form()->closeTag();
+
+
+                        ?>
                     </div>
                     <div class="tab-pane" id="contact">
                         <h2>Contact page</h2>
@@ -89,6 +108,7 @@
                         <h2>Users Management</h2>
                     </div>
                 </div>
+
 
                 <ul class="nav nav-tabs">
                     <?php
