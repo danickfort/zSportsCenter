@@ -13,12 +13,11 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 use Application\Controller\Plugin\Entity;
-use Application\Model\Entity\Post;
-use Application\Model\Entity\SportCenter;
 
 use Application\Model\Entity\User;
 use Application\Model\Entity\Sport;
 use Application\Model\Entity\Court;
+use Application\Model\Entity\SportCenter;
 
 use Application\Form\RegistrationForm;
 use Application\Form\NewSportForm;
@@ -178,7 +177,35 @@ class IndexController extends AbstractActionController {
 
 		$newSportForm = new NewSportForm();
 		$newCourtForm = new NewCourtForm();
-		$sportCenterForm = new sportCenterForm();
+		$sportCenterForm = new SportCenterForm();
+		
+		$sportCenters = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
+
+		if (!$sportCenters) {
+			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('name', 'newSportCenterSubmit');
+			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('value', 'New sport center');
+		} else {
+			if (!isset($this->request->getPost()->modifySportCenterSubmit)) {
+				$sportCenter = $sportCenters[0];
+
+				$sportCenterForm->get('id')->setAttribute('value', $sportCenter->getId());
+				$sportCenterForm->get('name')->setAttribute('value', $sportCenter->getName());
+				$sportCenterForm->get('address')->setAttribute('value', $sportCenter->getAddress());
+				$sportCenterForm->get('city')->setAttribute('value', $sportCenter->getCity());
+				$sportCenterForm->get('postCode')->setAttribute('value', $sportCenter->getPostCode());
+				$sportCenterForm->get('phone')->setAttribute('value', $sportCenter->getPhone());
+				$sportCenterForm->get('twitter')->setAttribute('value', $sportCenter->getTwitter());
+				$sportCenterForm->get('facebook')->setAttribute('value', $sportCenter->getFacebook());
+				$sportCenterForm->get('popOver1')->setAttribute('value', $sportCenter->getPopOver1());
+				$sportCenterForm->get('popOver2')->setAttribute('value', $sportCenter->getPopOver2());
+				$sportCenterForm->get('openingHour')->setAttribute('value', $sportCenter->getOpeningHour());
+				$sportCenterForm->get('closingHour')->setAttribute('value', $sportCenter->getClosingHour());
+
+			}
+
+			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('name', 'modifySportCenterSubmit');
+			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('value', 'Modify sport center');
+		}
 
 		$request = $this->getRequest();
 		if ($request->isPost()) {
@@ -232,16 +259,47 @@ class IndexController extends AbstractActionController {
 					$query->setParameter(4, $court->getId());
 					$query->getResult();
 				}
-			} else if (isset($request->getPost()->sportCenterSubmit)) {
+			// Add the sport center
+			} else if (isset($request->getPost()->newSportCenterSubmit)) {
 					$sportCenter = new SportCenter();
 					$sportCenterForm->setInputFilter($sportCenter->getInputFilter());
 					$sportCenterForm->setData($request->getPost());
 
 				if ($sportCenterForm->isValid()) {
-					$sportCenter->exchangeArray($sportCenterFort->getData());
+					$sportCenter->exchangeArray($sportCenterForm->getData());
 
 					$this->entity()->getEntityManager()->persist($sportCenter);
 					$this->entity()->getEntityManager()->flush();
+				}
+			}
+			// Modify the sport center
+			else if (isset($request->getPost()->modifySportCenterSubmit)) {
+				$sportCenter = new SportCenter();
+				$sportCenterForm->setInputFilter($sportCenter->getInputFilter());
+				$sportCenterForm->setData($request->getPost());
+
+				if ($sportCenterForm->isValid()) {
+					$sportCenter->exchangeArray($sportCenterForm->getData());
+
+					$query = $this->
+							 entity()->
+							 getEntityManager()->
+							 createQuery("UPDATE Application\Model\Entity\SportCenter c SET c.name = ?1, c.address = ?2, c.city = ?3, c.postCode = ?4, c.phone = ?5, c.twitter = ?6, c.facebook = ?7, c.popOver1 = ?8, c.popOver2 = ?9, c.openingHour = ?10, c.closingHour = ?11 WHERE c.id = ?12");
+
+					$query->setParameter(1, $sportCenter->getName());
+					$query->setParameter(2, $sportCenter->getAddress());
+					$query->setParameter(3, $sportCenter->getCity());
+					$query->setParameter(4, $sportCenter->getPostCode());
+					$query->setParameter(5, $sportCenter->getPhone());
+					$query->setParameter(6, $sportCenter->getTwitter());
+					$query->setParameter(7, $sportCenter->getFacebook());
+					$query->setParameter(8, $sportCenter->getPopOver1());
+					$query->setParameter(9, $sportCenter->getPopOver2());
+					$query->setParameter(10, $sportCenter->getOpeningHour());
+					$query->setParameter(11, $sportCenter->getClosingHour());
+					$query->setParameter(12, $sportCenter->getId());
+
+					$query->getResult();
 				}
 			}
 		}
@@ -258,7 +316,6 @@ class IndexController extends AbstractActionController {
 		));
 	
 		// admin.phtml
-
 		return new ViewModel(array(
 			'sports' => $sports,
 			'newSportForm' => $newSportForm,

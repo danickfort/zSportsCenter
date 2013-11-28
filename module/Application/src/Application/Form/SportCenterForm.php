@@ -13,27 +13,115 @@ class SportCenterForm extends Form
 		$this->setAttribute('method', 'post');
 		$this->setAttribute('class', 'form-horizontal');
 
-		
 		$this->add(array(
-			'name' => 'PopOver1',
-			'type' => 'Textarea',
+			'name' => 'id',
+			'type' => 'Hidden',
+		));
+
+		$this->add(array(
+			'name' => 'name',
+			'type' => 'Text',
 			'options' => array(
-				'label' => 'change popover 1',
+				'label' => 'Name',
 			),
 			'attributes' => array(
-				'placeholder' => 'PopOver1',
+				'placeholder' => 'Name',
+				'class' => 'form-control',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'address',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'Address',
+			),
+			'attributes' => array(
+				'placeholder' => 'Address',
+				'class' => 'form-control',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'city',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'City',
+			),
+			'attributes' => array(
+				'placeholder' => 'City',
+				'class' => 'form-control',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'postCode',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'Postcode',
+			),
+			'attributes' => array(
+				'placeholder' => 'Postcode',
+				'class' => 'form-control',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'phone',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'Phone',
+			),
+			'attributes' => array(
+				'placeholder' => 'Phone',
+				'class' => 'form-control',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'twitter',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'Twitter',
+			),
+			'attributes' => array(
+				'placeholder' => 'Twitter',
+				'class' => 'form-control',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'facebook',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'Facebook',
+			),
+			'attributes' => array(
+				'placeholder' => 'Facebook',
+				'class' => 'form-control',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'popOver1',
+			'type' => 'Textarea',
+			'options' => array(
+				'label' => 'PopOver 1',
+			),
+			'attributes' => array(
+				'placeholder' => 'PopOver 1',
 				'class' => 'form-control',
 			),
 		));
 		
 		$this->add(array(
-			'name' => 'PopOver2',
+			'name' => 'popOver2',
 			'type' => 'Textarea',
 			'options' => array(
-				'label' => 'change popover 2',
+				'label' => 'PopOver 2',
 			),
 			'attributes' => array(
-				'placeholder' => 'PopOver2',
+				'placeholder' => 'PopOver 2',
 				'class' => 'form-control',
 			),
 		));
@@ -45,21 +133,21 @@ class SportCenterForm extends Form
 			'options' => array(
 				'label' => 'Opening Hour',
 				'value_options' => array(
-                             '0' => '3:00',
-                             '1' => '4:00',
-                             '2' => '5:00',
-                             '3' => '6:00',
-                             '4' => '7:00',
-                             '5' => '8:00',
-                             '6' => '9:00',
-                             '7' => '10:00',
-                             '8' => '11:00',
-                             '9' => '12:00',
-                             '10' => '13:00',
-                             '11' => '14:00',
-                             '12' => '15:00',
-                             '13' => '16:00',
-                             '14' => '17:00',
+                             '3' => '3:00',
+                             '4' => '4:00',
+                             '5' => '5:00',
+                             '6' => '6:00',
+                             '7' => '7:00',
+                             '8' => '8:00',
+                             '9' => '9:00',
+                             '10' => '10:00',
+                             '11' => '11:00',
+                             '12' => '12:00',
+                             '13' => '13:00',
+                             '14' => '14:00',
+                             '15' => '15:00',
+                             '16' => '16:00',
+                             '17' => '17:00',
 				),
 				'class' => 'form-control',
 			),
@@ -71,21 +159,21 @@ class SportCenterForm extends Form
 			'options' => array(
 				'label' => 'Closing Hour',
 				'value_options' => array(
-                             '0' => '11:00',
-                             '1' => '12:00',
-                             '2' => '13:00',
-                             '3' => '14:00',
-                             '4' => '15:00',
-                             '5' => '16:00',
-                             '6' => '17:00',
-                             '7' => '18:00',
-                             '8' => '19:00',
-                             '9' => '20:00',
-                             '10' => '21:00',
-                             '11' => '22:00',
-                             '12' => '23:00',
-                             '13' => '00:00',
-                             '14' => '01:00',
+                             '11' => '11:00',
+                             '12' => '12:00',
+                             '13' => '13:00',
+                             '14' => '14:00',
+                             '15' => '15:00',
+                             '16' => '16:00',
+                             '17' => '17:00',
+                             '18' => '18:00',
+                             '19' => '19:00',
+                             '20' => '20:00',
+                             '21' => '21:00',
+                             '22' => '22:00',
+                             '23' => '23:00',
+                             '24' => '00:00',
+                             '25' => '01:00',
 				),
 				'class' => 'form-control',
 			),
@@ -94,12 +182,12 @@ class SportCenterForm extends Form
 	
 		// Submit button.
 		$this->add(array(
-			'name' => 'sportsCenterSubmit',
+			'name' => 'newSportCenterSubmit',
 			'type' => 'Submit',
 			'attributes' => array(
-				'value' => 'sportsCenterSubmit',
+				'value' => 'New sport center',
 				'class' => 'btn btn-primary',
-				),
-			));
+			),
+		));
 	}
 }
