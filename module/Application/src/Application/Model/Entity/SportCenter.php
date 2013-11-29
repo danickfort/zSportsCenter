@@ -4,6 +4,10 @@ namespace Application\Model\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+
 /**
  * @Entity
  * @Table(name="tbl_sport_center")
@@ -11,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @author matthieu.rossier
  */
  
- class SportCenter
+ class SportCenter implements InputFilterAwareInterface
  {
     protected $inputFilter;
 
@@ -22,16 +26,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 	protected $name;
 	
 	/** @Column(type="string") * */
-	protected $adresse;
+	protected $address;
 	
 	/** @Column(type="string") * */
 	protected $city;
 	
 	/** @Column(type="integer") * */
 	protected $postCode;
-	
-	/** @Column(type="string") * */
-	protected $imagePath;
 	
 	/** @Column(type="string") * */
 	protected $phone;
@@ -41,12 +42,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 	
 	/** @Column(type="string") * */
 	protected $facebook;
-	
-	/** @Column(type="integer") * */
-	protected $timetableHourStart;
-	
-	/** @Column(type="integer") * */
-	protected $timetableHourEnd;
 
     /** @Column(type="string") * */
     protected $popOver1;
@@ -102,15 +97,15 @@ use Doctrine\Common\Collections\ArrayCollection;
     /**
      * @return string
      */
-    public function getAdresse() {
-        return $this->adresse;
+    public function getAddress() {
+        return $this->address;
     }
     
     /**
-     * @param string $adresse
+     * @param string $address
      */
-    public function setAdresse($adresse) {
-        $this->adresse = $adresse;
+    public function setAddress($address) {
+        $this->address = $address;
     }
 	
     /**
@@ -139,20 +134,6 @@ use Doctrine\Common\Collections\ArrayCollection;
      */
     public function setPostCode($postCode) {
         $this->postCode = $postCode;
-    }
-	
-    /**
-     * @return string
-     */
-    public function getImagePath() {
-        return $this->imagePath;
-    }
-    
-    /**
-     * @param string $imagePath
-     */
-    public function setImagePath($imagePath) {
-        $this->imagePath = $imagePath;
     }
 	
     /**
@@ -196,33 +177,12 @@ use Doctrine\Common\Collections\ArrayCollection;
     public function setFacebook($facebook) {
         $this->facebook = $facebook;
     }
-	
+
     /**
-     * @return int
+     * @return string
      */
-    public function getTimetableHourStart() {
-        return $this->timetableHourStart;
-    }
-    
-    /**
-     * @param int $timetableHourStart
-     */
-    public function setTimetableHourStart($timetableHourStart) {
-        $this->timetableHourStart = $timetableHourStart;
-    }
-	
-    /**
-     * @return int
-     */
-    public function getTimetableHourEnd() {
-        return $this->timetableHourEnd;
-    }
-    
-    /**
-     * @param int $timetableHourEnd
-     */
-    public function setTimetableHourEnd($timetableHourEnd) {
-        $this->timetableHourEnd = $timetableHourEnd;
+    public function getPopOver1() {
+        return $this->popOver1;
     }
 
     /**
@@ -230,6 +190,13 @@ use Doctrine\Common\Collections\ArrayCollection;
      */
     public function setPopOver1($popOver1) {
         $this->popOver1 = $popOver1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPopOver2() {
+        return $this->popOver2;
     }
 
 
@@ -241,10 +208,24 @@ use Doctrine\Common\Collections\ArrayCollection;
     }
 
     /**
+     * @return int
+     */
+    public function getOpeningHour() {
+        return $this->openingHour;
+    }
+
+    /**
      * @param int $openingHour
      */
     public function setOpeningHour($openingHour) {
         $this->openingHour = $openingHour;
+    }
+
+    /**
+     * @return int
+     */
+    public function getClosingHour() {
+        return $this->closingHour;
     }
 
     /**
@@ -269,6 +250,14 @@ use Doctrine\Common\Collections\ArrayCollection;
     }
 
     public function exchangeArray($data) {
+        $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->name = (isset($data['name'])) ? $data['name'] : null;
+        $this->address = (isset($data['address'])) ? $data['address'] : null;
+        $this->city = (isset($data['city'])) ? $data['city'] : null;
+        $this->postCode = (isset($data['postCode'])) ? $data['postCode'] : null;
+        $this->phone = (isset($data['phone'])) ? $data['phone'] : null;
+        $this->twitter = (isset($data['twitter'])) ? $data['name'] : null;
+        $this->facebook = (isset($data['facebook'])) ? $data['facebook'] : null;
         $this->popOver1 = (isset($data['popOver1'])) ? $data['popOver1'] : null;
         $this->popOver2 = (isset($data['popOver2'])) ? $data['popOver2'] : null;
         $this->openingHour = (isset($data['openingHour'])) ? $data['openingHour'] : null;
@@ -282,7 +271,138 @@ use Doctrine\Common\Collections\ArrayCollection;
     public function getInputFilter() {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            
+
+            $inputFilter->add(array(
+                'name' => 'id',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'name',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'ISO-8859-1',
+                            'min' => 1,
+                            'max' => 100,
+                        ),
+                    ),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'address',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'ISO-8859-1',
+                            'min' => 1,
+                            'max' => 100,
+                        ),
+                    ),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'city',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'ISO-8859-1',
+                            'min' => 1,
+                            'max' => 100,
+                        ),
+                    ),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'postCode',
+                'required' => true,
+                'validators' => array(
+                    array(
+                        'name' => 'Digits',
+                    ),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'phone',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'ISO-8859-1',
+                            'min' => 1,
+                            'max' => 100,
+                        ),
+                    ),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'twitter',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'ISO-8859-1',
+                            'min' => 1,
+                            'max' => 100,
+                        ),
+                    ),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'facebook',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'ISO-8859-1',
+                            'min' => 1,
+                            'max' => 100,
+                        ),
+                    ),
+                ),
+            ));
             
             $inputFilter->add(array(
                 'name' => 'popOver1',
@@ -342,14 +462,11 @@ use Doctrine\Common\Collections\ArrayCollection;
                     ),
                 ),
             ));
-            
-            
-            
+
             $this->inputFilter = $inputFilter;
         }
         
         return $this->inputFilter;
     }
-
 
  }
