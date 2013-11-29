@@ -10,7 +10,10 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
+
 use Zend\Session\Container;
 use Application\Controller\Plugin\Entity;
 use Application\Model\Entity\Post;
@@ -272,7 +275,19 @@ class IndexController extends AbstractActionController {
 	
 	public function getReservationAction()
 	{
+		$start = (int) $this->params()->fromQuery('start', 0);
+        $end   = (int) $this->params()->fromQuery('end', 0);
 
+        $starting_at = date('Y-m-d H:i:s', $start);
+        $ending_at   = date('Y-m-d H:i:s', $end);
+
+        $model = new EventsModel($this->getEntityManager(), $this->getCacheAdapter());
+        $events = $model->getEvents($starting_at, $ending_at);
+
+        return new JsonModel(array(
+            'events' => $events,
+            'success' => true,
+        ));
 	}	
 
 	public function delReservationAction()
