@@ -11,6 +11,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 use Zend\Session\Container;
 use Application\Controller\Plugin\Entity;
 
@@ -324,8 +325,40 @@ class IndexController extends AbstractActionController {
 			'message' => $this->params()->fromRoute('message'),
 		));
 	}
-    
 
+	public function removeSportAction()
+	{
+		$params = $this->getRequest()->getPost();
+
+		$code = $this->params()->fromQuery('code',0);
+		$id = $this->params()->fromQuery('id',0);
+
+		if ($code == "removeSport") {
+			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
+			->select("c")
+			->from("Application\Model\Entity\Court", "c")
+			->where('c.sport = :sport');
+
+			$qb->setParameter('sport', $id);
+
+			$courts = $qb->getQuery()->getResult();
+
+			$names = array();
+			foreach($courts as $court) {
+				$names[] = $court->getName();
+			}
+
+			return new JsonModel(array(
+				'code' => 'confirm',
+				'idSport' => $id,
+				'courts' => $names,
+			));
+		} else if ($code == "confirm") {
+			return new JsonModel(array(
+				'code' => 'confirm',
+			));
+		}
+	}
 	
 	public function getReservationAction()
 	{

@@ -1,18 +1,12 @@
 
-<?php if ($this->message == 'error' || $this->message == 'notloggedin') {
-    echo $this->headLink()
-    ->prependStylesheet($this->basePath() . '/css/signin.css')
-    ;
-    $this->headScript()->offsetSetFile(100, $basePath . '/js/jquery.min.js', 'text/javascript')
-    ->offsetSetFile(101, $basePath . '/js/bootstrap.min.js');
-    ?>
-    <script type="text/javascript">
-        window.onload() = function()
-        {
-            $('#example').tooltip(options);
-            console.log("tits");
-        };
-    </script>
+<?php
+    // JQuery for administrator page.
+    $this->headScript()->appendFile($this->basePath() . '/js/admin.js');
+?>
+<?php
+    if ($this->message == 'error' || $this->message == 'notloggedin') {
+    $this->headStyle()->prependStylesheet($this->basePath() . '/css/signin.css');
+?>
     <div class="alert alert-danger"><?php echo ($this->message=='error') ? 'Wrong login information!' : 'You must login!';?></div>
     <form class="form-signin" method="post" action="<?php echo $this->url('home', array('action' => 'signin')); ?>">
         <h2 class="form-signin-heading">Please sign in</h2>
@@ -25,10 +19,7 @@
 
     </form>
     <?php } else {
-
-        //if ($this->message) {
-        switch($this->message)
-        {
+        switch($this->message) {
             case "success":
             adminContent($this);
             break;
@@ -39,11 +30,9 @@
             adminContent($this);
             break;
         }
-            //}
     } ?>
 
     <?php
-
     function displayForm($form, $that) {
         foreach ($form as $element)
         {
@@ -70,7 +59,6 @@
 
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#sportCenter" data-toggle="tab">Sport Center</a></li>
-                    <li><a href="#contact" data-toggle="tab">Contact page</a></li>
                     <li><a href="#users" data-toggle="tab">Users Managment</a></li>
                 </ul>
 
@@ -114,7 +102,7 @@
                     <?php
                     $active = ' class="active"';
                     foreach ($that->sports as $sport) {
-                        echo '<li'.$active.'>'.'<a href="#'.$sport->getName().'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
+                        echo '<li'.$active.'>'.'<a href="#'.$sport->getName().'" data-toggle="tab">'.$sport->getName().' <span class="glyphicon glyphicon-remove" data-id="'.$sport->getId().'"></span></a>'.'</li>';
                         $active = '';
                     }
                     echo '<li'.$active.'><a href="#newSport" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
