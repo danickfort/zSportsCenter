@@ -256,7 +256,7 @@ use Zend\InputFilter\InputFilterInterface;
         $this->city = (isset($data['city'])) ? $data['city'] : null;
         $this->postCode = (isset($data['postCode'])) ? $data['postCode'] : null;
         $this->phone = (isset($data['phone'])) ? $data['phone'] : null;
-        $this->twitter = (isset($data['twitter'])) ? $data['name'] : null;
+        $this->twitter = (isset($data['twitter'])) ? $data['twitter'] : null;
         $this->facebook = (isset($data['facebook'])) ? $data['facebook'] : null;
         $this->popOver1 = (isset($data['popOver1'])) ? $data['popOver1'] : null;
         $this->popOver2 = (isset($data['popOver2'])) ? $data['popOver2'] : null;

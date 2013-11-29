@@ -13,7 +13,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
-
 use Zend\Session\Container;
 use Application\Controller\Plugin\Entity;
 
@@ -155,6 +154,8 @@ class IndexController extends AbstractActionController {
 	public function contactAction() {
 		$this->setAction('contact');
 	
+		$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
+
 	 	// PASS VARIABLE IS ADMIN !!!
 		$this->layout()->setVariables(array(
 			'homeActive' => '',
@@ -166,7 +167,7 @@ class IndexController extends AbstractActionController {
 		));
 	
 		// contact.phtml
-		return new ViewModel(array('message' => $this->params()->fromRoute('message')));
+		return new ViewModel(array('message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
 	}
 	
 	public function adminAction() {
@@ -328,7 +329,40 @@ class IndexController extends AbstractActionController {
 			'message' => $this->params()->fromRoute('message'),
 		));
 	}
-	
+
+	public function removeSportAction()
+	{
+		$params = $this->getRequest()->getPost();
+
+		$code = $this->params()->fromQuery('code',0);
+		$id = $this->params()->fromQuery('id',0);
+
+		if ($code == "removeSport") {
+			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
+			->select("c")
+			->from("Application\Model\Entity\Court", "c")
+			->where('c.sport = :sport');
+
+			$qb->setParameter('sport', $id);
+
+			$courts = $qb->getQuery()->getResult();
+
+			$names = array();
+			foreach($courts as $court) {
+				$names[] = $court->getName();
+			}
+
+			return new JsonModel(array(
+				'code' => 'confirm',
+				'idSport' => $id,
+				'courts' => $names,
+			));
+		} else if ($code == "confirm") {
+			return new JsonModel(array(
+				'code' => 'confirm',
+			));
+		}
+	}	
 	public function getReservationAction()
 	{
 
