@@ -85,7 +85,7 @@ class SportCenterForm extends Form
 				'label' => 'Twitter',
 			),
 			'attributes' => array(
-				'placeholder' => 'Twitter',
+				'placeholder' => '@Twitter',
 				'class' => 'form-control',
 			),
 		));
