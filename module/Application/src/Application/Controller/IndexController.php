@@ -152,6 +152,8 @@ class IndexController extends AbstractActionController {
 	public function contactAction() {
 		$this->setAction('contact');
 	
+		$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
+
 	 	// PASS VARIABLE IS ADMIN !!!
 		$this->layout()->setVariables(array(
 			'homeActive' => '',
@@ -163,7 +165,7 @@ class IndexController extends AbstractActionController {
 		));
 	
 		// contact.phtml
-		return new ViewModel(array('message' => $this->params()->fromRoute('message')));
+		return new ViewModel(array('message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
 	}
 	
 	public function adminAction() {
