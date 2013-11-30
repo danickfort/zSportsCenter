@@ -10,6 +10,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Zend\Session\Container;
@@ -19,6 +20,7 @@ use Application\Model\Entity\User;
 use Application\Model\Entity\Sport;
 use Application\Model\Entity\Court;
 use Application\Model\Entity\SportCenter;
+use Application\Model\Entity\Reservation;
 
 use Application\Form\RegistrationForm;
 use Application\Form\NewSportForm;
@@ -398,11 +400,42 @@ class IndexController extends AbstractActionController {
 				'namesCourt' => $namesCourt,
 			));
 		}
-	}
-	
+	}	
 	public function getReservationAction()
 	{
 
+		// PASS IT TIMESTAMP UNIX BY CALENDAR!!!
+		$start = (int) $this->params()->fromQuery('start', 0);
+        $end   = (int) $this->params()->fromQuery('end', 0);
+
+        $starting_at = date('Y-m-d H:i:s', $start);
+        $ending_at   = date('Y-m-d H:i:s', $end);
+
+        $records = $this->entity()->getEntityManager()->createQueryBuilder()
+            ->select('e')
+            ->from('Application\Model\Entity\Reservation', 'e')
+            ->getQuery()
+            ->getResult();
+
+        $list = array();
+
+        foreach($records as $record)
+        	{
+        		$item = array(
+        			'id' => $record->getId(),
+        			'date' => $record->getDate(),
+        			'startHour' => $record->getStartHour(),
+        			'endHour' => $record->getEndHour(),
+        			);
+        		$list[] = $item;
+        	}
+
+
+        return new JsonModel(array(
+        	'res' => $list,
+        	'start' => $starting_at,
+       		)
+        );
 	}	
 
 	public function delReservationAction()

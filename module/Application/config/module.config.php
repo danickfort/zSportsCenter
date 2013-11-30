@@ -19,7 +19,8 @@ return array(
                     'route'    => '/[index/:action[/[:message]]]',
                     'defaults' => array(
                         'controller' => 'Application\Controller\Index',
-                        'action'     => 'index', 'add-post', 'signup', 'signin', 'signout', 'admin', 'contact', 'removeSport',
+                        'action'     => 'index', 'add-post', 'signup', 'signin', 'signout', 'admin', 'contact', 'get-reservation', 'remove-sport',
+
                     ),
                 ),
             ),
