@@ -346,7 +346,7 @@ class IndexController extends AbstractActionController {
 			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
 			->select("c")
 			->from("Application\Model\Entity\Court", "c")
-			->where('c.sport = :sport');
+			->where("c.sport = :sport");
 
 			$qb->setParameter('sport', $id);
 
@@ -358,14 +358,52 @@ class IndexController extends AbstractActionController {
 			}
 
 			return new JsonModel(array(
-				'code' => 'confirm',
 				'idSport' => $id,
 				'courts' => $names,
 				));
 		} else if ($code == "confirm") {
+			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
+			->select("c")
+			->from("Application\Model\Entity\Court", "c")
+			->where("c.sport = :sport");
+
+			$qb->setParameter("sport", $id);
+
+			$courts = $qb->getQuery()->getResult();
+
+			$namesCourt = array();
+			// deleting courts
+			foreach($courts as $court) {
+				$namesCourt[] = $court->getName();
+				$idCourt = $court->getId();
+
+				$query = $this->entity()->getEntityManager()->createQuery("DELETE Application\Model\Entity\Court c WHERE c.id = ?1");
+				$query->setParameter(1, $idCourt);
+				$result = $query->getResult();
+			}
+
+			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
+			->select("s")
+			->from("Application\Model\Entity\Sport", "s")
+			->where("s.id = :id");
+
+			$qb->setParameter("id", $id);
+
+			$sports = $qb->getQuery()->getResult();
+
+			$sportName = '';
+			foreach($sports as $sport) {
+				$sportName = $sport->getName();
+			}
+
+			$query = $this->entity()->getEntityManager()->createQuery("DELETE Application\Model\Entity\Sport s WHERE s.id = ?1");
+			$query->setParameter(1, $id);
+			$result = $query->getResult();
+			
 			return new JsonModel(array(
-				'code' => 'confirm',
-				));
+				'sportName' => $sportName,
+				'namesCourt' => $namesCourt,
+			));
 		}
 	}	
 	public function getReservationAction()

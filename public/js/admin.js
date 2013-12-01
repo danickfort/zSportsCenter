@@ -11,7 +11,6 @@ $(document).ready(function() {
 					id: id
 				},
 				success: function(json) {
-
 					var message = 'Deleting court:\n';
 					message += '----------------\n';
 					var size = json.courts.length;
@@ -30,7 +29,34 @@ $(document).ready(function() {
 								id: json.idSport
 							},
 							success: function(json) {
+								console.log(json.sportName);
+								var li = $("a[href='#" + json.sportName + "']").parent();
+								var div = $("#" +  json.sportName);
 
+								var prevLi = li.prev();
+								var prevDiv = div.prev();
+
+								console.log("prevLi: " + prevLi);
+								console.log("prevDiv: " + prevDiv);
+
+								if ($.isEmptyObject(prevLi)) {
+									console.log("prevLi");
+									prevLi.addClass("active");
+								} else {
+									console.log("nextLi");
+									li.next().addClass("active");
+								}
+
+								if ($.isEmptyObject(prevDiv)) {
+									console.log("prevDiv");
+									prevDiv.addClass("active");
+								} else {
+									console.log("nextDiv");
+									div.next().addClass("active");
+								}
+
+								li.remove();
+								div.remove();
 							}
 						});
 					}
