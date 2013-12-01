@@ -75,7 +75,7 @@
         firstDay: 1, // start week from Monday
         root: 'events',
         success: 'success',
-        events: api.get,
+        events:  api.get,
         timeFormat: 'H:mm', // uppercase H for 24-hour clock
         axisFormat: 'H:mm',
         slotMinutes: 15,
@@ -97,12 +97,12 @@
             if (bool)
             {
                 $('#loading').show();
-                $('.container-fluid').hide();
+                //$('#calendar').hide();
             }
             else
             {
                 $('#loading').hide();
-                $('.container-fluid').show();
+                //$('#calendar').show();
             }
         }
     };
@@ -129,18 +129,22 @@
      function createEvent( startDate, endDate, allDay, jsEvent, view ) {
         var ts = new Date().getTime();
 
-        bootbox.prompt(translate('Nommez votre réservato'), function(title) {
-            if (title) {
+        bootbox.confirm(translate(
+            "Confirmez vous la réservation pour le " + $.fullCalendar.formatDate(startDate, "dd-MM-yyyy")
+            + " de<br />"
+            + "<strong>" + $.fullCalendar.formatDate(startDate, "HH:mm") + "</strong>"
+            + "<br />à<br />"
+            + "<strong>" + $.fullCalendar.formatDate(endDate, "HH:mm") + "</strong>" 
+            ), function(confirmed) {
+            if (confirmed) {
                 startDate = $.fullCalendar.formatDate(startDate, format);
                 endDate = $.fullCalendar.formatDate(endDate, format);
 
                 $.ajax({
                     url: api.add,
                     data: {
-                        title: title,
                         start: startDate,
                         end: endDate,
-                        all_day: allDay,
                         ts: ts
                     },
                     type: "POST",
@@ -163,17 +167,17 @@
                         bootbox.alert('Error occured during saving event in the database', function() {});
                     }
                 });
-calendar.fullCalendar('renderEvent', {
-    title: title,
-    start: startDate,
-    end: endDate,
-    allDay: allDay,
-    ts: ts
-                }, true); // make the event "stick"
-}
-});
-calendar.fullCalendar('unselect');
-}
+                calendar.fullCalendar('renderEvent', {
+                    title: "Réservé à vous !", // TODO CHANGE THIS!!!
+                    start: startDate,
+                    end: endDate,
+                    allDay: allDay,
+                    ts: ts
+                    }, true); // make the event "stick"
+            }
+        });
+        calendar.fullCalendar('unselect');
+        }
 
     /**
      * @private

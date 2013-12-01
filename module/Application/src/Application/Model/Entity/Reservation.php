@@ -8,20 +8,22 @@ namespace Application\Model\Entity;
  *
  * @author matthieu.rossier
  */
- 
- class Reservation
+
+use Zend\InputFilter\InputFilter,
+    Zend\InputFilter\InputFilterAwareInterface,
+    Zend\InputFilter\InputFilterInterface;
+
+class Reservation implements InputFilterAwareInterface
  {
+    protected $inputFilter;
 	/** @Id @Column(type="integer") @GeneratedValue * */
     protected $id;
 	
-    /** @Column(type="date") * */
-    protected $date;
-	
-	/** @Column(type="integer") * */
-    protected $startHour;
-	
-    /** @Column(type="integer") * */
-    protected $endHour;
+    /** @Column(type="datetime") * */
+    protected $startDateTime;
+    
+    /** @Column(type="datetime") * */
+    protected $endDateTime;
 	
 	/**
 	 * @ManyToOne(targetEntity="User", inversedBy="getReservations")
@@ -53,43 +55,29 @@ namespace Application\Model\Entity;
     /**
      * @return DateTime
      */
-    public function getDate() {
-        return $this->date;
+    public function getStartDateTime() {
+        return $this->startDateTime;
     }
     
     /**
-     * @param DateTime $date
+     * @param DateTime $startDateTime
      */
-    public function setDate($date) {
-        $this->date = $date;
+    public function setStartDateTime($startDateTime) {
+        $this->startDateTime = $startDateTime;
     }
-	
-	/**
-     * @return int
+
+    /**
+     * @return DateTime
      */
-    public function getStartHour() {
-        return $this->startHour;
+    public function getEndDateTime() {
+        return $this->endDateTime;
     }
     
     /**
-     * @param int $startHour
+     * @param DateTime $endDateTime
      */
-    public function setStartHour($startHour) {
-        $this->startHour = $startHour;
-    }
-	
-	/**
-     * @return int
-     */
-    public function getEndHour() {
-        return $this->id;
-    }
-    
-    /**
-     * @param int $endHour
-     */
-    public function setEndHour($endHour) {
-        $this->endHour = $endHour;
+    public function setEndDateTime($endDateTime) {
+        $this->endDateTime = $endDateTime;
     }
 	
 	/**
@@ -118,5 +106,47 @@ namespace Application\Model\Entity;
      */
     public function setCourt($court) {
         $this->court = $court;
+    }
+
+    /*public function exchangeArray($data) {
+        $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->name = (isset($data['name'])) ? $data['name'] : null;
+        $this->description = (isset($data['description'])) ? $data['description'] : null;
+    }*/
+    
+    public function setInputFilter(InputFilterInterface $inputFilter) {
+        throw new \Exception("Not used");
+    }
+    
+    public function getInputFilter() {
+        if (!$this->inputFilter) {
+            $inputFilter = new InputFilter();
+            
+            /*$inputFilter->add(array(
+                'name' => 'id',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ));*/
+            
+            
+            $this->inputFilter = $inputFilter;
+        }
+        
+        return $this->inputFilter;
+    }
+
+    /**
+     * Populate from an array.
+     *
+     * @param array $data
+     */
+    public function populate($data = array())
+    {
+        $this->id          = $data['id'];
+        $this->startDateTime  = isset($data['start']) ? new \DateTime($data['start']) : null;
+        $this->endDateTime    = isset($data['end']) ? new \DateTime($data['end']) : null;
+        // TODO : $this->court AND user to ADD HERE !
     }
 }

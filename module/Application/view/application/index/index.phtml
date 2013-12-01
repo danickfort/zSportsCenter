@@ -25,6 +25,7 @@
 	->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap-responsive.css')
 	->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap.min.css')
 	->offsetSetStylesheet(++$idx, $basePath . '/css/indexPage.css')
+	->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap.min.css')
 	;
 
 	$idx = 100;
@@ -138,16 +139,16 @@
 		var calendarWrapper = new zCalendarWrapper({
 		container: '#calendar',
 		api: {
-		get: '<?php echo $this->url('reservations_json', array(
+		get: '<?php echo $this->url('home', array(
 			'action'=>'get-reservation',
 			));?>',
-		add: '<?php echo $this->url('reservations_json', array(
+		add: '<?php echo $this->url('home', array(
 			'action'=>'add-reservation',
 			));?>',
-		update: '<?php echo $this->url('reservations_json', array(
+		update: '<?php echo $this->url('home', array(
 			'action'=>'upd-reservation',
 			));?>',
-		erase: '<?php echo $this->url('reservations_json', array(
+		erase: '<?php echo $this->url('home', array(
 			'action'=>'del-reservation',
 			));?>'
 		},
@@ -218,14 +219,14 @@ allDayText: '<?php echo $this->translate('all-day', 'evl-calendar'); ?>',
 header: {
 left: 'prev,next today',
 center: 'title',
-right:''
+            right: 'month,agendaWeek,agendaDay'
 },
 defaultView:'agendaWeek',
 
 minTime: 8,
 maxTime: 21,
 
-firstDay:2,
+firstDay:1,
 slotMinutes:60,
 snapMinutes:60,
 

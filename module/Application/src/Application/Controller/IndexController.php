@@ -9,6 +9,9 @@
 
 namespace Application\Controller;
 
+use Doctrine\ORM\Query;
+
+
 use Zend\Mvc\Controller\AbstractActionController;
 
 use Zend\View\Model\ViewModel;
@@ -26,6 +29,8 @@ use Application\Form\RegistrationForm;
 use Application\Form\NewSportForm;
 use Application\Form\NewCourtForm;
 use Application\Form\SportCenterForm;
+
+use Application\Form\ReservationForm;
 
 class IndexController extends AbstractActionController {
 
@@ -56,7 +61,7 @@ class IndexController extends AbstractActionController {
 		}
 	}
 	
-    public function indexAction() {	
+	public function indexAction() {	
 		$this->setAction('');
 
 		$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
@@ -68,15 +73,15 @@ class IndexController extends AbstractActionController {
 			'signupActive' => '',
 			'userAuth' => $this->isUserAuth(),
 			'adminVisible' => $this->isAdministratorUser(),
-		));
+			));
 		
 		// index.pthml
 		return new ViewModel(array('message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
-    }
+	}
 	
 	public function signupAction() {
 		$this->setAction('signup');
-	
+
 		$form = new RegistrationForm();
 		
 		$request = $this->getRequest();
@@ -103,12 +108,12 @@ class IndexController extends AbstractActionController {
 			'signupActive' => 'active',
 			'userAuth' => $this->isUserAuth(),
 			'adminVisible' => $this->isAdministratorUser(),
-		));
+			));
 		
 		// signup.phtml
 		return new ViewModel(array(
 			'form' => $form,
-		));
+			));
 	}
 	
 	public function signoutAction() {
@@ -153,7 +158,7 @@ class IndexController extends AbstractActionController {
 	
 	public function contactAction() {
 		$this->setAction('contact');
-	
+
 		$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
 
 	 	// PASS VARIABLE IS ADMIN !!!
@@ -164,15 +169,15 @@ class IndexController extends AbstractActionController {
 			'signupActive' => '',
 			'userAuth' => $this->isUserAuth(),
 			'adminVisible' => $this->isAdministratorUser(),
-		));
-	
+			));
+
 		// contact.phtml
 		return new ViewModel(array('message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
 	}
 	
 	public function adminAction() {
 		$this->setAction('admin');
-	
+
 		if (!$this->isUserAuth() && $this->params()->fromRoute('message') != 'notloggedin' && $this->params()->fromRoute('message') != 'notpermitted')
 			return $this->redirect()->toRoute('home', array('action' => 'admin', 'message' => 'notloggedin'));
 
@@ -254,9 +259,9 @@ class IndexController extends AbstractActionController {
 					$court->setSport($sport);
 
 					$query = $this->
-							 entity()->
-							 getEntityManager()->
-							 createQuery("UPDATE Application\Model\Entity\Court c SET c.name = ?1, c.description = ?2, c.sport = ?3 WHERE c.id = ?4");
+					entity()->
+					getEntityManager()->
+					createQuery("UPDATE Application\Model\Entity\Court c SET c.name = ?1, c.description = ?2, c.sport = ?3 WHERE c.id = ?4");
 
 					$query->setParameter(1, $court->getName());
 					$query->setParameter(2, $court->getDescription());
@@ -266,9 +271,9 @@ class IndexController extends AbstractActionController {
 				}
 			// Add the sport center
 			} else if (isset($request->getPost()->newSportCenterSubmit)) {
-					$sportCenter = new SportCenter();
-					$sportCenterForm->setInputFilter($sportCenter->getInputFilter());
-					$sportCenterForm->setData($request->getPost());
+				$sportCenter = new SportCenter();
+				$sportCenterForm->setInputFilter($sportCenter->getInputFilter());
+				$sportCenterForm->setData($request->getPost());
 
 				if ($sportCenterForm->isValid()) {
 					$sportCenter->exchangeArray($sportCenterForm->getData());
@@ -287,9 +292,9 @@ class IndexController extends AbstractActionController {
 					$sportCenter->exchangeArray($sportCenterForm->getData());
 
 					$query = $this->
-							 entity()->
-							 getEntityManager()->
-							 createQuery("UPDATE Application\Model\Entity\SportCenter c SET c.name = ?1, c.address = ?2, c.city = ?3, c.postCode = ?4, c.phone = ?5, c.twitter = ?6, c.facebook = ?7, c.popOver1 = ?8, c.popOver2 = ?9, c.openingHour = ?10, c.closingHour = ?11 WHERE c.id = ?12");
+					entity()->
+					getEntityManager()->
+					createQuery("UPDATE Application\Model\Entity\SportCenter c SET c.name = ?1, c.address = ?2, c.city = ?3, c.postCode = ?4, c.phone = ?5, c.twitter = ?6, c.facebook = ?7, c.popOver1 = ?8, c.popOver2 = ?9, c.openingHour = ?10, c.closingHour = ?11 WHERE c.id = ?12");
 
 					$query->setParameter(1, $sportCenter->getName());
 					$query->setParameter(2, $sportCenter->getAddress());
@@ -310,7 +315,7 @@ class IndexController extends AbstractActionController {
 		}
 
 		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
-	
+
 		$this->layout()->setVariables(array(
 			'homeActive' => '',
 			'contactActive' => '',
@@ -318,8 +323,8 @@ class IndexController extends AbstractActionController {
 			'signupActive' => '',
 			'userAuth' => $this->isUserAuth(),
 			'adminVisible' => $this->isAdministratorUser(),
-		));
-	
+			));
+
 		// admin.phtml
 		return new ViewModel(array(
 			'sports' => $sports,
@@ -327,7 +332,7 @@ class IndexController extends AbstractActionController {
 			'newCourtForm' => $newCourtForm,
 			'sportCenterForm' => $sportCenterForm,
 			'message' => $this->params()->fromRoute('message'),
-		));
+			));
 	}
 
 	public function removeSportAction()
@@ -356,48 +361,51 @@ class IndexController extends AbstractActionController {
 				'code' => 'confirm',
 				'idSport' => $id,
 				'courts' => $names,
-			));
+				));
 		} else if ($code == "confirm") {
 			return new JsonModel(array(
 				'code' => 'confirm',
-			));
+				));
 		}
 	}	
 	public function getReservationAction()
 	{
 
-		// PASS IT TIMESTAMP UNIX BY CALENDAR!!!
 		$start = (int) $this->params()->fromQuery('start', 0);
-        $end   = (int) $this->params()->fromQuery('end', 0);
+		$end   = (int) $this->params()->fromQuery('end', 0);
 
-        $starting_at = date('Y-m-d H:i:s', $start);
-        $ending_at   = date('Y-m-d H:i:s', $end);
+		$starting_at = date('Y-m-d H:i:s', $start);
+		$ending_at   = date('Y-m-d H:i:s', $end);
 
-        $records = $this->entity()->getEntityManager()->createQueryBuilder()
-            ->select('e')
-            ->from('Application\Model\Entity\Reservation', 'e')
-            ->getQuery()
-            ->getResult();
+		$records = $this->entity()->getEntityManager()->createQueryBuilder()
+		->select('e')
+		->from('Application\Model\Entity\Reservation', 'e')
+		->setParameter('starting_at', $starting_at)
+		->where('e.startDateTime >= :starting_at')
+		->setParameter('ending_at', $ending_at)
+		->andWhere('e.endDateTime < :ending_at')
+		->getQuery()
+		->getResult();
 
-        $list = array();
+		$list = array();
 
-        foreach($records as $record)
-        	{
-        		$item = array(
-        			'id' => $record->getId(),
-        			'date' => $record->getDate(),
-        			'startHour' => $record->getStartHour(),
-        			'endHour' => $record->getEndHour(),
-        			);
-        		$list[] = $item;
-        	}
+		foreach($records as $record)
+		{
+			$item = array(
+				'id' => $record->getId() + "",
+				'title' => "Réservé",
+				'start' => $record->getStartDateTime()->format('Y-m-d H:i'),
+				'end' => $record->getEndDateTime()->format('Y-m-d H:i'),
+				'allDay' => false,
+				);
+			$list[] = $item;
+		}
 
 
-        return new JsonModel(array(
-        	'res' => $list,
-        	'start' => $starting_at,
-       		)
-        );
+		return new JsonModel(array(
+			'events' => $list
+			)
+		);
 	}	
 
 	public function delReservationAction()
@@ -405,14 +413,48 @@ class IndexController extends AbstractActionController {
 
 	}	
 
-	public function addReservationAction()
-	{
+    public function addReservationAction()
+    {
 
-	}	
+    	// TODO : CHECK IF USER LOGGED IN !!
+    	$request = $this->getRequest();
 
-	public function updReservationAction()
-	{
+    	$success = false;
+    	$ts      = $this->params()->fromPost('ts', 0);
+    	$id = 0;
 
-	}
+    	$form = new ReservationForm();
+
+    	if ($request->isPost())
+    	{
+    		// TODO : add court & user data to $form 
+    		$form->setData($request->getPost());
+    		$reservation = new Reservation();
+            $form->setInputFilter($reservation->getInputFilter());
+    		if ($form->isValid()) {
+
+    			$data = $form->getData();
+
+    			$reservation->populate($data);
+    			$this->entity()->getEntityManager()->persist($reservation);
+    			$this->entity()->getEntityManager()->flush();
+
+    			$success   = true;
+    			$id        = (int) $reservation->getId();
+    		}
+        }
+
+        return new JsonModel(array(
+        	'success' => $success,
+        	'ts'      => $ts,
+        	'id'      => $id,
+        	)
+        );
+    }	
+
+    public function updReservationAction()
+    {
+
+    }
 
 }
