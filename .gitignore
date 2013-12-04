@@ -1,3 +1,4 @@
 vendor/*
 my_bootstrap.php
 composer.lock
+.idea/*
