@@ -19,16 +19,16 @@
 
 /**
  * jQuery Fullcalendar wrapper class
- * 
+ *
  * Class based on the JavaScript OOP example available at:
  * http://phrogz.net/JS/classes/OOPinJS.html
- * 
+ *
  * @author Tomasz Kuter <evolic_at_interia_dot_pl>
  * @version v0.2.0
  * @param {Array} config
  */
 
- function zCalendarWrapper(config) {
+function zCalendarWrapper(config) {
     this.constructor.population++;
 
     // ************************************************************************ 
@@ -40,8 +40,8 @@
      * jQuery FullCalendar container e.g. '#calendar'
      * @private
      */
-     var container = config.container;
-     delete config.container;
+    var container = config.container;
+    delete config.container;
 
     /**
      * List of urls used to get/update/delete event(s)
@@ -54,16 +54,16 @@
      * }
      * @private
      */
-     var api = config.api;
-     delete config.api;
+    var api = config.api;
+    delete config.api;
 
-     var locales = config.locales;
-     delete config.locales;
+    var locales = config.locales;
+    delete config.locales;
 
     /**
      * @private
      */
-     var defaults = {
+    var defaults = {
         header: {
             left: 'prev,next today',
             center: 'title',
@@ -75,32 +75,30 @@
         firstDay: 1, // start week from Monday
         root: 'events',
         success: 'success',
-        events:  api.get,
+        events: api.get,
         timeFormat: 'H:mm', // uppercase H for 24-hour clock
         axisFormat: 'H:mm',
         slotMinutes: 15,
         snapMinutes: 15,
         defaultEventMinutes: 45,
-        select: function( startDate, endDate, allDay, jsEvent, view ) {
-            createEvent( startDate, endDate, allDay, jsEvent, view );
+        select: function (startDate, endDate, allDay, jsEvent, view) {
+            createEvent(startDate, endDate, allDay, jsEvent, view);
         },
-        eventDrop: function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) {
-            updateEvent( event, revertFunc );
+        eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+            updateEvent(event, revertFunc);
         },
-        eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) {
-            updateEvent( event, revertFunc );
+        eventResize: function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
+            updateEvent(event, revertFunc);
         },
-        eventClick: function( event, jsEvent, view ) {
-            clickEvent( event );
+        eventClick: function (event, jsEvent, view) {
+            clickEvent(event);
         },
-        loading: function(bool) {
-            if (bool)
-            {
+        loading: function (bool) {
+            if (bool) {
                 $('#loading').show();
                 //$('#calendar').hide();
             }
-            else
-            {
+            else {
                 $('#loading').hide();
                 //$('#calendar').show();
             }
@@ -110,32 +108,32 @@
     /**
      * @private
      */
-     var cfg = defaults;
-     $.extend(true, cfg, config);
+    var cfg = defaults;
+    $.extend(true, cfg, config);
 
     /**
      * @private
      */
-     var format = "yyyy-MM-dd HH:mm:ss";
+    var format = "yyyy-MM-dd HH:mm:ss";
     /**
      * jQuery FullCalendar instance
      * @private
      */
-     var calendar = $(container).fullCalendar(cfg);
+    var calendar = $(container).fullCalendar(cfg);
 
     /**
      * @private
      */
-     function createEvent( startDate, endDate, allDay, jsEvent, view ) {
+    function createEvent(startDate, endDate, allDay, jsEvent, view) {
         var ts = new Date().getTime();
 
         bootbox.confirm(translate(
             "Confirmez vous la réservation pour le " + $.fullCalendar.formatDate(startDate, "dd-MM-yyyy")
-            + " de<br />"
-            + "<strong>" + $.fullCalendar.formatDate(startDate, "HH:mm") + "</strong>"
-            + "<br />à<br />"
-            + "<strong>" + $.fullCalendar.formatDate(endDate, "HH:mm") + "</strong>" 
-            ), function(confirmed) {
+                + " de<br />"
+                + "<strong>" + $.fullCalendar.formatDate(startDate, "HH:mm") + "</strong>"
+                + "<br />à<br />"
+                + "<strong>" + $.fullCalendar.formatDate(endDate, "HH:mm") + "</strong>"
+        ), function (confirmed) {
             if (confirmed) {
                 startDate = $.fullCalendar.formatDate(startDate, format);
                 endDate = $.fullCalendar.formatDate(endDate, format);
@@ -145,12 +143,13 @@
                     data: {
                         start: startDate,
                         end: endDate,
-                        ts: ts
+                        ts: textStatus
                     },
                     type: "POST",
-                    success: function( response ) {
+                    success: function (response) {
                         if (response.success) {
-                            bootbox.alert(response.message, function() {});
+                            bootbox.alert(response.message, function () {
+                            });
                             var events = calendar.fullCalendar('clientEvents');
 
                             for (var i in events) {
@@ -160,11 +159,13 @@
                                 }
                             }
                         } else {
-                            bootbox.alert(response.message, function() {});
+                            bootbox.alert(response.message, function () {
+                            });
                         }
                     },
-                    error: function( jqXHR, textStatus, errorThrown ) {
-                        bootbox.alert('Error occured during saving event in the database', function() {});
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        bootbox.alert('Error occured during saving event in the database', function () {
+                        });
                     }
                 });
                 calendar.fullCalendar('renderEvent', {
@@ -173,16 +174,16 @@
                     end: endDate,
                     allDay: allDay,
                     ts: ts
-                    }, true); // make the event "stick"
+                }, true); // make the event "stick"
             }
         });
         calendar.fullCalendar('unselect');
-        }
+    }
 
     /**
      * @private
      */
-     function updateEvent( event, revertFunc, skipConfirm, report ) {
+    function updateEvent(event, revertFunc, skipConfirm, report) {
         var ts = new Date().getTime();
         event.ts = ts;
 
@@ -208,9 +209,10 @@
                         ts: ts
                     },
                     type: "POST",
-                    success: function( response ) {
+                    success: function (response) {
                         if (response.success) {
-                            bootbox.alert(response.message, function() {});
+                            bootbox.alert(response.message, function () {
+                            });
                             var events = calendar.fullCalendar('clientEvents');
 
                             for (var i in events) {
@@ -224,22 +226,24 @@
                                 }
                             }
                         } else {
-                            bootbox.alert(response.message, function() {});
+                            bootbox.alert(response.message, function () {
+                            });
                         }
                     },
-                    error: function( jqXHR, textStatus, errorThrown ) {
-                        bootbox.alert('Error occured during saving event in the database', function() {});
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        bootbox.alert('Error occured during saving event in the database', function () {
+                        });
                     }
                 });
-}
-});
-}
+            }
+        });
+    }
 
     /**
      * @param {Array} event
      * @private
      */
-     function deleteEvent ( event ) {
+    function deleteEvent(event) {
         var ts = new Date().getTime();
         event.ts = ts;
 
@@ -250,9 +254,10 @@
                 ts: ts
             },
             type: "POST",
-            success: function( response ) {
+            success: function (response) {
                 if (response.success) {
-                    bootbox.alert(response.message, function() {});
+                    bootbox.alert(response.message, function () {
+                    });
                     var events = calendar.fullCalendar('clientEvents');
 
                     for (var i in events) {
@@ -262,24 +267,27 @@
                         }
                     }
                 } else {
-                    bootbox.alert(response.message, function() {});
+                    bootbox.alert(response.message, function () {
+                    });
                 }
             },
-            error: function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert('Error occured during deleting event in the database', function() {});
+            error: function (jqXHR, textStatus, errorThrown) {
+                bootbox.alert('Error occured during deleting event in the database', function () {
+                });
             }
         });
-}
+    }
 
     /**
      * @param {Array} event
      * @private
      */
-     function editEvent ( event ) {
-        bootbox.prompt(translate('Event Title:'), translate('Cancel'), translate('OK'), function(title) {
+    function editEvent(event) {
+        bootbox.prompt(translate('Event Title:'), translate('Cancel'), translate('OK'), function (title) {
             if (title) {
                 event.title = title;
-                updateEvent( event, function () {}, true, true );
+                updateEvent(event, function () {
+                }, true, true);
             }
         }, event.title);
     }
@@ -288,146 +296,43 @@
      * @param {Array} event
      * @private
      */
-     function clickEvent ( event ) {
-        /*bootbox.dialog(
-            [{
-                "label" : translate('Delete'),
-                "class" : "btn-danger",
-                "callback": function() {
-                    console.log("uh oh, look out!");
-                    deleteEvent ( event );
+    function clickEvent(event) {
+        bootbox.dialog({
+            message: "Réservation du ...",
+            title: "Modifier un réservation",
+            buttons: {
+                success: {
+                    label: "Modifier",
+                    className: "btn-success",
+                    callback: function () {
+                        console.log(event.id, "")
+                        editEvent(event);
+                    }
+                },
+                danger: {
+                    label: "Supprimer",
+                    className: "btn-danger",
+                    callback: function () {
+                        deleteEvent(event)
+                    }
                 }
-            }, {
-                "label" : translate('Edit'),
-                "class" : "btn-primary",
-                "callback": function() {
-                    console.log("Primary button");
-                    editEvent ( event );
-                }
-            }, {
-                "label" : translate('Cancel')
-            }]
-            );*/
-bootbox.dialog({
-  /**
-   * @required String|Element
-   */
-   message: "I am a custom dialog",
-   
-  /**
-   * @optional String|Element
-   * adds a header to the dialog and places this text in an h4
-   */
-   title: "Custom title",
-   
-  /**
-   * @optional Function
-   * allows the user to dismisss the dialog by hitting ESC, which
-   * will invoke this function
-   */
-   onEscape: function() {},
-   
-  /**
-   * @optional Boolean
-   * @default: true
-   * whether the dialog should be shown immediately
-   */
-   show: true,
-   
-  /**
-   * @optional Boolean
-   * @default: true
-   * whether the dialog should be have a backdrop or not
-   */
-   backdrop: true,
-   
-  /**
-   * @optional Boolean
-   * @default: true
-   * show a close button
-   */
-   closeButton: true,
-   
-  /**
-   * @optional Boolean
-   * @default: true
-   * animate the dialog in and out (not supported in < IE 10)
-   */
-   animate: true,
-   
-  /**
-   * @optional String
-   * @default: null
-   * an additional class to apply to the dialog wrapper
-   */
-   className: "my-modal",
-   
-  /**
-   * @optional Object
-   * @default: {}
-   * any buttons shown in the dialog's footer
-   */
-   buttons: {
-    
-    // For each key inside the buttons object...
-    
-    /**
-     * @required Object|Function
-     * 
-     * this first usage will ignore the `success` key
-     * provided and take all button options from the given object
-     */
-     success: {   
-      /**
-       * @required String
-       * this button's label
-       */
-       label: "Success!",
-       
-      /**
-       * @optional String
-       * an additional class to apply to the button
-       */
-       className: "btn-success",
-       
-      /**
-       * @optional Function
-       * the callback to invoke when this button is clicked
-       */
-       callback: function() {}
-   },
-   
-    /**
-     * this usage demonstrates that if no label property is
-     * supplied in the object, the key is used instead
-     */
-     "Danger!": {
-      className: "btn-danger",
-      callback: function() {}
-  },
-  
-    /**
-     * lastly, if the value supplied is a function, the options
-     * are assumed to be the short form of label -> callback
-     * this is the most condensed way of providing useful buttons
-     * but doesn't allow for any configuration
-     */
-     "Another label": function() {}
- }
-});
-}
+            },
+            onEscape: function () {
+            }
+        });
+    }
 
     /**
      * @private
      */
-     function translate(text) {
+    function translate(text) {
         if (typeof(locales[text]) !== 'undefined') {
             return locales[text];
         } else {
             return text;
         }
     }
-    
+
     // ************************************************************************ 
     // PRIVILEGED METHODS 
     // MAY BE INVOKED PUBLICLY AND MAY ACCESS PRIVATE ITEMS 
@@ -437,7 +342,7 @@ bootbox.dialog({
     /**
      * @public
      */
-     this.getCalendar = function () {
+    this.getCalendar = function () {
         return calendar;
     }
 

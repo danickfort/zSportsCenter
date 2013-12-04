@@ -17,19 +17,19 @@ class ReservationForm extends Form
         $this->add(array(
             'name' => 'id',
             'attributes' => array(
-                'type'  => 'hidden',
+                'type' => 'hidden',
             ),
         ));
         $this->add(array(
             'name' => 'ts',
             'attributes' => array(
-                'type'  => 'hidden',
+                'type' => 'hidden',
             ),
         ));
         $this->add(array(
             'name' => 'start',
             'attributes' => array(
-                'type'  => 'text',
+                'type' => 'text',
             ),
             'options' => array(
                 'label' => 'Starting at',
@@ -38,10 +38,22 @@ class ReservationForm extends Form
         $this->add(array(
             'name' => 'end',
             'attributes' => array(
-                'type'  => 'text',
+                'type' => 'text',
             ),
             'options' => array(
                 'label' => 'Ending at',
+            ),
+        ));
+        $this->add(array(
+            'name' => 'user',
+            'attributes' => array(
+                'type' => 'text',
+            ),
+        ));
+        $this->add(array(
+            'name' => 'court',
+            'attributes' => array(
+                'type' => 'text',
             ),
         ));
     }
@@ -54,14 +66,14 @@ class ReservationForm extends Form
      * @param  object $object
      * @param  int $flags
      * @return mixed|void
-     * @throws Exception\InvalidArgumentException
+     * @throws |Exception\InvalidArgumentException
      */
     public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
 
         //$object->title   = $object->name;
-        $object->start   = $object->started_at->format('Y-m-d H:i:s');
-        $object->end     = $object->ended_at->format('Y-m-d H:i:s');
+        $object->start = $object->started_at->format('Y-m-d H:i:s');
+        $object->end = $object->ended_at->format('Y-m-d H:i:s');
 
         return parent::bind($object, $flags);
     }

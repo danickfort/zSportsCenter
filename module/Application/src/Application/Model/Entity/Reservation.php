@@ -14,97 +14,108 @@ use Zend\InputFilter\InputFilter,
     Zend\InputFilter\InputFilterInterface;
 
 class Reservation implements InputFilterAwareInterface
- {
+{
     protected $inputFilter;
-	/** @Id @Column(type="integer") @GeneratedValue * */
+    /** @Id @Column(type="integer") @GeneratedValue * */
     protected $id;
-	
+
     /** @Column(type="datetime") * */
     protected $startDateTime;
-    
+
     /** @Column(type="datetime") * */
     protected $endDateTime;
-	
-	/**
-	 * @ManyToOne(targetEntity="User", inversedBy="getReservations")
-	 */
-	protected $user;
-	
-	/**
-	 * @ManyToOne(targetEntity="Court", inversedBy="getReservations")
-	 */
-	protected $court;
-	
-	public function __construct() {
+
+    /**
+     * @ManyToOne(targetEntity="User", inversedBy="getReservations")
+     */
+    protected $user;
+
+    /**
+     * @ManyToOne(targetEntity="Court", inversedBy="getReservations")
+     */
+    protected $court;
+
+    public function __construct()
+    {
     }
-	
-	/**
+
+    /**
      * @return int
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
-    
+
     /**
      * @param int $id
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
-	
+
     /**
      * @return DateTime
      */
-    public function getStartDateTime() {
+    public function getStartDateTime()
+    {
         return $this->startDateTime;
     }
-    
+
     /**
      * @param DateTime $startDateTime
      */
-    public function setStartDateTime($startDateTime) {
+    public function setStartDateTime($startDateTime)
+    {
         $this->startDateTime = $startDateTime;
     }
 
     /**
      * @return DateTime
      */
-    public function getEndDateTime() {
+    public function getEndDateTime()
+    {
         return $this->endDateTime;
     }
-    
+
     /**
      * @param DateTime $endDateTime
      */
-    public function setEndDateTime($endDateTime) {
+    public function setEndDateTime($endDateTime)
+    {
         $this->endDateTime = $endDateTime;
     }
-	
-	/**
+
+    /**
      * @return User
      */
-    public function getUser() {
+    public function getUser()
+    {
         return $this->user;
     }
-    
+
     /**
      * @param User $user
      */
-    public function setUser($user) {
+    public function setUser($user)
+    {
         $this->user = $user;
     }
-	
-	/**
+
+    /**
      * @return Court
      */
-    public function getCourt() {
+    public function getCourt()
+    {
         return $this->court;
     }
-    
+
     /**
      * @param Court $court
      */
-    public function setCourt($court) {
+    public function setCourt($court)
+    {
         $this->court = $court;
     }
 
@@ -113,15 +124,17 @@ class Reservation implements InputFilterAwareInterface
         $this->name = (isset($data['name'])) ? $data['name'] : null;
         $this->description = (isset($data['description'])) ? $data['description'] : null;
     }*/
-    
-    public function setInputFilter(InputFilterInterface $inputFilter) {
+
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
         throw new \Exception("Not used");
     }
-    
-    public function getInputFilter() {
+
+    public function getInputFilter()
+    {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            
+
             /*$inputFilter->add(array(
                 'name' => 'id',
                 'required' => true,
@@ -129,11 +142,11 @@ class Reservation implements InputFilterAwareInterface
                     array('name' => 'Int'),
                 ),
             ));*/
-            
-            
+
+
             $this->inputFilter = $inputFilter;
         }
-        
+
         return $this->inputFilter;
     }
 
@@ -144,9 +157,11 @@ class Reservation implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-        $this->id          = $data['id'];
-        $this->startDateTime  = isset($data['start']) ? new \DateTime($data['start']) : null;
-        $this->endDateTime    = isset($data['end']) ? new \DateTime($data['end']) : null;
+        $this->id = $data['id'];
+        $this->startDateTime = isset($data['start']) ? new \DateTime($data['start']) : null;
+        $this->endDateTime = isset($data['end']) ? new \DateTime($data['end']) : null;
+        $this->court = $data['court'];
+        $this->user = $data['user'];
         // TODO : $this->court AND user to ADD HERE !
     }
 }

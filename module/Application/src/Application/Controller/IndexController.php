@@ -448,8 +448,61 @@ class IndexController extends AbstractActionController {
 
 	public function delReservationAction()
 	{
+        $success = false;
+        $message = 'Bad request';
+        $ts = $this->params()->fromPost('ts', 0);
+        $id = (int)$this->params()->fromPost('id', 0);
 
-	}	
+        if (!$id || !$ts) {
+
+            return new JsonModel(array(
+                'message' => $message,
+                'success' => false,
+            ));
+        }
+
+        $request = $this->getRequest();
+
+        $qb = $this->entity()->getEntityManager()->createQueryBuilder()
+            ->select('e')
+            ->from('Application\Model\Entity\Reservation', 'e')
+            ->where('e.id = :id');
+
+        $qb->setParameter('id', $id);
+
+        $query = $qb->getQuery();
+
+        $reservation = '';
+        try {
+            $reservation = $query->getSingleResult(Query::HYDRATE_OBJECT);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        if (!$reservation) {
+            $message = 'Not found';
+
+            return new JsonModel(array(
+                'message' => $message,
+                'success' => false,
+            ));
+        }
+
+        if ($request->isPost()) {
+            $this->entity()->getEntityManager()->remove($reservation);
+            $this->entity()->getEntityManager()->flush();
+
+            $success = true;
+            // translate helper
+            $message = 'L\'entrée ' . $id . ' a été supprimée';
+        }
+
+        return new JsonModel(array(
+            'message' => $message,
+            'success' => $success,
+            'ts' => $ts,
+        ));
+    }
 
     public function addReservationAction()
     {
@@ -460,33 +513,45 @@ class IndexController extends AbstractActionController {
     	$success = false;
     	$ts      = $this->params()->fromPost('ts', 0);
     	$id = 0;
+        $message = 'Bad request';
 
-    	$form = new ReservationForm();
+        $form = new ReservationForm();
 
-    	if ($request->isPost())
-    	{
-    		// TODO : add court & user data to $form 
-    		$form->setData($request->getPost());
-    		$reservation = new Reservation();
+        $userAuthNamespace = new Container('userAuthNamespace');
+        $currentUserId = $userAuthNamespace->id;
+
+        if ($request->isPost()) {
+            // TODO : add court & user data to $form
+            //$form->setData($request->getPost());
+            $form->setData($request->getPost());
+            $form->populateValues(array(
+                    'user' => '1',
+                    'court' => '1',
+                )
+            );
+            $reservation = new Reservation();
             $form->setInputFilter($reservation->getInputFilter());
     		if ($form->isValid()) {
 
     			$data = $form->getData();
 
     			$reservation->populate($data);
-    			$this->entity()->getEntityManager()->persist($reservation);
-    			$this->entity()->getEntityManager()->flush();
 
-    			$success   = true;
-    			$id        = (int) $reservation->getId();
-    		}
+                $this->entity()->getEntityManager()->persist($reservation);
+                $this->entity()->getEntityManager()->flush();
+
+                $success   = true;
+                $message = 'Réservation ajoutée!';
+                $id = (int)$reservation->getId();
+            }
         }
 
         return new JsonModel(array(
-        	'success' => $success,
-        	'ts'      => $ts,
-        	'id'      => $id,
-        	)
+                'message' => $message,
+                'success' => $success,
+                'ts' => $ts,
+                'id' => $id, // DEBUG FORM ????
+            )
         );
     }	
 
