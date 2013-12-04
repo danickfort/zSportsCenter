@@ -24,11 +24,15 @@ use Application\Model\Entity\Sport;
 use Application\Model\Entity\Court;
 use Application\Model\Entity\SportCenter;
 use Application\Model\Entity\Reservation;
+use Application\Model\Entity\HourlyPrice;
+use Application\Model\Entity\Holiday;
 
 use Application\Form\RegistrationForm;
 use Application\Form\NewSportForm;
 use Application\Form\NewCourtForm;
 use Application\Form\SportCenterForm;
+use Application\Form\HourlyPriceForm;
+use Application\Form\SportCenterVacationForm;
 
 use Application\Form\ReservationForm;
 
@@ -188,6 +192,8 @@ class IndexController extends AbstractActionController {
 		$newSportForm = new NewSportForm();
 		$newCourtForm = new NewCourtForm();
 		$sportCenterForm = new SportCenterForm();
+		$hourlyPriceForm = new HourlyPriceForm(null, 9, 18);
+		$sportCenterVacationForm = new SportCenterVacationForm();
 		
 		$sportCenters = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
 
@@ -210,6 +216,8 @@ class IndexController extends AbstractActionController {
 				$sportCenterForm->get('popOver2')->setAttribute('value', $sportCenter->getPopOver2());
 				$sportCenterForm->get('openingHour')->setAttribute('value', $sportCenter->getOpeningHour());
 				$sportCenterForm->get('closingHour')->setAttribute('value', $sportCenter->getClosingHour());
+
+				$sportCenterVacationForm->get('sportCenter')->setAttribute('value', $sportCenter->getId());
 
 			}
 
@@ -331,6 +339,8 @@ class IndexController extends AbstractActionController {
 			'newSportForm' => $newSportForm,
 			'newCourtForm' => $newCourtForm,
 			'sportCenterForm' => $sportCenterForm,
+			'hourlyPriceForm' => $hourlyPriceForm,
+			'sportCenterVacationForm' => $sportCenterVacationForm,
 			'message' => $this->params()->fromRoute('message'),
 			));
 	}
