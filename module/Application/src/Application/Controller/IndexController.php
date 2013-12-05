@@ -192,7 +192,7 @@ class IndexController extends AbstractActionController {
 		$newSportForm = new NewSportForm();
 		$newCourtForm = new NewCourtForm();
 		$sportCenterForm = new SportCenterForm();
-		$hourlyPriceForm = new HourlyPriceForm(null, 9, 18);
+		// $hourlyPriceForm = new HourlyPriceForm(null, 9, 18);
 		$sportCenterVacationForm = new SportCenterVacationForm();
 		
 		$sportCenters = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
@@ -218,6 +218,7 @@ class IndexController extends AbstractActionController {
 				$sportCenterForm->get('closingHour')->setAttribute('value', $sportCenter->getClosingHour());
 
 				$sportCenterVacationForm->get('sportCenter')->setAttribute('value', $sportCenter->getId());
+				$hourlyPriceForm = new HourlyPriceForm(null, $sportCenter->getOpeningHour(), $sportCenter->getClosingHour());
 
 			}
 
@@ -318,6 +319,38 @@ class IndexController extends AbstractActionController {
 					$query->setParameter(12, $sportCenter->getId());
 
 					$query->getResult();
+				}
+			}
+			// Add hourly price for a court
+			else if (isset($request->getPost()->hourlyPriceSubmit)) {
+				$hourlyPrice = new HourlyPrice();
+				$hourlyPriceForm->setInputFilter($hourlyPrice->getInputFilter());
+				$hourlyPriceForm->setData($request->getPost());
+
+				if ($hourlyPriceForm->isValid()) {
+					$hourlyPrice->exchangeArray($hourlyPriceForm->getData());
+
+					$court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', $hourlyPriceForm->get('court')->getValue());
+					$hourlyPrice->setCourt($court);
+
+					$this->entity()->getEntityManager()->persist($hourlyPrice);
+					$this->entity()->getEntityManager()->flush();
+				}
+			}
+			// Add sport center vacation
+			else if (isset($request->getPost()->sportCenterVacationSubmit)) {
+				$holiday = new Holiday();
+				$sportCenterVacationForm->setInputFilter($holiday->getInputFilter());
+				$sportCenterVacationForm->setData($request->getPost());
+
+				if ($sportCenterVacationForm->isValid()) {
+					$holiday->exchangeArray($sportCenterVacationForm->getData());
+
+					$sportCenter = $this->entity()->getEntityManager()->find('Application\Model\Entity\SportCenter', $sportCenterVacationForm->get('sportCenter')->getValue());
+					$holiday->setSportCenter($sportCenter);
+
+					$this->entity()->getEntityManager()->persist($holiday);
+					$this->entity()->getEntityManager()->flush();
 				}
 			}
 		}

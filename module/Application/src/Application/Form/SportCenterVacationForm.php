@@ -24,6 +24,18 @@ class SportCenterVacationForm extends Form
 		));
 
 		$this->add(array(
+			'name' => 'name',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'Vacation Name',
+			),
+			'attributes' => array(
+				'placeholder' => 'Vacation Name',
+				'class' => 'form-control',
+			),
+		));
+
+		$this->add(array(
 			'name' => 'startDate',
 			'type' => 'Date',
 			'options' => array(
@@ -35,7 +47,7 @@ class SportCenterVacationForm extends Form
 		));
 
 		$this->add(array(
-			'name' => 'stopDate',
+			'name' => 'endDate',
 			'type' => 'Date',
 			'options' => array(
 				'label' => 'Stop Date',

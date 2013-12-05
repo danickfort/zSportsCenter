@@ -132,7 +132,7 @@ class RegistrationForm extends Form
 			'attributes' => array(
 				'value' => 'Sign up',
 				'class' => 'btn btn-primary',
-				),
-			));
+			),
+		));
 	}
 }

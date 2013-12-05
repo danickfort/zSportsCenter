@@ -2,6 +2,10 @@
 
 namespace Application\Model\Entity;
 
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+
 /**
  * @Entity
  * @Table(name="tbl_hourly_price")
@@ -9,8 +13,10 @@ namespace Application\Model\Entity;
  * @author matthieu.rossier
  */
  
- class HourlyPrice
+ class HourlyPrice implements InputFilterAwareInterface
  {
+    protected $inputFilter;
+
 	/** @Id @Column(type="integer") @GeneratedValue * */
     protected $id;
 	
@@ -18,7 +24,7 @@ namespace Application\Model\Entity;
 	protected $time;
 	
 	/** @Column(type="integer") * */
-	protected $hourly_price;
+	protected $hourlyPrice;
 	
 	/**
 	 * @ManyToOne(targetEntity="Court", inversedBy="getHourlyPrices")
@@ -82,5 +88,49 @@ namespace Application\Model\Entity;
      */
     public function setCourt($court) {
         $this->court = $court;
+    }
+
+    public function exchangeArray($data) {
+        $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->time = (isset($data['time'])) ? $data['time'] : null;
+        $this->hourlyPrice = (isset($data['hourlyPrice'])) ? $data['hourlyPrice'] : null;
+    }
+    
+    public function setInputFilter(InputFilterInterface $inputFilter) {
+        throw new \Exception("Not used");
+    }
+    
+    public function getInputFilter() {
+        if (!$this->inputFilter) {
+            $inputFilter = new InputFilter();
+            
+            $inputFilter->add(array(
+                'name' => 'id',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'time',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'hourlyPrice',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            
+            $this->inputFilter = $inputFilter;
+        }
+        
+        return $this->inputFilter;
     }
 }
