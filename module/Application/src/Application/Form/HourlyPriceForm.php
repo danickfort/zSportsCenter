@@ -30,10 +30,20 @@ class HourlyPriceForm extends Form
 		));
 
 		$this->add(array(
-			'name' => 'time',
+			'name' => 'startTime',
 			'type' => 'Select',
 			'options' => array(
-				'label' => 'Time',
+				'label' => 'Start Time',
+				'value_options' => $valuesOptions,
+				'class' => 'form-control',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'stopTime',
+			'type' => 'Select',
+			'options' => array(
+				'label' => 'Stop Time',
 				'value_options' => $valuesOptions,
 				'class' => 'form-control',
 			),

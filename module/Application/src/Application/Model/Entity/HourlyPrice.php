@@ -21,7 +21,10 @@ use Zend\InputFilter\InputFilterInterface;
     protected $id;
 	
 	/** @Column(type="integer") * */
-	protected $time;
+	protected $startTime;
+
+    /** @Column(type="integer") * */
+    protected $stopTime;
 	
 	/** @Column(type="integer") * */
 	protected $hourlyPrice;
@@ -51,15 +54,29 @@ use Zend\InputFilter\InputFilterInterface;
 	/**
      * @return int
      */
-    public function getTime() {
-        return $this->time;
+    public function getStartTime() {
+        return $this->startTime;
     }
     
     /**
-     * @param int $time
+     * @param int $startTime
      */
-    public function setTime($time) {
-        $this->time = $time;
+    public function setStartTime($startTime) {
+        $this->startTime = $startTime;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStopTime() {
+        return $this->stopTime;
+    }
+    
+    /**
+     * @param int $stopTime
+     */
+    public function setStopTime($stopTime) {
+        $this->stopTime = $stopTime;
     }
 	
 	/**
@@ -92,7 +109,8 @@ use Zend\InputFilter\InputFilterInterface;
 
     public function exchangeArray($data) {
         $this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->time = (isset($data['time'])) ? $data['time'] : null;
+        $this->startTime = (isset($data['startTime'])) ? $data['startTime'] : null;
+        $this->stopTime = (isset($data['stopTime'])) ? $data['stopTime'] : null;
         $this->hourlyPrice = (isset($data['hourlyPrice'])) ? $data['hourlyPrice'] : null;
     }
     
@@ -113,7 +131,15 @@ use Zend\InputFilter\InputFilterInterface;
             ));
 
             $inputFilter->add(array(
-                'name' => 'time',
+                'name' => 'startTime',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'stopTime',
                 'required' => true,
                 'filters' => array(
                     array('name' => 'Int'),
