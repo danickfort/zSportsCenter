@@ -47,13 +47,13 @@ class ReservationForm extends Form
         $this->add(array(
             'name' => 'user',
             'attributes' => array(
-                'type' => 'text',
+                'type' => 'Hidden',
             ),
         ));
         $this->add(array(
             'name' => 'court',
             'attributes' => array(
-                'type' => 'text',
+                'type' => 'Hidden',
             ),
         ));
     }
