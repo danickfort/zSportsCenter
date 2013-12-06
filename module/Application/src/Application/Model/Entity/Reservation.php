@@ -160,8 +160,6 @@ class Reservation implements InputFilterAwareInterface
         $this->id = $data['id'];
         $this->startDateTime = isset($data['start']) ? new \DateTime($data['start']) : null;
         $this->endDateTime = isset($data['end']) ? new \DateTime($data['end']) : null;
-        $this->court = $data['court'];
-        $this->user = $data['user'];
         // TODO : $this->court AND user to ADD HERE !
     }
 }

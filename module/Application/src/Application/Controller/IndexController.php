@@ -328,13 +328,26 @@ class IndexController extends AbstractActionController {
 				$hourlyPriceForm->setData($request->getPost());
 
 				if ($hourlyPriceForm->isValid()) {
-					$hourlyPrice->exchangeArray($hourlyPriceForm->getData());
+					$entityManager = $this->entity()->getEntityManager();
 
-					$court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', $hourlyPriceForm->get('court')->getValue());
-					$hourlyPrice->setCourt($court);
+					$startTime = intval($hourlyPriceForm->get('startTime')->getValue());
+					$stopTime = intval($hourlyPriceForm->get('stopTime')->getValue());
+					$price = intval($hourlyPriceForm->get('hourlyPrice')->getValue());
+					$idCourt = intval($hourlyPriceForm->get('court')->getValue());
 
-					$this->entity()->getEntityManager()->persist($hourlyPrice);
-					$this->entity()->getEntityManager()->flush();
+					$court = $entityManager->find('Application\Model\Entity\Court', $idCourt);
+
+
+					for($time = $startTime; $time <= $stopTime; $time++) {
+						$hourlyPrice = new HourlyPrice();
+
+						$hourlyPrice->setTime($time);
+						$hourlyPrice->setHourlyPrice($price);
+						$hourlyPrice->setCourt($court);
+
+						$entityManager->persist($hourlyPrice);
+						$entityManager->flush();
+					}
 				}
 			}
 			// Add sport center vacation
@@ -488,7 +501,7 @@ class IndexController extends AbstractActionController {
 		->setParameter('ending_at', $ending_at)
 		->andWhere('e.endDateTime < :ending_at')
 		->getQuery()
-		->getResult();
+		->getResult(); // TODO add andWhere user = currentUser
 
 		$list = array();
 
@@ -589,12 +602,17 @@ class IndexController extends AbstractActionController {
             // TODO : add court & user data to $form
             //$form->setData($request->getPost());
             $form->setData($request->getPost());
-            $form->populateValues(array(
-                    'user' => '1',
-                    'court' => '1',
-                )
-            );
+
+            $court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', 1);
+            $user = $this->entity()->getEntityManager()->find('Application\Model\Entity\User', 1);
+
+            if ($court == null || $user == null) die();
+
             $reservation = new Reservation();
+
+            $reservation->setUser($user);
+            $reservation->setCourt($court);
+
             $form->setInputFilter($reservation->getInputFilter());
     		if ($form->isValid()) {
 

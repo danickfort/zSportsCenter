@@ -143,7 +143,7 @@ function zCalendarWrapper(config) {
                     data: {
                         start: startDate,
                         end: endDate,
-                        ts: textStatus
+                        ts: ts
                     },
                     type: "POST",
                     success: function (response) {
