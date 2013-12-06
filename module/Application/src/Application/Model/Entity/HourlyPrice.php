@@ -21,10 +21,7 @@ use Zend\InputFilter\InputFilterInterface;
     protected $id;
 	
 	/** @Column(type="integer") * */
-	protected $startTime;
-
-    /** @Column(type="integer") * */
-    protected $stopTime;
+	protected $time;
 	
 	/** @Column(type="integer") * */
 	protected $hourlyPrice;
@@ -54,43 +51,29 @@ use Zend\InputFilter\InputFilterInterface;
 	/**
      * @return int
      */
-    public function getStartTime() {
-        return $this->startTime;
+    public function getTime() {
+        return $this->time;
     }
     
     /**
-     * @param int $startTime
+     * @param int $time
      */
-    public function setStartTime($startTime) {
-        $this->startTime = $startTime;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStopTime() {
-        return $this->stopTime;
-    }
-    
-    /**
-     * @param int $stopTime
-     */
-    public function setStopTime($stopTime) {
-        $this->stopTime = $stopTime;
+    public function setTime($time) {
+        $this->time = $time;
     }
 	
 	/**
      * @return int
      */
     public function getHourlyPrice() {
-        return $this->hourly_price;
+        return $this->hourlyPrice;
     }
     
     /**
-     * @param int $hourly_price
+     * @param int $hourlyPrice
      */
-    public function setHourlyPrice($hourly_price) {
-        $this->hourly_price = $hourly_price;
+    public function setHourlyPrice($hourlyPrice) {
+        $this->hourlyPrice = $hourlyPrice;
     }
 	
 	/**
@@ -109,8 +92,7 @@ use Zend\InputFilter\InputFilterInterface;
 
     public function exchangeArray($data) {
         $this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->startTime = (isset($data['startTime'])) ? $data['startTime'] : null;
-        $this->stopTime = (isset($data['stopTime'])) ? $data['stopTime'] : null;
+        $this->startTime = (isset($data['time'])) ? $data['time'] : null;
         $this->hourlyPrice = (isset($data['hourlyPrice'])) ? $data['hourlyPrice'] : null;
     }
     
