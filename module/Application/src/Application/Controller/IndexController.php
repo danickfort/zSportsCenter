@@ -79,8 +79,13 @@ class IndexController extends AbstractActionController {
 			'adminVisible' => $this->isAdministratorUser(),
 			));
 		
+		$isAdmin = 0;
+		if ($this->isAdministratorUser())
+		{
+			$isAdmin = 1;
+		}
 		// index.pthml
-		return new ViewModel(array('message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
+		return new ViewModel(array('isAdmin' => $isAdmin, 'message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
 	}
 	
 	public function signupAction() {
@@ -457,6 +462,10 @@ class IndexController extends AbstractActionController {
 
 		$starting_at = date('Y-m-d H:i:s', $start);
 		$ending_at   = date('Y-m-d H:i:s', $end);
+        $records = '';
+
+        $userAuthNamespace = new Container('userAuthNamespace');
+        $currentUserId = $userAuthNamespace->id;
 
 		$records = $this->entity()->getEntityManager()->createQueryBuilder()
 		->select('e')
@@ -464,20 +473,23 @@ class IndexController extends AbstractActionController {
 		->setParameter('starting_at', $starting_at)
 		->where('e.startDateTime >= :starting_at')
 		->setParameter('ending_at', $ending_at)
-		->andWhere('e.endDateTime < :ending_at')
+		->andWhere('e.endDateTime < :ending_at')// TODO : ADD COURT CONDITION !!!!
 		->getQuery()
-		->getResult(); // TODO add andWhere user = currentUser
+		->getResult();
+
 
 		$list = array();
 
 		foreach($records as $record)
 		{
+			$bgcolor = ($record->getUser()->getId() == $currentUserId) ? 'green' : 'red';
 			$item = array(
 				'id' => $record->getId() + "",
 				'title' => "Réservé",
 				'start' => $record->getStartDateTime()->format('Y-m-d H:i'),
 				'end' => $record->getEndDateTime()->format('Y-m-d H:i'),
 				'allDay' => false,
+				'backgroundColor' => $bgcolor,
 				);
 			$list[] = $item;
 		}
@@ -495,6 +507,14 @@ class IndexController extends AbstractActionController {
         $message = 'Bad request';
         $ts = $this->params()->fromPost('ts', 0);
         $id = (int)$this->params()->fromPost('id', 0);
+
+        if (!$this->isAdministratorUser())
+        {
+            return new JsonModel(array(
+                'message' => 'Vous devez être administrateur pour faire ça!',
+                'success' => false,
+            ));
+        }
 
         if (!$id || !$ts) {
 
@@ -550,7 +570,6 @@ class IndexController extends AbstractActionController {
     public function addReservationAction()
     {
 
-    	// TODO : CHECK IF USER LOGGED IN !!
     	$request = $this->getRequest();
 
     	$success = false;
@@ -563,15 +582,24 @@ class IndexController extends AbstractActionController {
         $userAuthNamespace = new Container('userAuthNamespace');
         $currentUserId = $userAuthNamespace->id;
 
+        if (!$this->isUserAuth())
+        {
+
+        return new JsonModel(array(
+                'message' => 'Connectez-vous avant de réserver!',
+                'success' => $success,
+                'ts' => $ts
+            )
+        );
+        }
+
         if ($request->isPost()) {
             // TODO : add court & user data to $form
             //$form->setData($request->getPost());
             $form->setData($request->getPost());
 
             $court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', 1);
-            $user = $this->entity()->getEntityManager()->find('Application\Model\Entity\User', 1);
-
-            if ($court == null || $user == null) die();
+            $user = $this->entity()->getEntityManager()->find('Application\Model\Entity\User', $currentUserId);
 
             $reservation = new Reservation();
 
@@ -597,15 +625,42 @@ class IndexController extends AbstractActionController {
         return new JsonModel(array(
                 'message' => $message,
                 'success' => $success,
-                'ts' => $ts,
-                'id' => $id, // DEBUG FORM ????
+                'ts' => $ts
             )
         );
     }	
 
     public function updReservationAction()
     {
+    	$request = $this->getRequest();
+        $success = false;
+        $message = 'Bad request';
+        $ts = $this->params()->fromPost('ts', 0);
+        $id = (int)$this->params()->fromPost('id', 0);
+        $start = $this->params()->fromPost('start',0);
+        $end = $this->params()->fromPost('end',0);
 
+        if (!$this->isAdministratorUser())
+        {
+            return new JsonModel(array(
+                'message' => 'Vous devez être administrateur pour faire ça!',
+                'success' => false,
+            ));
+        }
+
+        if ($request->isPost()) {
+            $reservation = $this->entity()->getEntityManager()->find('Application\Model\Entity\Reservation', $id);
+            $reservation->setStartDateTime(new \DateTime($start));
+            $reservation->setEndDateTime(new \DateTime($end));
+			$this->entity()->getEntityManager()->flush();
+
+			$message = 'Réservation mise à jour !';
+        }
+
+        return new JsonModel(array(
+            'message' => $message,
+            'success' => false,
+        ));
     }
 
 }

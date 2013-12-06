@@ -30,7 +30,6 @@
 
 function zCalendarWrapper(config) {
     this.constructor.population++;
-
     // ************************************************************************ 
     // PRIVATE VARIABLES AND FUNCTIONS 
     // ONLY PRIVELEGED METHODS MAY VIEW/EDIT/INVOKE 
@@ -42,6 +41,9 @@ function zCalendarWrapper(config) {
      */
     var container = config.container;
     delete config.container;
+
+    var isAdmin = config.isAdmin;
+    delete config.isAdmin;
 
     /**
      * List of urls used to get/update/delete event(s)
@@ -85,13 +87,16 @@ function zCalendarWrapper(config) {
             createEvent(startDate, endDate, allDay, jsEvent, view);
         },
         eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-            updateEvent(event, revertFunc);
+            if (isAdmin==1) updateEvent(event, revertFunc);
+            else revertFunc();
         },
         eventResize: function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
-            updateEvent(event, revertFunc);
+            if (isAdmin==1) updateEvent(event, revertFunc);
+            else revertFunc();
         },
         eventClick: function (event, jsEvent, view) {
-            clickEvent(event);
+            if (isAdmin==1) clickEvent(event);
+            else revertFunc();
         },
         loading: function (bool) {
             if (bool) {
@@ -127,6 +132,13 @@ function zCalendarWrapper(config) {
     function createEvent(startDate, endDate, allDay, jsEvent, view) {
         var ts = new Date().getTime();
 
+        var check = $.fullCalendar.formatDate(startDate,'yyyy-MM-dd HH:mm');
+        var today = $.fullCalendar.formatDate(new Date(),'yyyy-MM-dd HH:mm');
+        if(check < today)
+        {
+            calendar.fullCalendar('unselect');
+        }
+        else {
         bootbox.confirm(translate(
             "Confirmez vous la réservation pour le " + $.fullCalendar.formatDate(startDate, "dd-MM-yyyy")
                 + " de<br />"
@@ -179,11 +191,13 @@ function zCalendarWrapper(config) {
         });
         calendar.fullCalendar('unselect');
     }
+}
 
     /**
      * @private
      */
     function updateEvent(event, revertFunc, skipConfirm, report) {
+
         var ts = new Date().getTime();
         event.ts = ts;
 
@@ -193,8 +207,16 @@ function zCalendarWrapper(config) {
         if (typeof(report) === 'undefined') {
             report = false;
         }
+        var check = $.fullCalendar.formatDate(event.start,'yyyy-MM-dd');
+        var today = $.fullCalendar.formatDate(new Date(),'yyyy-MM-dd');
+        if(check < today)
+        {
+            calendar.fullCalendar('unselect');
+        }
+        else {
 
-        bootbox.confirm(translate('Is this okay?'), translate('Cancel'), translate('OK'), function (result) {
+        // TODO : montrer la différence entre old et new hour dans le text du dialog
+        bootbox.confirm(translate('Cela convient-il?<br />' + event.start.getTimestamp() + '<br />à<br />' + event.end.getTimestamp()), function (result) {
             if (!skipConfirm && !result) {
                 revertFunc();
             } else {
@@ -202,10 +224,8 @@ function zCalendarWrapper(config) {
                     url: api.update,
                     data: {
                         id: event.id,
-                        title: event.title,
                         start: event.start.getTimestamp(),
                         end: event.end.getTimestamp(),
-                        all_day: event.allDay,
                         ts: ts
                     },
                     type: "POST",
@@ -238,6 +258,7 @@ function zCalendarWrapper(config) {
             }
         });
     }
+}
 
     /**
      * @param {Array} event
@@ -297,6 +318,7 @@ function zCalendarWrapper(config) {
      * @private
      */
     function clickEvent(event) {
+
         bootbox.dialog({
             message: "Réservation du ...",
             title: "Modifier un réservation",
@@ -305,8 +327,7 @@ function zCalendarWrapper(config) {
                     label: "Modifier",
                     className: "btn-success",
                     callback: function () {
-                        console.log(event.id, "")
-                        editEvent(event);
+                        //editEvent(event);
                     }
                 },
                 danger: {

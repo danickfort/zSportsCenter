@@ -135,15 +135,6 @@ class Reservation implements InputFilterAwareInterface
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
 
-            /*$inputFilter->add(array(
-                'name' => 'id',
-                'required' => true,
-                'filters' => array(
-                    array('name' => 'Int'),
-                ),
-            ));*/
-
-
             $this->inputFilter = $inputFilter;
         }
 
@@ -160,6 +151,5 @@ class Reservation implements InputFilterAwareInterface
         $this->id = $data['id'];
         $this->startDateTime = isset($data['start']) ? new \DateTime($data['start']) : null;
         $this->endDateTime = isset($data['end']) ? new \DateTime($data['end']) : null;
-        // TODO : $this->court AND user to ADD HERE !
     }
 }
