@@ -39,11 +39,6 @@ class NewCourtForm extends Form
 			),
 		));
 
-		$this->add(array(
-			'name' => 'sport',
-			'type' => 'Hidden',
-		));
-
 		// Submit button.
 		$this->add(array(
 			'name' => 'newCourtSubmit',
@@ -51,7 +46,12 @@ class NewCourtForm extends Form
 			'attributes' => array(
 				'value' => 'New Court',
 				'class' => 'btn btn-primary',
-				),
-			));
+			),
+		));
+
+		$this->add(array(
+			'name' => 'sport',
+			'type' => 'Hidden',
+		));
 	}
 }
