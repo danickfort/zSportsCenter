@@ -25,11 +25,6 @@ class HourlyPriceForm extends Form
 		));
 
 		$this->add(array(
-			'name' => 'court',
-			'type' => 'Hidden',
-		));
-
-		$this->add(array(
 			'name' => 'startTime',
 			'type' => 'Select',
 			'options' => array(
@@ -70,6 +65,11 @@ class HourlyPriceForm extends Form
 				'value' => 'Set hourly price',
 				'class' => 'btn btn-primary',
 			),
+		));
+
+		$this->add(array(
+			'name' => 'court',
+			'type' => 'Hidden',
 		));
 	}
 }

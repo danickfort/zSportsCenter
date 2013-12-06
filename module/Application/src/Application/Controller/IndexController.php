@@ -192,7 +192,6 @@ class IndexController extends AbstractActionController {
 		$newSportForm = new NewSportForm();
 		$newCourtForm = new NewCourtForm();
 		$sportCenterForm = new SportCenterForm();
-		// $hourlyPriceForm = new HourlyPriceForm(null, 9, 18);
 		$sportCenterVacationForm = new SportCenterVacationForm();
 		
 		$sportCenters = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
@@ -200,6 +199,8 @@ class IndexController extends AbstractActionController {
 		if (!$sportCenters) {
 			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('name', 'newSportCenterSubmit');
 			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('value', 'New sport center');
+
+			$hourlyPriceForm = new HourlyPriceForm(null, 9, 18);
 		} else {
 			if (!isset($this->request->getPost()->modifySportCenterSubmit)) {
 				$sportCenter = $sportCenters[0];
@@ -218,9 +219,11 @@ class IndexController extends AbstractActionController {
 				$sportCenterForm->get('closingHour')->setAttribute('value', $sportCenter->getClosingHour());
 
 				$sportCenterVacationForm->get('sportCenter')->setAttribute('value', $sportCenter->getId());
-				$hourlyPriceForm = new HourlyPriceForm(null, $sportCenter->getOpeningHour(), $sportCenter->getClosingHour());
 
 			}
+			$sportCenter = $sportCenters[0];
+
+			$hourlyPriceForm = new HourlyPriceForm(null, $sportCenter->getOpeningHour(), $sportCenter->getClosingHour());
 
 			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('name', 'modifySportCenterSubmit');
 			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('value', 'Modify sport center');
@@ -398,6 +401,7 @@ class IndexController extends AbstractActionController {
 		$code = $this->params()->fromQuery('code',0);
 		$id = $this->params()->fromQuery('id',0);
 
+		// Admin want delete a sport
 		if ($code == "removeSport") {
 			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
 			->select("c")
@@ -416,15 +420,13 @@ class IndexController extends AbstractActionController {
 			return new JsonModel(array(
 				'idSport' => $id,
 				'courts' => $names,
-				));
+			));
 		} else if ($code == "confirm") {
 			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
 			->select("c")
 			->from("Application\Model\Entity\Court", "c")
 			->where("c.sport = :sport");
-
 			$qb->setParameter("sport", $id);
-
 			$courts = $qb->getQuery()->getResult();
 
 			$namesCourt = array();
@@ -433,6 +435,15 @@ class IndexController extends AbstractActionController {
 				$namesCourt[] = $court->getName();
 				$idCourt = $court->getId();
 
+				// delete hourly prices for the current court
+				$query = $this->entity()->getEntityManager()->createQuery("DELETE Application\Model\Entity\HourlyPrice h WHERE h.court = ?1");
+				$query->setParameter(1, $idCourt);
+				$result = $query->getResult();
+				// delete reservations for the current court
+				$query = $this->entity()->getEntityManager()->createQuery("DELETE Application\Model\Entity\Reservation r WHERE r.court = ?1");
+				$query->setParameter(1, $idCourt);
+				$result = $query->getResult();
+				// delete current court
 				$query = $this->entity()->getEntityManager()->createQuery("DELETE Application\Model\Entity\Court c WHERE c.id = ?1");
 				$query->setParameter(1, $idCourt);
 				$result = $query->getResult();

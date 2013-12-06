@@ -37,8 +37,8 @@
         foreach ($form as $element)
         {
             echo '<div class="form-group">';
-            echo '<label class="col-md-3 control-label" for="'.$element->getAttribute('id').'">'.$element->getLabel().'</label>';
-            echo '<div class="col-md-9">';
+            echo '<label class="col-md-4 control-label" for="'.$element->getAttribute('id').'">'.$element->getLabel().'</label>';
+            echo '<div class="col-md-8">';
             echo $that->formElement($element);
             echo $that->formElementErrors()
                 ->setMessageOpenFormat('<span class="label label-danger">')
@@ -55,7 +55,7 @@
         ?>
         <div class="row">
 
-            <div class="col-md-6">
+            <div class="col-md-12">
 
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#sportCenter" data-toggle="tab">Sport Center</a></li>
@@ -65,6 +65,7 @@
 
                 <div class="tab-content">
                     <div class="tab-pane active" id="sportCenter">
+                    <div class="col-md-6">
                         <h2>Sport Center</h2>
                         <?php
                         $that->sportCenterForm->setAttribute('class', 'form-horizontal');
@@ -87,6 +88,9 @@
                         }
                         echo $that->form()->closeTag();
                         ?>
+                        </div>
+                        <div class="col-md-6">
+                        <h2>Sport Center Vacation</h2>
                         <!-- Set vacation form -->
                         <?php
                             echo '<div>';
@@ -96,6 +100,7 @@
                             echo $that->form()->closeTag();
                             echo '</div>';
                         ?>
+                        </div>
                     </div>
                     <div class="tab-pane" id="users">
                         <h2>Users Management</h2>
@@ -132,7 +137,7 @@
 
                         echo '<div class="row">';
 
-                        echo '<div class="col-md-3">';
+                        echo '<div class="col-md-2">';
                         echo '<h3>'.$sport->getName().'</h3>';
                         echo '<ul class="nav nav-pills nav-stacked">';
                         $active = ' class="active"';
@@ -145,13 +150,15 @@
                         echo '</ul>';
                         echo '</div>';
 
-                        echo '<div class="col-md-9">';
+                        echo '<div class="col-md-10">';
                         echo '<div class="tab-content">';
                         $active = ' active';
                         foreach ($courts as $court) {
                             echo '<div class="tab-pane'.$active.'" id="'.$court['name'].'">';
                             $active = '';
                             // Affichage des terrains.
+                            echo '<div class="row">';
+                            echo '<div class="col-md-5">';
                             $that->newCourtForm->setAttribute('class', 'form-horizontal');
                             $that->newCourtForm->get('id')->setAttribute('value', $court['id']);
                             $that->newCourtForm->get('name')->setAttribute('value', $court['name']);
@@ -163,9 +170,10 @@
                             echo $that->form()->openTag($that->newCourtForm);
                             displayForm($that->newCourtForm, $that);
                             echo $that->form()->closeTag();
+                            echo '</div>';
                             // Fin affichage des terrains.
                             /* TODO Formulaire add price hourly (with $court['id']) */
-                            echo '<div>';
+                            echo '<div class="col-md-5">';
                             $that->hourlyPriceForm->get('court')->setAttribute('value', $court['id']);
                             $that->hourlyPriceForm->prepare();
                             echo $that->form()->openTag($that->hourlyPriceForm);
@@ -174,9 +182,11 @@
                             echo '</div>';
                             /* TODO END */
                             echo '</div>';
+                            echo '</div>';
                         }
                         echo '<div class="tab-pane'.$active.'" id="newCourt'.$sport->getName().'">';
                         $active = '';
+                        echo '<div class="col-md-6">';
                         echo '<h3>Add a new '.$sport->getName().' court</h3>';
                         $that->newCourtForm->setAttribute('class', 'form-horizontal');
                         $that->newCourtForm->get('id')->setAttribute('value', '');
@@ -190,6 +200,7 @@
                         displayForm($that->newCourtForm, $that);
                         echo $that->form()->closeTag();
                         echo '</div>';
+                        echo '</div>';
 
                         echo '</div>';
 
@@ -201,6 +212,7 @@
                     }
                     ?>
                     <div class="tab-pane<?php echo $active; ?>" id="newSport">
+                        <div class="col-md-6">
                         <h3>Add a new sport</h3>
                         <?php
                         $that->newSportForm->setAttribute('class', 'form-horizontal');
@@ -209,16 +221,12 @@
                         displayForm($that->newSportForm, $that);
                         echo $that->form()->closeTag();
                         ?>
+                        </div>
                     </div>
                 </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-6">
-                <!-- Calendar here! -->
-            </div>
-
         </div>
         <?php
     } ?>

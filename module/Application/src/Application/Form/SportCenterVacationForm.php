@@ -19,11 +19,6 @@ class SportCenterVacationForm extends Form
 		));
 
 		$this->add(array(
-			'name' => 'sportCenter',
-			'type' => 'Hidden',
-		));
-
-		$this->add(array(
 			'name' => 'name',
 			'type' => 'Text',
 			'options' => array(
@@ -65,6 +60,11 @@ class SportCenterVacationForm extends Form
 				'value' => 'Set vacation',
 				'class' => 'btn btn-primary',
 			),
+		));
+
+		$this->add(array(
+			'name' => 'sportCenter',
+			'type' => 'Hidden',
 		));
 	}
 }
