@@ -22,7 +22,7 @@ $(document).ready(function() {
 
 			return;
 		}
-		id = $(this).attr("data-id");
+		/*id = $(this).attr("data-id");
 		if(id != 0) {
 			$.ajax({
 				url: "/index/removeSport",
@@ -84,6 +84,6 @@ $(document).ready(function() {
 					}
 				}
 			});
-		}
+		}*/
 	});
 });
