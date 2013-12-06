@@ -1,6 +1,28 @@
 $(document).ready(function() {
 	$(".glyphicon-remove").click(function() {
-		var id = $(this).attr("data-id");
+		var id = $(this).attr("userRemove");
+		if(typeof id !== 'undefined' && id !== false)
+		{
+			console.log(id);
+
+			$.ajax({
+				url: "/index/remove-user",
+				type: "POST",
+				dataType: "JSON",
+				data: {
+					id: id,
+					code:"removeUser"
+				},
+				success: function(json) {
+					var message = 'Deleting user:\n';
+					message += '----------------\n';
+					$('.userEntry#' + id).hide();
+					}
+				});
+
+			return;
+		}
+		id = $(this).attr("data-id");
 		if(id != 0) {
 			$.ajax({
 				url: "/index/removeSport",

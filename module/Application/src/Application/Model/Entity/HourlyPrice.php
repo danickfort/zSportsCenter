@@ -66,14 +66,14 @@ use Zend\InputFilter\InputFilterInterface;
      * @return int
      */
     public function getHourlyPrice() {
-        return $this->hourly_price;
+        return $this->hourlyPrice;
     }
     
     /**
-     * @param int $hourly_price
+     * @param int $hourlyPrice
      */
-    public function setHourlyPrice($hourly_price) {
-        $this->hourly_price = $hourly_price;
+    public function setHourlyPrice($hourlyPrice) {
+        $this->hourlyPrice = $hourlyPrice;
     }
 	
 	/**
@@ -92,7 +92,7 @@ use Zend\InputFilter\InputFilterInterface;
 
     public function exchangeArray($data) {
         $this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->time = (isset($data['time'])) ? $data['time'] : null;
+        $this->startTime = (isset($data['time'])) ? $data['time'] : null;
         $this->hourlyPrice = (isset($data['hourlyPrice'])) ? $data['hourlyPrice'] : null;
     }
     
@@ -113,7 +113,15 @@ use Zend\InputFilter\InputFilterInterface;
             ));
 
             $inputFilter->add(array(
-                'name' => 'time',
+                'name' => 'startTime',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+
+            $inputFilter->add(array(
+                'name' => 'stopTime',
                 'required' => true,
                 'filters' => array(
                     array('name' => 'Int'),

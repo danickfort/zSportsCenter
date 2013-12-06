@@ -333,13 +333,26 @@ class IndexController extends AbstractActionController {
 				$hourlyPriceForm->setData($request->getPost());
 
 				if ($hourlyPriceForm->isValid()) {
-					$hourlyPrice->exchangeArray($hourlyPriceForm->getData());
+					$entityManager = $this->entity()->getEntityManager();
 
-					$court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', $hourlyPriceForm->get('court')->getValue());
-					$hourlyPrice->setCourt($court);
+					$startTime = intval($hourlyPriceForm->get('startTime')->getValue());
+					$stopTime = intval($hourlyPriceForm->get('stopTime')->getValue());
+					$price = intval($hourlyPriceForm->get('hourlyPrice')->getValue());
+					$idCourt = intval($hourlyPriceForm->get('court')->getValue());
 
-					$this->entity()->getEntityManager()->persist($hourlyPrice);
-					$this->entity()->getEntityManager()->flush();
+					$court = $entityManager->find('Application\Model\Entity\Court', $idCourt);
+
+
+					for($time = $startTime; $time <= $stopTime; $time++) {
+						$hourlyPrice = new HourlyPrice();
+
+						$hourlyPrice->setTime($time);
+						$hourlyPrice->setHourlyPrice($price);
+						$hourlyPrice->setCourt($court);
+
+						$entityManager->persist($hourlyPrice);
+						$entityManager->flush();
+					}
 				}
 			}
 			// Add sport center vacation
@@ -362,6 +375,8 @@ class IndexController extends AbstractActionController {
 
 		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
 
+		$users = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\user s")->getResult();
+
 		$this->layout()->setVariables(array(
 			'homeActive' => '',
 			'contactActive' => '',
@@ -374,6 +389,7 @@ class IndexController extends AbstractActionController {
 		// admin.phtml
 		return new ViewModel(array(
 			'sports' => $sports,
+			'users' => $users,
 			'newSportForm' => $newSportForm,
 			'newCourtForm' => $newCourtForm,
 			'sportCenterForm' => $sportCenterForm,
@@ -454,6 +470,25 @@ class IndexController extends AbstractActionController {
 			));
 		}
 	}	
+
+	public function removeUserAction()
+	{
+
+		$code = $this->params()->fromPost('code',0);
+		$id = $this->params()->fromPost('id',0);
+
+			$query = $this->entity()->getEntityManager()->find("Application\Model\Entity\User", $id);
+
+			$this->entity()->getEntityManager()->remove($query);
+
+			$this->entity()->getEntityManager()->flush();
+			
+			return new JsonModel(array(
+				'code' => "success"
+			));
+
+	}
+
 	public function getReservationAction()
 	{
 
