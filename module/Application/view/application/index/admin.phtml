@@ -104,6 +104,39 @@
                     </div>
                     <div class="tab-pane" id="users">
                         <h2>Users Management</h2>
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading">list of all users</div>
+
+                            <!-- Table -->
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>NickName</th>
+                                        <th>FirstName</th>
+                                        <th>LastName</th>
+                                        <th>Phone</th>
+                                        <th>Address</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    foreach ($that->users as $user) {
+                                        echo '<tr class="userEntry" id=' . $user->getId() . '>';
+                                        echo '<td>'.$user->getId().'</td>';
+                                        echo '<td>'.$user->getNickName().'</td>';
+                                        echo '<td>'.$user->getFirstName().'</td>';
+                                        echo '<td>'.$user->getLastName().'</td>';
+                                        echo '<td>'.$user->getPhone().'</td>';
+                                        echo '<td>'.$user->getAddress().'</td>';
+                                        echo '<td><span class="glyphicon glyphicon-remove" userRemove = "'.$user->getId().'"></span></td></tr>';
+                                    }
+                                    ?>
+                                </tbody>
+                                
+                            </table>
+                        </div>
                     </div>
                     <div class="tab-pane" id="sports">
                         <h2>Sports Management</h2>

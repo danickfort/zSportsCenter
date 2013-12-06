@@ -373,6 +373,8 @@ class IndexController extends AbstractActionController {
 
 		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
 
+		$users = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\user s")->getResult();
+
 		$this->layout()->setVariables(array(
 			'homeActive' => '',
 			'contactActive' => '',
@@ -385,6 +387,7 @@ class IndexController extends AbstractActionController {
 		// admin.phtml
 		return new ViewModel(array(
 			'sports' => $sports,
+			'users' => $users,
 			'newSportForm' => $newSportForm,
 			'newCourtForm' => $newCourtForm,
 			'sportCenterForm' => $sportCenterForm,
@@ -473,6 +476,25 @@ class IndexController extends AbstractActionController {
 			));
 		}
 	}	
+
+	public function removeUserAction()
+	{
+
+		$code = $this->params()->fromPost('code',0);
+		$id = $this->params()->fromPost('id',0);
+
+			$query = $this->entity()->getEntityManager()->find("Application\Model\Entity\User", $id);
+
+			$this->entity()->getEntityManager()->remove($query);
+
+			$this->entity()->getEntityManager()->flush();
+			
+			return new JsonModel(array(
+				'code' => "success"
+			));
+
+	}
+
 	public function getReservationAction()
 	{
 
