@@ -378,7 +378,7 @@ class IndexController extends AbstractActionController {
 
 		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
 
-		$users = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\user s")->getResult();
+		$users = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\User s")->getResult();
 
 		$this->layout()->setVariables(array(
 			'homeActive' => '',
