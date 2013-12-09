@@ -45,6 +45,9 @@ function zCalendarWrapper(config) {
     var isAdmin = config.isAdmin;
     delete config.isAdmin;
 
+    var isLoggedIn = config.isLoggedIn;
+    delete config.isLoggedIn;
+
     /**
      * List of urls used to get/update/delete event(s)
      * For example:
@@ -84,7 +87,8 @@ function zCalendarWrapper(config) {
         snapMinutes: 15,
         defaultEventMinutes: 45,
         select: function (startDate, endDate, allDay, jsEvent, view) {
-            createEvent(startDate, endDate, allDay, jsEvent, view);
+            if (isLoggedIn==1) createEvent(startDate, endDate, allDay, jsEvent, view);
+            else calendar.fullCalendar('unselect');
         },
         eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
             if (isAdmin==1) updateEvent(event, revertFunc);
@@ -185,7 +189,8 @@ function zCalendarWrapper(config) {
                     start: startDate,
                     end: endDate,
                     allDay: allDay,
-                    ts: ts
+                    ts: ts,
+                    backgroundColor: '#33B5E5'
                 }, true); // make the event "stick"
             }
         });
@@ -293,7 +298,7 @@ function zCalendarWrapper(config) {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                bootbox.alert('Error occured during deleting event in the database', function () {
+                bootbox.alert("Une erreur est survenue lors de l'enregistrement dans la base de donnée!", function () {
                 });
             }
         });
@@ -320,16 +325,9 @@ function zCalendarWrapper(config) {
     function clickEvent(event) {
 
         bootbox.dialog({
-            message: "Réservation du ...",
-            title: "Modifier un réservation",
+            message: "Réservation de<br/>" + event.start.getTimestamp() + "<br/>à<br/>" + event.end.getTimestamp() + "",
+            title: "Supprimer une réservation",
             buttons: {
-                success: {
-                    label: "Modifier",
-                    className: "btn-success",
-                    callback: function () {
-                        //editEvent(event);
-                    }
-                },
                 danger: {
                     label: "Supprimer",
                     className: "btn-danger",

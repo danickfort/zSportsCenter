@@ -142,6 +142,7 @@
 		var calendarWrapper = new zCalendarWrapper({
 
 		isAdmin: <?php echo $this->isAdmin; ?>,
+        isLoggedIn: <?php echo $this->isLoggedIn; ?>,
 		container: '#calendar',
 		api: {
 		get: '<?php echo $this->url('home', array(

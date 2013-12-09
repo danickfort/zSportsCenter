@@ -78,15 +78,20 @@ class IndexController extends AbstractActionController {
 			'userAuth' => $this->isUserAuth(),
 			'adminVisible' => $this->isAdministratorUser(),
 			));
-		
+
 		$isAdmin = 0;
+        $isLoggedIn = 0;
 		if ($this->isAdministratorUser())
 		{
 			$isAdmin = 1;
 		}
-		// index.pthml
-		return new ViewModel(array('isAdmin' => $isAdmin, 'message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
-	}
+        if ($this->isUserAuth())
+        {
+            $isLoggedIn = 1;
+        }
+        // index.pthml
+        return new ViewModel(array('isLoggedIn' => $isLoggedIn, 'isAdmin' => $isAdmin, 'message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
+    }
 	
 	public function signupAction() {
 		$this->setAction('signup');
@@ -528,7 +533,7 @@ class IndexController extends AbstractActionController {
 
 		foreach($records as $record)
 		{
-			$bgcolor = ($record->getUser()->getId() == $currentUserId) ? 'green' : 'red';
+			$bgcolor = ($record->getUser()->getId() == $currentUserId) ? '#33B5E5' : '#AA66CC';
 			$item = array(
 				'id' => $record->getId() + "",
 				'title' => "Réservé",
