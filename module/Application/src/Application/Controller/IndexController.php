@@ -485,7 +485,59 @@ class IndexController extends AbstractActionController {
 				'namesCourt' => $namesCourt,
 			));
 		}
-	}	
+	}
+
+	public function removeCourtAction()
+	{
+		$params = $this->getRequest()->getPost();
+
+		$code = $this->params()->fromQuery('code',0);
+		$id = $this->params()->fromQuery('id',0);
+
+		// Admin want delete a sport
+		if ($code == "removeCourt") {
+			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
+			->select("r")
+			->from("Application\Model\Entity\Reservation", "r")
+			->where("r.court = :court");
+
+			$qb->setParameter('court', $id);
+
+			$reservations = $qb->getQuery()->getResult();
+
+			$usersName = array();
+			foreach($reservations as $reservation) {
+				$usersName[] = $reservation->getUser()->getFirstName();
+			}
+
+			return new JsonModel(array(
+				'idCourt' => $id,
+				'usersName' => $usersName,
+			));
+		} else if ($code == "confirm") {
+			$court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', $id);
+			$nameCourt = $court->getName();
+
+			// delete hourly prices for the current court
+			$query = $this->entity()->getEntityManager()->createQuery("DELETE Application\Model\Entity\HourlyPrice h WHERE h.court = ?1");
+			$query->setParameter(1, $id);
+			$result = $query->getResult();
+			// delete reservations for the current court
+			$query = $this->entity()->getEntityManager()->createQuery("DELETE Application\Model\Entity\Reservation r WHERE r.court = ?1");
+			$query->setParameter(1, $id);
+			$result = $query->getResult();
+
+			// delete the court
+			$query = $this->entity()->getEntityManager()->createQuery("DELETE Application\Model\Entity\Court c WHERE c.id = ?1");
+			$query->setParameter(1, $id);
+			$result = $query->getResult();
+			
+			// return court name
+			return new JsonModel(array(
+				'nameCourt' => $nameCourt,
+			));
+		}
+	}
 
 	public function removeUserAction()
 	{
