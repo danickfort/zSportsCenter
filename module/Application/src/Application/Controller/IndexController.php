@@ -555,14 +555,33 @@ class IndexController extends AbstractActionController {
 		}
 	}
 
+
+
+
+
 	public function removeUserAction()
 	{
 
 		$code = $this->params()->fromPost('code',0);
 		$id = $this->params()->fromPost('id',0);
 
-			$query = $this->entity()->getEntityManager()->find("Application\Model\Entity\User", $id);
 
+		if($code == "confirm")
+		{
+			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
+				->select("r")
+				->from("Application\Model\Entity\Reservation", "r")
+				->where("r.user = :user");
+			$qb->setParameter('user', $id);
+
+			foreach ($qb->getQuery()->getResult() as $res):
+				$this->entity()->getEntityManager()->remove($res);
+			endforeach;
+
+			$this->entity()->getEntityManager()->flush();
+
+
+			$query = $this->entity()->getEntityManager()->find("Application\Model\Entity\User", $id);
 			$this->entity()->getEntityManager()->remove($query);
 
 			$this->entity()->getEntityManager()->flush();
@@ -570,6 +589,31 @@ class IndexController extends AbstractActionController {
 			return new JsonModel(array(
 				'code' => "success"
 			));
+		}
+		elseif ($code == "removeUser")
+		{
+			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
+			->select("r")
+			->from("Application\Model\Entity\Reservation", "r")
+			->where("r.user = :user");
+
+			$qb->setParameter('user', $id);
+
+			$result = $qb->getQuery()->getResult();
+
+			$reservations = array();
+			foreach($reservations as $reservation)
+			{
+				$ids[] = $court->getId();
+			}
+
+			$user = $this->entity()->getEntityManager()->find("Application\Model\Entity\User", $id);
+
+			return new JsonModel(array(
+				'idUser' => $user->getId(),
+				'name' => $user->getNickname(),
+			));
+		}
 
 	}
 

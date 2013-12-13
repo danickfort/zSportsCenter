@@ -9,11 +9,13 @@ $(document).ready(function() {
 
 		if (action == "removeSport") {
 
+		$('#sportsmanager.loading').show();
 			$.ajax({
 				url: "/index/removeSport",
 				type: "GET",
 				dataType: "JSON",
-				data: {
+				data:
+				{
 					code: "removeSport",
 					id: id
 				},
@@ -36,6 +38,7 @@ $(document).ready(function() {
 								id: json.idSport
 							},
 							success: function(json) {
+								$('#sportsmanager.loading').hide();
 								console.log(json.sportName);
 								var li = $("a[href='#" + json.sportName + "']").parent();
 								var div = $("#" +  json.sportName);
@@ -133,23 +136,45 @@ $(document).ready(function() {
 				}
 			});
 
-		} else if(action == "removeUser") {
+		} else if(action == "removeUser")
+		{
 
-			$.ajax({
+			$.ajax(
+			{
 				url: "/index/remove-user",
 				type: "POST",
 				dataType: "JSON",
-				data: {
+				data:
+				{
 					id: id,
 					code:"removeUser"
 				},
-				success: function(json) {
+				success: function(json)
+				{
 					var message = 'Deleting user:\n';
 					message += '----------------\n';
-					$('.userEntry#' + id).hide();
+					var result = confirm(message);
+					if(result)
+					{
+						$.ajax(
+						{
+							url: "/index/remove-user",
+							type: "POST",
+							dataType: "JSON",
+							data:
+							{
+								code: "confirm",
+								id: json.idUser
+							},
+							success: function(json)
+							{
+								$('.userEntry#' + id).hide();
+							}
+						});
 					}
-				});
-
+				}
+					
+			});
 		}
 	});
 });
