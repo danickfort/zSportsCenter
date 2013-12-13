@@ -37,102 +37,111 @@
 	->offsetSetFile(++$idx, $basePath . '/js/evl-calendar/zCalendarWrapper.js', 'text/javascript')
 	;
 
-	$title = $this->translate('zSc homepage', 'evl-calendar');
+	$title = $this->translate('zSportCenter - HomePage', 'evl-calendar');
 	$this->headTitle($title);
+	?>
+
+	<!-- Login/Logout message  -->
+	<?php
+		if ($this->message) {
+			switch($this->message) {
+				case "success":
+					?><div class="alert alert-success">Logged in !</div><?php
+					break;
+			}
+		}
 	?>
 
 	<h1><?php echo $this->escapeHtml($title); ?></h1>
 
-	<?php
-	/*$sportCenter = null;
-	foreach($this->sportCenter as $center):
-		$sportCenter = $center;
-	endforeach;*/
+	<div class="row">
+		<div class="col-md-5">
+			<div id='infobox'>
+				<?php if (!$this->isAdmin) { ?>
+						<address>
+							<strong><?php echo $sportCenter->getName(); ?></strong><br />
+							<?php echo $sportCenter->getAddress(); ?><br />
+							<?php echo $sportCenter->getCity().', '. $sportCenter->getPostCode(); ?><br />
+							<abbr title="Phone">P:</abbr><?php echo $sportCenter->getPhone(); ?>
+						</address>
+					<div id='timetableinfo'>
+						<table>
+							<tr>
+								<td>Opening Hour</td><td><?php echo $sportCenter->getOpeningHour().':00'; ?></td>
+							</tr>
+							<tr>
+								<td>Closing Hour</td><td><?php echo $sportCenter->getClosingHour().':00'; ?></td>
+							</tr>
+						</table>
+					</div>
+				<?php } else { ?>
+				<div class="lastReservationsList">
+					<h1>Liste réservations</h1>
+				</div> <?php } ?>
+			</div>
+			<div>
+				<h2>Disponible Sports</h2>
+				<ul class="nav nav-tabs">
+					<?php
+                    	$active = ' class="active"';
+                    	foreach ($this->sports as $sport) {
+                        	echo '<li'.$active.'>'.'<a href="#'.$sport->getName().'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
+                        	$active = '';
+                    	}
+                	?>
+            	</ul>
+            	    <div class="tab-content">
+                    <?php
+                    $active = ' active';
+                    foreach ($this->sports as $sport) {
+                        echo '<div class="tab-pane'.$active.'" id="'.$sport->getName().'">';
+                        $active = '';
+						// Displaying courts
+                        $courts = array_map(function($court) {
+                            return array(
+                            	'id' => $court->getId(),
+                                'name' => $court->getName(),
+                                'description' => $court->getDescription(),
+                                );
+                        }, $sport->getCourts()->toArray());
 
-	if ($this->message) {
-		switch($this->message)
-		{
-			case "success":
-			?><div class="alert alert-success">Logged in !</div><?php
-			break;
-		}
-	}
-	?>
+                        echo '<div class="row">';
+                        echo '<div class="col-md-4">';
+                        echo '<h3>'.$sport->getName().'</h3>';
+                        echo '<ul class="nav nav-pills nav-stacked">';
+                        $active = ' class="active"';
+                        foreach ($courts as $court) {
+                            echo '<li'.$active.'>'.'<a href="#'.$court['name'].'" data-toggle="tab">'.$court['name'].'</a>'.'</li>';
+                            $active = '';
+                        }
+                        $active = '';
+                        echo '</ul>';
+                        echo '</div>'; // fermeture div col-md-2
 
-	<div class="progress progress-striped active loading" style="display:none">
-		<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        echo '<div class="col-md-8">';
+                        echo '<div class="tab-content">';
+                        $active = ' active';
+                        foreach ($courts as $court) {
+                            echo '<div class="tab-pane'.$active.'" id="'.$court['name'].'" data-id="'.$court['id'].'">';
+                            $active = '';
+                            echo '<h4>'.$court['name'].'</h4>';
+                            echo '<p>'.$court['description'].'</p>';
+                            echo '</div>';
+                        }
+                        $active = '';
+                        echo '</div>'; // fermeture div tab-content
+                        echo '</div>'; // fermeture div col-md-10
+                        echo '</div>'; // fermeture div row
+                        echo '</div>'; // fermeture div tab-pane
+                    }
+                    ?>
+                </div>
+        	</div>
+		</div>
+		<div class="col-md-7">
+			<div id='calendar'></div>
 		</div>
 	</div>
-	<div class="container-fluid panel panel-default">
-		<div class="row-fluid">
-			<div class="span5">
-				<div id='infobox'>
-				<?php if (!$this->isAdmin) { ?>
-					<div class='panel panel-default' id='geninfo'>
-						<?php
-						echo $sportCenter->getName();
-						echo "<br />";
-						echo $sportCenter->getAddress();
-						echo "<br />";
-						echo $sportCenter->getPostCode();
-						echo $sportCenter->getCity();
-						echo "<br />";
-						echo $sportCenter->getPhone();
-						?>
-					</div>
-					<div class='panel panel-default' id='timetableinfo'>
-						<?php
-						echo $sportCenter->getOpeningHour();
-						echo "<br />";
-						echo $sportCenter->getClosingHour();
-						?>
-					</div>
-					<?php } else { ?>
-					<div class="lastReservationsList">
-						<h1>Liste réserv</h1>
-					</div> <?php } ?>
-
-					<div class='panel panel-default' id='sportbox'>
-
-						<div class="row">
-
-							<div class="col-md-6">
-
-								<ul class="nav nav-tabs">
-									<li class="active"><a href="#newSport" data-toggle="tab">New Sport</a></li>
-									<li><a href="#newCourt" data-toggle="tab">New Court</a></li>
-									<li><a href="#timetable" data-toggle="tab">Timetable</a></li>
-								</ul>
-
-								<div class="tab-content">
-									<div class="tab-pane active" id="newSport">
-										<div class="page-header">
-											<h1>New Sport <small>Form for add a new sport</small></h1>
-										</div>
-									</div>
-									<div class="tab-pane" id="newCourt">
-										<div class="page-header">
-											<h1>New Court <small>Form for add a new court</small></h1>
-										</div>
-									</div>
-									<div class="tab-pane" id="timetable">
-										<div class="page-header">
-											<h1>Timetable<small>Form to manage timetable</small></h1>
-										</div>
-									</div>
-								</div>
-
-								</div>
-
-							</div>
-						</div>
-					</div> 
-				</div>
-				<div class="span7">
-					<div id='calendar'></div>
-				</div>
-			</div>
-		</div>
 
 
 
