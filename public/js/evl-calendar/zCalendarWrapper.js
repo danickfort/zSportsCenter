@@ -65,9 +65,21 @@ function zCalendarWrapper(config) {
     var locales = config.locales;
     delete config.locales;
 
+    function isOverlapping(event){
+        var array = calendar.fullCalendar('clientEvents');
+        for(i in array){
+                if(!(array[i].start >= event.end || array[i].end <= event.start)){
+                    return true;
+                }
+        }
+        return false;
+    }
+
     /**
      * @private
      */
+
+
     var defaults = {
         header: {
             left: 'prev,next today',
@@ -138,7 +150,7 @@ function zCalendarWrapper(config) {
 
         var check = $.fullCalendar.formatDate(startDate,'yyyy-MM-dd HH:mm');
         var today = $.fullCalendar.formatDate(new Date(),'yyyy-MM-dd HH:mm');
-        if(check < today)
+        if(check < today || isOverlapping({start: startDate, end: endDate}))
         {
             calendar.fullCalendar('unselect');
         }
@@ -171,6 +183,7 @@ function zCalendarWrapper(config) {
                             for (var i in events) {
                                 if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
                                     events[i].id = parseInt(response.id);
+                                    console.log(events[i])
                                     delete events[i].ts;
                                 }
                             }
@@ -185,7 +198,7 @@ function zCalendarWrapper(config) {
                     }
                 });
                 calendar.fullCalendar('renderEvent', {
-                    title: "Réservé à vous !", // TODO CHANGE THIS!!!
+                    title: "Réservé!!",
                     start: startDate,
                     end: endDate,
                     allDay: allDay,

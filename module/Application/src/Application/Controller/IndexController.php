@@ -71,13 +71,6 @@ class IndexController extends AbstractActionController {
 		$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
 		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
 
-		$isAdmin = 0;
-        $isLoggedIn = 0;
-		if ($this->isAdministratorUser()) {
-			$isAdmin = 1;
-		} if ($this->isUserAuth()) {
-            $isLoggedIn = 1;
-        }
 
 		$this->layout()->setVariables(array(
 			'homeActive' => 'active',
@@ -88,14 +81,28 @@ class IndexController extends AbstractActionController {
 			'adminVisible' => $this->isAdministratorUser(),
 		));
 
+		$isAdmin = 0;
+		$lastReservations = 0;
+        $isLoggedIn = 0;
+
+		if ($this->isAdministratorUser())
+		{
+			$isAdmin = 1;
+			$lastReservations = $this->entity()->getEntityManager()->createQueryBuilder()
+			->select('e')
+			->from('Application\Model\Entity\Reservation', 'e')
+			->orderBy('e.id','DESC')
+			->setMaxResults(10)
+			->getQuery()
+			->getResult();
+		}
+
+        if ($this->isUserAuth())
+        {
+            $isLoggedIn = 1;
+        }
         // index.pthml
-        return new ViewModel(array(
-        	'isLoggedIn' => $isLoggedIn,
-        	'isAdmin' => $isAdmin,
-        	'message' => $this->params()->fromRoute('message'),
-        	'sportCenter' => $sportCenter[0],
-        	'sports' => $sports,
-        ));
+        return new ViewModel(array('sports' => $sports, 'lastReservations' => $lastReservations, 'isLoggedIn' => $isLoggedIn, 'isAdmin' => $isAdmin, 'message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
     }
 	
 	public function signupAction() {
@@ -180,7 +187,6 @@ class IndexController extends AbstractActionController {
 
 		$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
 
-	 	// PASS VARIABLE IS ADMIN !!!
 		$this->layout()->setVariables(array(
 			'homeActive' => '',
 			'contactActive' => 'active',
@@ -196,6 +202,8 @@ class IndexController extends AbstractActionController {
 	
 	public function adminAction() {
 		$this->setAction('admin');
+
+		$performedAction = '';
 
 		if (!$this->isUserAuth() && $this->params()->fromRoute('message') != 'notloggedin' && $this->params()->fromRoute('message') != 'notpermitted')
 			return $this->redirect()->toRoute('home', array('action' => 'admin', 'message' => 'notloggedin'));
@@ -272,6 +280,8 @@ class IndexController extends AbstractActionController {
 
 					$this->entity()->getEntityManager()->persist($court);
 					$this->entity()->getEntityManager()->flush();
+
+					$performedAction = 'addCourt';
 				}
 			// Modify a court
 			} else if (isset($request->getPost()->modifyCourtSubmit)) {
@@ -295,6 +305,8 @@ class IndexController extends AbstractActionController {
 					$query->setParameter(3, $court->getSport());
 					$query->setParameter(4, $court->getId());
 					$query->getResult();
+
+					$performedAction = 'updCourt';
 				}
 			// Add the sport center
 			} else if (isset($request->getPost()->newSportCenterSubmit)) {
