@@ -153,3 +153,11 @@ $(document).ready(function() {
 		}
 	});
 });
+
+$(document).ready(function() {
+var urlz = document.location.toString();
+if (urlz.match('#')) {
+	var n = urlz.split('#')[1];
+    if (n != sports) $('.nav-tabs a[href=#sports]').tab('show') ;
+    $('.nav-tabs a[href=#'+n+']').tab('show') ;
+}});
