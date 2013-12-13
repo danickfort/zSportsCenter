@@ -1,8 +1,8 @@
 #infobox {
-	background-image: url('../img/1.jpg');
+	// background-image: url('../img/1.jpg');
 	padding: 5px;
-	background-repeat: no-repeat;
-	height: 300px;
+	// background-repeat: no-repeat;
+	// height: 300px;
 }
 #geninfo {
 	// margin-top:10%;
@@ -12,7 +12,7 @@
 	// margin-top:10%;
 	// margin-left:50%;
 }
-#sportbox {
+#sp	ortbox {
 }
 
 #calendar {

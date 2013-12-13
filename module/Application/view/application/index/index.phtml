@@ -58,13 +58,16 @@
 		<div class="col-md-5">
 			<div id='infobox'>
 				<?php if (!$this->isAdmin) { ?>
+					<div class="row">
+					<div class="col-md-6">
 						<address>
 							<strong><?php echo $sportCenter->getName(); ?></strong><br />
 							<?php echo $sportCenter->getAddress(); ?><br />
 							<?php echo $sportCenter->getCity().', '. $sportCenter->getPostCode(); ?><br />
 							<abbr title="Phone">P:</abbr><?php echo $sportCenter->getPhone(); ?>
 						</address>
-					<div id='timetableinfo'>
+					</div>
+					<div id='timetableinfo' class="col-md-6">
 						<table>
 							<tr>
 								<td>Opening Hour</td><td><?php echo $sportCenter->getOpeningHour().':00'; ?></td>
@@ -74,10 +77,12 @@
 							</tr>
 						</table>
 					</div>
+					</div>
 				<?php } else { ?>
 				<div class="lastReservationsList">
 					<h1>Liste réservations</h1>
 				</div> <?php } ?>
+			<img src="../img/1.jpg" class="img-thumbnail" />
 			</div>
 			<div>
 				<h2>Disponible Sports</h2>
