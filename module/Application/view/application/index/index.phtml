@@ -1,95 +1,86 @@
 
 <?php if ($this->message == 'error') {
-	echo $this->headLink()
-	->prependStylesheet($this->basePath() . '/css/signin.css')
-	->prependStylesheet($this->basePath() . '/css/bootstrap.css')
-	;
-	?>
-	<div class="alert alert-danger">Wrong log in information!</div>
-	<form class="form-signin" method="post" action="<?php echo $this->url('home', array('action' => 'signin')); ?>">
-		<h2 class="form-signin-heading">Please sign in</h2>
-		<input type="text" name="nickname" class="form-control" placeholder="Nickname" required autofocus>
-		<input type="password" name="password" class="form-control" placeholder="Password" required>
-		<label class="checkbox">
-			<input type="checkbox" value="remember-me"> Remember me
-		</label>
-		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    echo $this->headLink()
+    ->prependStylesheet($this->basePath() . '/css/signin.css')
+    ->prependStylesheet($this->basePath() . '/css/bootstrap.css')
+    ;
+    ?>
+    <div class="alert alert-danger">Wrong log in information!</div>
+    <form class="form-signin" method="post" action="<?php echo $this->url('home', array('action' => 'signin')); ?>">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="text" name="nickname" class="form-control" placeholder="Nickname" required autofocus>
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
+        <label class="checkbox">
+            <input type="checkbox" value="remember-me"> Remember me
+        </label>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
-	</form>
-	<?php } else { ?>
-	<?php
-	$basePath = $this->basePath();
+    </form>
+    <?php } else { ?>
+    <?php
+    $basePath = $this->basePath();
 
-	$idx = 100;
-	$this->headLink()->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.css')
-	->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.print.css', 'print')
-	->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap-responsive.css')
-	->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap.min.css')
-	->offsetSetStylesheet(++$idx, $basePath . '/css/indexPage.css')
-	;
+    $idx = 100;
+    $this->headLink()->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.css')
+    ->offsetSetStylesheet(++$idx, $basePath . '/css/jquery/fullcalendar/fullcalendar.print.css', 'print')
+    ->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap-responsive.css')
+    ->offsetSetStylesheet(++$idx, $basePath . '/css/bootstrap.min.css')
+    ->offsetSetStylesheet(++$idx, $basePath . '/css/indexPage.css')
+    ;
 
-	$idx = 100;
-	$this->headScript()->offsetSetFile(++$idx, $basePath . '/js/date.js', 'text/javascript')
-	->offsetSetFile(++$idx, $basePath . '/js/jquery-ui-1.10.1.custom.min.js', 'text/javascript')
-	->offsetSetFile(++$idx, $basePath . '/js/jquery/fullcalendar/fullcalendar.js', 'text/javascript')
-	->offsetSetFile(++$idx, $basePath . '/js/bootstrap.min.js')
-	->offsetSetFile(++$idx, $basePath . '/js/bootstrap/bootbox.min.js')
-	->offsetSetFile(++$idx, $basePath . '/js/evl-calendar/zCalendarWrapper.js', 'text/javascript')
-	;
+    $idx = 100;
+    $this->headScript()->offsetSetFile(++$idx, $basePath . '/js/date.js', 'text/javascript')
+    ->offsetSetFile(++$idx, $basePath . '/js/jquery-ui-1.10.1.custom.min.js', 'text/javascript')
+    ->offsetSetFile(++$idx, $basePath . '/js/jquery/fullcalendar/fullcalendar.js', 'text/javascript')
+    ->offsetSetFile(++$idx, $basePath . '/js/bootstrap.min.js')
+    ->offsetSetFile(++$idx, $basePath . '/js/bootstrap/bootbox.min.js')
+    ->offsetSetFile(++$idx, $basePath . '/js/evl-calendar/zCalendarWrapper.js', 'text/javascript')
+    ;
 
-	$title = $this->translate('zSc homepage', 'evl-calendar');
-	$this->headTitle($title);
-	?>
+    $title = $this->translate('zSportCenter - HomePage', 'evl-calendar');
+    $this->headTitle($title);
+    ?>
 
-	<h1><?php echo $this->escapeHtml($title); ?></h1>
+    <!-- Login/Logout message  -->
+    <?php
+        if ($this->message) {
+            switch($this->message) {
+                case "success":
+                    ?><div class="alert alert-success">Logged in !</div><?php
+                    break;
+            }
+        }
+    ?>
 
-	<?php
-	/*$sportCenter = null;
-	foreach($this->sportCenter as $center):
-		$sportCenter = $center;
-	endforeach;*/
+    <h1><?php echo $this->escapeHtml($title); ?></h1>
 
-	if ($this->message) {
-		switch($this->message)
-		{
-			case "success":
-			?><div class="alert alert-success">Logged in !</div><?php
-			break;
-		}
-	}
-	?>
-
-	<div class="progress progress-striped active loading" style="display:none">
-		<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-		</div>
-	</div>
-	<div class="container-fluid panel panel-default">
-		<div class="row-fluid">
-			<div class="span5">
-				<div id='infobox'>
-				<?php if (!$this->isAdmin) { ?>
-					<div class='panel panel-default' id='geninfo'>
-						<?php
-						echo $sportCenter->getName();
-						echo "<br />";
-						echo $sportCenter->getAddress();
-						echo "<br />";
-						echo $sportCenter->getPostCode();
-						echo $sportCenter->getCity();
-						echo "<br />";
-						echo $sportCenter->getPhone();
-						?>
-					</div>
-					<div class='panel panel-default' id='timetableinfo'>
-						<?php
-						echo $sportCenter->getOpeningHour();
-						echo "<br />";
-						echo $sportCenter->getClosingHour();
-						?>
-					</div>
-					<?php } else { ?>
-					<div class="lastReservationsList">
-						    <div class="panel panel-default">
+    <div class="row">
+        <div class="col-md-5">
+            <div id='infobox'>
+                <?php if (!$this->isAdmin) { ?>
+                    <div class="row">
+                    <div class="col-md-6">
+                        <address>
+                            <strong><?php echo $sportCenter->getName(); ?></strong><br />
+                            <?php echo $sportCenter->getAddress(); ?><br />
+                            <?php echo $sportCenter->getCity().', '. $sportCenter->getPostCode(); ?><br />
+                            <abbr title="Phone">P:</abbr><?php echo $sportCenter->getPhone(); ?>
+                        </address>
+                    </div>
+                    <div id='timetableinfo' class="col-md-6">
+                        <table>
+                            <tr>
+                                <td>Opening Hour</td><td><?php echo $sportCenter->getOpeningHour().':00'; ?></td>
+                            </tr>
+                            <tr>
+                                <td>Closing Hour</td><td><?php echo $sportCenter->getClosingHour().':00'; ?></td>
+                            </tr>
+                        </table>
+                    </div>
+                    </div>
+                <?php } else { ?>
+                    <div class="lastReservationsList">
+                            <div class="panel panel-default">
                             <!-- Default panel contents -->
                             <div class="panel-heading">Last reservations</div>
 
@@ -122,134 +113,157 @@
                                 
                             </table>
                         </div>
-					</div> <?php } ?>
+                    </div> <?php } ?>
+            <img src="/img/1.jpg" class="img-thumbnail" />
+            </div>
+            <div>
+                <h2>Disponible Sports</h2>
+                <ul class="nav nav-tabs">
+                    <?php
+                        $active = ' class="active"';
+                        foreach ($this->sports as $sport) {
+                            echo '<li'.$active.'>'.'<a href="#'.$sport->getName().'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
+                            $active = '';
+                        }
+                    ?>
+                </ul>
+                    <div class="tab-content">
+                    <?php
+                    $active = ' active';
+                    foreach ($this->sports as $sport) {
+                        echo '<div class="tab-pane'.$active.'" id="'.$sport->getName().'">';
+                        $active = '';
+                        // Displaying courts
+                        $courts = array_map(function($court) {
+                            return array(
+                                'id' => $court->getId(),
+                                'name' => $court->getName(),
+                                'description' => $court->getDescription(),
+                                );
+                        }, $sport->getCourts()->toArray());
 
-					<div class='panel panel-default' id='sportbox'>
+                        echo '<div class="row">';
+                        echo '<div class="col-md-4">';
+                        echo '<h3>'.$sport->getName().'</h3>';
+                        echo '<ul class="nav nav-pills nav-stacked">';
+                        $active = ' class="active"';
+                        foreach ($courts as $court) {
+                            echo '<li'.$active.'>'.'<a href="#'.$court['name'].'" data-toggle="tab">'.$court['name'].'</a>'.'</li>';
+                            $active = '';
+                        }
+                        $active = '';
+                        echo '</ul>';
+                        echo '</div>'; // fermeture div col-md-2
 
-						<div class="row">
-
-							<div class="col-md-6">
-
-								<ul class="nav nav-tabs">
-									<li class="active"><a href="#newSport" data-toggle="tab">New Sport</a></li>
-									<li><a href="#newCourt" data-toggle="tab">New Court</a></li>
-									<li><a href="#timetable" data-toggle="tab">Timetable</a></li>
-								</ul>
-
-								<div class="tab-content">
-									<div class="tab-pane active" id="newSport">
-										<div class="page-header">
-											<h1>New Sport <small>Form for add a new sport</small></h1>
-										</div>
-									</div>
-									<div class="tab-pane" id="newCourt">
-										<div class="page-header">
-											<h1>New Court <small>Form for add a new court</small></h1>
-										</div>
-									</div>
-									<div class="tab-pane" id="timetable">
-										<div class="page-header">
-											<h1>Timetable<small>Form to manage timetable</small></h1>
-										</div>
-									</div>
-								</div>
-
-								</div>
-
-							</div>
-						</div>
-					</div> 
-				</div>
-				<div class="span7">
-					<div id='calendar'></div>
-				</div>
-			</div>
-		</div>
+                        echo '<div class="col-md-8">';
+                        echo '<div class="tab-content">';
+                        $active = ' active';
+                        foreach ($courts as $court) {
+                            echo '<div class="tab-pane'.$active.'" id="'.$court['name'].'" data-id="'.$court['id'].'">';
+                            $active = '';
+                            echo '<h4>'.$court['name'].'</h4>';
+                            echo '<p>'.$court['description'].'</p>';
+                            echo '</div>';
+                        }
+                        $active = '';
+                        echo '</div>'; // fermeture div tab-content
+                        echo '</div>'; // fermeture div col-md-10
+                        echo '</div>'; // fermeture div row
+                        echo '</div>'; // fermeture div tab-pane
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div id='calendar'></div>
+        </div>
+    </div>
 
 
 
-		<?php $this->headScript()->captureStart(); ?>
+        <?php $this->headScript()->captureStart(); ?>
 
-		$(document).ready(function() {
-		var calendarWrapper = new zCalendarWrapper({
+        $(document).ready(function() {
+        var calendarWrapper = new zCalendarWrapper({
 
-		isAdmin: <?php echo $this->isAdmin; ?>,
+        isAdmin: <?php echo $this->isAdmin; ?>,
         isLoggedIn: <?php echo $this->isLoggedIn; ?>,
-		container: '#calendar',
-		api: {
-		get: '<?php echo $this->url('home', array(
-			'action'=>'get-reservation',
-			));?>',
-		add: '<?php echo $this->url('home', array(
-			'action'=>'add-reservation',
-			));?>',
-		update: '<?php echo $this->url('home', array(
-			'action'=>'upd-reservation',
-			));?>',
-		erase: '<?php echo $this->url('home', array(
-			'action'=>'del-reservation',
-			));?>'
-		},
-		locales: {
-		'Event Title:': '<?php echo $this->translate('Event Title:', 'evl-calendar'); ?>',
-		'Is this okay?': '<?php echo $this->translate('Is this okay?', 'evl-calendar'); ?>',
-		'What do you want to do with event `%s`?': '<?php echo $this->translate('What do you want to do with event `%s`?', 'evl-calendar'); ?>',
-		'Delete': '<?php echo $this->translate('Delete', 'evl-calendar'); ?>',
-		'Edit': '<?php echo $this->translate('Edit', 'evl-calendar'); ?>',
-		'Cancel': '<?php echo $this->translate('Cancel', 'evl-calendar'); ?>'
-	},
-	// localization
-	monthNames: [
-	'<?php echo $this->translate('January', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('February', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('March', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('April', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('May', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('June', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('July', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('August', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('September', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('October', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('November', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('December', 'evl-calendar'); ?>',
-	],
-	monthNamesShort: [
-	'<?php echo $this->translate('Jan', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Feb', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Mar', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Apr', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('May', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Jun', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Jul', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Aug', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Sep', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Oct', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Nov', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Dec', 'evl-calendar'); ?>'
-	],
-	dayNames: [
-	'<?php echo $this->translate('Sunday', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Monday', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Tuesday', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Wednesday', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Thursday', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Friday', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Saturday', 'evl-calendar'); ?>'
-	],
-	dayNamesShort: [
-	'<?php echo $this->translate('Sun', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Mon', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Tue', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Wed', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Thu', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Fri', 'evl-calendar'); ?>',
-	'<?php echo $this->translate('Sat', 'evl-calendar'); ?>'
-	],
-	buttonText: {
-	today: '<?php echo $this->translate('today', 'evl-calendar'); ?>',
-	month: '<?php echo $this->translate('month', 'evl-calendar'); ?>',
-	week: '<?php echo $this->translate('week', 'evl-calendar'); ?>',
-	day: '<?php echo $this->translate('day', 'evl-calendar'); ?>'
+        container: '#calendar',
+        api: {
+        get: '<?php echo $this->url('home', array(
+            'action'=>'get-reservation',
+            ));?>',
+        add: '<?php echo $this->url('home', array(
+            'action'=>'add-reservation',
+            ));?>',
+        update: '<?php echo $this->url('home', array(
+            'action'=>'upd-reservation',
+            ));?>',
+        erase: '<?php echo $this->url('home', array(
+            'action'=>'del-reservation',
+            ));?>'
+        },
+        locales: {
+        'Event Title:': '<?php echo $this->translate('Event Title:', 'evl-calendar'); ?>',
+        'Is this okay?': '<?php echo $this->translate('Is this okay?', 'evl-calendar'); ?>',
+        'What do you want to do with event `%s`?': '<?php echo $this->translate('What do you want to do with event `%s`?', 'evl-calendar'); ?>',
+        'Delete': '<?php echo $this->translate('Delete', 'evl-calendar'); ?>',
+        'Edit': '<?php echo $this->translate('Edit', 'evl-calendar'); ?>',
+        'Cancel': '<?php echo $this->translate('Cancel', 'evl-calendar'); ?>'
+    },
+    // localization
+    monthNames: [
+    '<?php echo $this->translate('January', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('February', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('March', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('April', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('May', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('June', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('July', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('August', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('September', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('October', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('November', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('December', 'evl-calendar'); ?>',
+    ],
+    monthNamesShort: [
+    '<?php echo $this->translate('Jan', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Feb', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Mar', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Apr', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('May', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Jun', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Jul', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Aug', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Sep', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Oct', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Nov', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Dec', 'evl-calendar'); ?>'
+    ],
+    dayNames: [
+    '<?php echo $this->translate('Sunday', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Monday', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Tuesday', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Wednesday', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Thursday', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Friday', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Saturday', 'evl-calendar'); ?>'
+    ],
+    dayNamesShort: [
+    '<?php echo $this->translate('Sun', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Mon', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Tue', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Wed', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Thu', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Fri', 'evl-calendar'); ?>',
+    '<?php echo $this->translate('Sat', 'evl-calendar'); ?>'
+    ],
+    buttonText: {
+    today: '<?php echo $this->translate('today', 'evl-calendar'); ?>',
+    month: '<?php echo $this->translate('month', 'evl-calendar'); ?>',
+    week: '<?php echo $this->translate('week', 'evl-calendar'); ?>',
+    day: '<?php echo $this->translate('day', 'evl-calendar'); ?>'
 },
 allDayText: '<?php echo $this->translate('all-day', 'evl-calendar'); ?>',
 

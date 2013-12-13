@@ -69,6 +69,8 @@ class IndexController extends AbstractActionController {
 		$this->setAction('');
 
 		$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
+		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
+
 
 		$this->layout()->setVariables(array(
 			'homeActive' => 'active',
@@ -77,7 +79,7 @@ class IndexController extends AbstractActionController {
 			'signupActive' => '',
 			'userAuth' => $this->isUserAuth(),
 			'adminVisible' => $this->isAdministratorUser(),
-			));
+		));
 
 		$isAdmin = 0;
 		$lastReservations = 0;
@@ -100,7 +102,7 @@ class IndexController extends AbstractActionController {
             $isLoggedIn = 1;
         }
         // index.pthml
-        return new ViewModel(array('lastReservations' => $lastReservations, 'isLoggedIn' => $isLoggedIn, 'isAdmin' => $isAdmin, 'message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
+        return new ViewModel(array('sports' => $sports, 'lastReservations' => $lastReservations, 'isLoggedIn' => $isLoggedIn, 'isAdmin' => $isAdmin, 'message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
     }
 	
 	public function signupAction() {
@@ -132,12 +134,12 @@ class IndexController extends AbstractActionController {
 			'signupActive' => 'active',
 			'userAuth' => $this->isUserAuth(),
 			'adminVisible' => $this->isAdministratorUser(),
-			));
+		));
 		
 		// signup.phtml
 		return new ViewModel(array(
 			'form' => $form,
-			));
+		));
 	}
 	
 	public function signoutAction() {
@@ -397,7 +399,6 @@ class IndexController extends AbstractActionController {
 		}
 
 		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
-
 		$users = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\User s")->getResult();
 
 		$this->layout()->setVariables(array(
