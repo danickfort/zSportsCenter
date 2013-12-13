@@ -9,11 +9,13 @@ $(document).ready(function() {
 
 		if (action == "removeSport") {
 
+		$('#sportsmanager.loading').show();
 			$.ajax({
 				url: "/index/removeSport",
 				type: "GET",
 				dataType: "JSON",
-				data: {
+				data:
+				{
 					code: "removeSport",
 					id: id
 				},
@@ -36,6 +38,7 @@ $(document).ready(function() {
 								id: json.idSport
 							},
 							success: function(json) {
+								$('#sportsmanager.loading').hide();
 								console.log(json.sportName);
 								var li = $("a[href='#" + json.sportName + "']").parent();
 								var div = $("#" +  json.sportName);
