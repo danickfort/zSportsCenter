@@ -33,6 +33,7 @@
     ->offsetSetFile(++$idx, $basePath . '/js/jquery-ui-1.10.1.custom.min.js', 'text/javascript')
     ->offsetSetFile(++$idx, $basePath . '/js/jquery/fullcalendar/fullcalendar.js', 'text/javascript')
     ->offsetSetFile(++$idx, $basePath . '/js/bootstrap.min.js')
+    ->offsetSetFile(++$idx, $basePath . '/js/courtsportsel.js', 'text/javascript')
     ->offsetSetFile(++$idx, $basePath . '/js/bootstrap/bootbox.min.js')
     ->offsetSetFile(++$idx, $basePath . '/js/evl-calendar/zCalendarWrapper.js', 'text/javascript')
     ;
@@ -115,7 +116,7 @@
                         </div>
                     </div> <?php } ?>
             <img src="/img/1.jpg" class="img-thumbnail" />
-            </div>
+            </div>  
             <div>
                 <h2>Disponible Sports</h2>
                 <ul class="nav nav-tabs">
@@ -146,9 +147,9 @@
                         echo '<div class="col-md-4">';
                         echo '<h3>'.$sport->getName().'</h3>';
                         echo '<ul class="nav nav-pills nav-stacked">';
-                        $active = ' class="active"';
+                        $active = ' active';
                         foreach ($courts as $court) {
-                            echo '<li'.$active.'>'.'<a href="#'.$court['name'].'" data-toggle="tab">'.$court['name'].'</a>'.'</li>';
+                            echo '<li class="courtsel'.$active.'">'.'<a  href="#'.$court['name'].'" data-toggle="tab">'.$court['name'].'</a>'.'</li>';
                             $active = '';
                         }
                         $active = '';
@@ -183,7 +184,6 @@
 
 
         <?php $this->headScript()->captureStart(); ?>
-
         $(document).ready(function() {
         var calendarWrapper = new zCalendarWrapper({
 

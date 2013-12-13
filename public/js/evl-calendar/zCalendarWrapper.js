@@ -68,9 +68,9 @@ function zCalendarWrapper(config) {
     function isOverlapping(event){
         var array = calendar.fullCalendar('clientEvents');
         for(i in array){
-                if(!(array[i].start >= event.end || array[i].end <= event.start)){
-                    return true;
-                }
+            if(!(array[i].start >= event.end || array[i].end <= event.start)){
+                return true;
+            }
         }
         return false;
     }
