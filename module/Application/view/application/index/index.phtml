@@ -53,6 +53,12 @@
         }
     ?>
 
+    <?php
+    function removeSpaces($text) {
+        return str_replace(' ', '', $text);
+    }
+    ?>
+
     <h1><?php echo $this->escapeHtml($title); ?></h1>
     <div class="row">
         <div class="col-md-5">
@@ -122,7 +128,7 @@
                     <?php
                         $active = ' class="active"';
                         foreach ($this->sports as $sport) {
-                            echo '<li'.$active.'>'.'<a href="#'.$sport->getName().'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
+                            echo '<li'.$active.'>'.'<a href="#'.removeSpaces($sport->getName()).'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
                             $active = '';
                         }
                     ?>
@@ -131,7 +137,7 @@
                     <?php
                     $active = ' active';
                     foreach ($this->sports as $sport) {
-                        echo '<div class="tab-pane'.$active.'" id="'.$sport->getName().'">';
+                        echo '<div class="tab-pane'.$active.'" id="'.removeSpaces($sport->getName()).'">';
                         $active = '';
                         // Displaying courts
                         $courts = array_map(function($court) {
@@ -149,7 +155,7 @@
                         echo '<ul class="nav nav-pills nav-stacked">';
                         $active = ' active';
                         foreach ($courts as $court) {
-                            echo '<li class="courtsel'.$active.'">'.'<a  href="#'.$court['name'].'" data-toggle="tab">'.$court['name'].'</a>'.'</li>';
+                            echo '<li class="courtsel'.$active.'">'.'<a  href="#'.removeSpaces($court['name']).'" data-toggle="tab">'.$court['name'].'</a>'.'</li>';
                             $active = '';
                         }
                         $active = '';
@@ -160,7 +166,7 @@
                         echo '<div class="tab-content">';
                         $active = ' active';
                         foreach ($courts as $court) {
-                            echo '<div class="tab-pane'.$active.'" id="'.$court['name'].'" data-id="'.$court['id'].'">';
+                            echo '<div class="tab-pane'.$active.'" id="'.removeSpaces($court['name']).'" data-id="'.$court['id'].'">';
                             $active = '';
                             echo '<p>'.$court['description'].'</p>';
                             echo '<h3>Hourly Price</h3>';

@@ -50,6 +50,10 @@
         }
     }
 
+    function removeSpaces($text) {
+        return str_replace(' ', '', $text);
+    }
+
     function adminContent($that) {
 
         ?>
@@ -144,7 +148,7 @@
                     <?php
                     $active = ' class="active"';
                     foreach ($that->sports as $sport) {
-                        echo '<li'.$active.'>'.'<a href="#'.$sport->getName().'" data-toggle="tab">'.$sport->getName().' <span class="glyphicon glyphicon-remove" action="removeSport" data-id="'.$sport->getId().'"></span></a>'.'</li>';
+                        echo '<li'.$active.'>'.'<a href="#'.removeSpaces($sport->getName()).'" data-toggle="tab">'.$sport->getName().' <span class="glyphicon glyphicon-remove" action="removeSport" data-id="'.$sport->getId().'"></span></a>'.'</li>';
                         $active = '';
                     }
                     echo '<li'.$active.'><a href="#newSport" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
@@ -156,7 +160,7 @@
                     <?php
                     $active = ' active';
                     foreach ($that->sports as $sport) {
-                        echo '<div class="tab-pane'.$active.'" id="'.$sport->getName().'">';
+                        echo '<div class="tab-pane'.$active.'" id="'.removeSpaces($sport->getName()).'">';
                         $active = '';
 
                     // Displaying courts
@@ -175,10 +179,10 @@
                         echo '<ul class="nav nav-pills nav-stacked">';
                         $active = ' class="active"';
                         foreach ($courts as $court) {
-                            echo '<li'.$active.'>'.'<a href="#'.$court['name'].'" data-toggle="tab">'.$court['name'].' <span class="glyphicon glyphicon-remove" action="removeCourt" data-id="'.$court['id'].'"></span></a>'.'</li>';
+                            echo '<li'.$active.'>'.'<a href="#'.removeSpaces($court['name']).'" data-toggle="tab">'.$court['name'].' <span class="glyphicon glyphicon-remove" action="removeCourt" data-id="'.$court['id'].'"></span></a>'.'</li>';
                             $active = '';
                         }
-                        echo '<li'.$active.'><a href="#newCourt'.$sport->getName().'" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
+                        echo '<li'.$active.'><a href="#newCourt'.removeSpaces($sport->getName()).'" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
                         $active = '';
                         echo '</ul>';
                         echo '</div>';
@@ -187,7 +191,7 @@
                         echo '<div class="tab-content">';
                         $active = ' active';
                         foreach ($courts as $court) {
-                            echo '<div class="tab-pane'.$active.'" id="'.$court['name'].'">';
+                            echo '<div class="tab-pane'.$active.'" id="'.removeSpaces($court['name']).'">';
                             $active = '';
                             // Affichage des terrains.
                             echo '<div class="row">';
@@ -217,7 +221,7 @@
                             echo '</div>';
                             echo '</div>';
                         }
-                        echo '<div class="tab-pane'.$active.'" id="newCourt'.$sport->getName().'">';
+                        echo '<div class="tab-pane'.$active.'" id="newCourt'.removeSpaces($sport->getName()).'">';
                         $active = '';
                         echo '<div class="col-md-6">';
                         echo '<h3>Add a new '.$sport->getName().' court</h3>';
