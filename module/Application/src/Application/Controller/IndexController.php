@@ -201,6 +201,10 @@ class IndexController extends AbstractActionController {
 	}
 	
 	public function adminAction() {
+		$sportCenterActive = 'active';
+		$usersActive = '';
+		$sportsActive = '';
+
 		$this->setAction('admin');
 
 		$performedAction = '';
@@ -256,6 +260,10 @@ class IndexController extends AbstractActionController {
 		if ($request->isPost()) {
 			// Add a sport
 			if (isset($request->getPost()->newSportSubmit)) {
+				$sportCenterActive = '';
+				$usersActive = '';
+				$sportsActive = 'active';
+
 				$sport = new Sport();
 				$newSportForm->setInputFilter($sport->getInputFilter());
 				$newSportForm->setData($request->getPost());
@@ -268,6 +276,10 @@ class IndexController extends AbstractActionController {
 				}
 			// Add a court
 			} else if (isset($request->getPost()->newCourtSubmit))  {
+				$sportCenterActive = '';
+				$usersActive = '';
+				$sportsActive = 'active';
+
 				$court = new Court();
 				$newCourtForm->setInputFilter($court->getInputFilter());
 				$newCourtForm->setData($request->getPost());
@@ -285,6 +297,10 @@ class IndexController extends AbstractActionController {
 				}
 			// Modify a court
 			} else if (isset($request->getPost()->modifyCourtSubmit)) {
+				$sportCenterActive = '';
+				$usersActive = '';
+				$sportsActive = 'active';
+
 				$court = new Court();
 				$newCourtForm->setInputFilter($court->getInputFilter());
 				$newCourtForm->setData($request->getPost());
@@ -310,6 +326,10 @@ class IndexController extends AbstractActionController {
 				}
 			// Add the sport center
 			} else if (isset($request->getPost()->newSportCenterSubmit)) {
+				$sportCenterActive = 'active';
+				$usersActive = '';
+				$sportsActive = '';
+
 				$sportCenter = new SportCenter();
 				$sportCenterForm->setInputFilter($sportCenter->getInputFilter());
 				$sportCenterForm->setData($request->getPost());
@@ -323,6 +343,10 @@ class IndexController extends AbstractActionController {
 			}
 			// Modify the sport center
 			else if (isset($request->getPost()->modifySportCenterSubmit)) {
+				$sportCenterActive = 'active';
+				$usersActive = '';
+				$sportsActive = '';
+
 				$sportCenter = new SportCenter();
 				$sportCenterForm->setInputFilter($sportCenter->getInputFilter());
 				$sportCenterForm->setData($request->getPost());
@@ -353,6 +377,10 @@ class IndexController extends AbstractActionController {
 			}
 			// Add hourly price for a court
 			else if (isset($request->getPost()->hourlyPriceSubmit)) {
+				$sportCenterActive = '';
+				$usersActive = '';
+				$sportsActive = 'active';
+
 				$hourlyPrice = new HourlyPrice();
 				$hourlyPriceForm->setInputFilter($hourlyPrice->getInputFilter());
 				$hourlyPriceForm->setData($request->getPost());
@@ -382,6 +410,10 @@ class IndexController extends AbstractActionController {
 			}
 			// Add sport center vacation
 			else if (isset($request->getPost()->sportCenterVacationSubmit)) {
+				$sportCenterActive = 'active';
+				$usersActive = '';
+				$sportsActive = '';
+				
 				$holiday = new Holiday();
 				$sportCenterVacationForm->setInputFilter($holiday->getInputFilter());
 				$sportCenterVacationForm->setData($request->getPost());
@@ -412,6 +444,9 @@ class IndexController extends AbstractActionController {
 
 		// admin.phtml
 		return new ViewModel(array(
+			'sportCenterActive' => $sportCenterActive,
+			'usersActive' => $usersActive,
+			'sportsActive' => $sportsActive,
 			'sports' => $sports,
 			'users' => $users,
 			'newSportForm' => $newSportForm,

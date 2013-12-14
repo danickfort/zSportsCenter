@@ -58,13 +58,13 @@
             <div class="col-md-12">
 
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#sportCenter" data-toggle="tab">Sport Center</a></li>
-                    <li><a href="#users" data-toggle="tab">Users Management</a></li>
-                    <li><a href="#sports" data-toggle="tab">Sports Management</a></li>
+                    <li class="<?php echo $that->sportCenterActive; ?>"><a href="#sportCenter" data-toggle="tab">Sport Center</a></li>
+                    <li class="<?php echo $that->usersActive; ?>"><a href="#users" data-toggle="tab">Users Management</a></li>
+                    <li class="<?php echo $that->sportsActive; ?>"><a href="#sports" data-toggle="tab">Sports Management</a></li>
                 </ul>
 
                 <div class="tab-content">
-                    <div class="tab-pane active" id="sportCenter">
+                    <div class="tab-pane <?php echo $that->sportCenterActive; ?>" id="sportCenter">
                     <div class="col-md-6">
                         <h2>Sport Center</h2>
                         <?php
@@ -102,7 +102,7 @@
                         ?>
                         </div>
                     </div>
-                    <div class="tab-pane" id="users">
+                    <div class="tab-pane <?php echo $that->usersActive; ?>" id="users">
                         <h2>Users Management</h2>
                         <div class="panel panel-default">
                             <!-- Default panel contents -->
@@ -118,6 +118,7 @@
                                         <th>LastName</th>
                                         <th>Phone</th>
                                         <th>Address</th>
+                                        <th>Delete the user</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -137,7 +138,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="tab-pane" id="sports">
+                    <div class="tab-pane <?php echo $that->sportsActive; ?>" id="sports">
                         <h2>Sports Management <span id="sportsmanager" style="display:none" class="loading"><img src="/img/loading.gif"  width="20px" height="20px"  /></span></h2>
                     <ul class="nav nav-tabs">
                     <?php
