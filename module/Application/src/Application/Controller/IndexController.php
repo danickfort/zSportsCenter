@@ -657,6 +657,8 @@ class IndexController extends AbstractActionController {
 
 		$start = (int) $this->params()->fromQuery('start', 0);
 		$end   = (int) $this->params()->fromQuery('end', 0);
+		$courtId = (int) $this->params()->fromQuery('courtId', 0);
+
 
 		$starting_at = date('Y-m-d H:i:s', $start);
 		$ending_at   = date('Y-m-d H:i:s', $end);
