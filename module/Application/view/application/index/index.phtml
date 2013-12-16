@@ -128,7 +128,7 @@
                     <?php
                         $active = ' class="active"';
                         foreach ($this->sports as $sport) {
-                            echo '<li'.$active.'>'.'<a href="#'.removeSpaces($sport->getName()).'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
+                            echo '<li'.$active.' data-id="'. $sport->getCourts()[0]->getId() .'">'.'<a href="#'.removeSpaces($sport->getName()).'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
                             $active = '';
                         }
                     ?>
@@ -155,7 +155,7 @@
                         echo '<ul class="nav nav-pills nav-stacked">';
                         $active = ' active';
                         foreach ($courts as $court) {
-                            echo '<li class="courtsel'.$active.'">'.'<a  href="#'.removeSpaces($court['name']).'" data-toggle="tab">'.$court['name'].'</a>'.'</li>';
+                            echo '<li class="'.$active.' court" data-id="'.$court['id'].'">'.'<a  href="#'.removeSpaces($court['name']).'" data-toggle="tab" >'.$court['name'].'</a>'.'</li>';
                             $active = '';
                         }
                         $active = '';
@@ -207,6 +207,7 @@
 
 
         <?php $this->headScript()->captureStart(); ?>
+        var courtId = 0;
         $(document).ready(function() {
         var calendarWrapper = new zCalendarWrapper({
 
@@ -216,7 +217,7 @@
         api: {
         get: '<?php echo $this->url('home', array(
             'action'=>'get-reservation',
-            ));?>',
+            ));?>?courtId=' + courtId,
         add: '<?php echo $this->url('home', array(
             'action'=>'add-reservation',
             ));?>',

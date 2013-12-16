@@ -657,8 +657,7 @@ class IndexController extends AbstractActionController {
 
 		$start = (int) $this->params()->fromQuery('start', 0);
 		$end   = (int) $this->params()->fromQuery('end', 0);
-		$courtId = (int) $this->params()->fromQuery('courtId', 0);
-
+		$courtId   = (int) $this->params()->fromQuery('courtId', 0);
 
 		$starting_at = date('Y-m-d H:i:s', $start);
 		$ending_at   = date('Y-m-d H:i:s', $end);
@@ -667,13 +666,17 @@ class IndexController extends AbstractActionController {
         $userAuthNamespace = new Container('userAuthNamespace');
         $currentUserId = $userAuthNamespace->id;
 
+        //$court = $this->entity()->getEntityManager()->find("Application\Model\Entity\Court", $courtId);
+
 		$records = $this->entity()->getEntityManager()->createQueryBuilder()
 		->select('e')
 		->from('Application\Model\Entity\Reservation', 'e')
 		->setParameter('starting_at', $starting_at)
 		->where('e.startDateTime >= :starting_at')
 		->setParameter('ending_at', $ending_at)
-		->andWhere('e.endDateTime < :ending_at')// TODO : ADD COURT CONDITION !!!!
+		->andWhere('e.endDateTime < :ending_at')
+		->setParameter('courtId', $courtId)
+		->andWhere('e.court = :courtId')
 		->getQuery()
 		->getResult();
 
