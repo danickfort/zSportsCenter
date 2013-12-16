@@ -8,8 +8,7 @@ $(document).ready(function() {
 		console.log("id = " + id);
 
 		if (action == "removeSport") {
-
-		$('#sportsmanager.loading').show();
+			$('#sportsmanager.loading').show();
 			$.ajax({
 				url: "/index/removeSport",
 				type: "GET",
@@ -70,11 +69,14 @@ $(document).ready(function() {
 							}
 						});
 					}
+					else
+					{
+						$('#sportsmanager.loading').hide();
+					}
 				}
 			});
 
 		} else if (action == "removeCourt") {
-
 			$.ajax({
 				url: "/index/removeCourt",
 				type: "GET",
@@ -138,7 +140,7 @@ $(document).ready(function() {
 
 		} else if(action == "removeUser")
 		{
-
+			$('#usersmanager.loading').show();
 			$.ajax(
 			{
 				url: "/index/remove-user",
@@ -169,8 +171,13 @@ $(document).ready(function() {
 							success: function(json)
 							{
 								$('.userEntry#' + id).hide();
+								$('#usersmanager.loading').hide();
 							}
 						});
+					}
+					else
+					{
+						$('#usersmanager.loading').hide();
 					}
 				}
 					

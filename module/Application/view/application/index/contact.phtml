@@ -39,26 +39,36 @@
 <div class="container">
     <?php echo $this->content; ?>
     <hr />
-    <div>
+    <div class="panel panel-info">
+        <div class="panel-heading"><h3>Comment nous contacter?</h3></div>
         <p class="text-left"><?php
+        echo "<h4>";
         echo $sportCenter->getName();
-        echo ", ";
+        echo "</h4>";
         ?> 
         </p>
         <p class="text-left"><?php
+
+        echo "<h4>";
         echo $sportCenter->getPostCode();
         echo " ";
         echo $sportCenter->getCity();
+        echo "</h4>";
         ?> 
         </p>
         <p class="text-left">
         <?php 
+        echo "<h4>";
         echo $sportCenter->getAddress();
+        echo "</h4>";
         ?>
         <p/>
         <p class="text-left">
         <?php 
+        echo "<h4>";
+        echo "Téléphone: ";
         echo $sportCenter->getPhone();
+        echo "</h4>";
         ?>
         <p/>
         <p>
