@@ -181,8 +181,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nickname</th>
-                                        <th>First name</th>
-                                        <th>Last name</th>
+                                        <th>Real name</th>
+                                        <th>Phone #</th>
                                         <th>Start time</th>
                                         <th>End time</th>
                                         <th>Court</th>
@@ -194,8 +194,8 @@
                                         echo '<tr class="userEntry" id=' . $reservation->getId() . '>';
                                         echo '<td>'.$reservation->getId().'</td>';
                                         echo '<td>'.$reservation->getUser()->getNickName().'</td>';
-                                        echo '<td>'.$reservation->getUser()->getFirstName().'</td>';
-                                        echo '<td>'.$reservation->getUser()->getLastName().'</td>';
+                                        echo '<td>'.$reservation->getUser()->getFirstName(). ' ' .$reservation->getUser()->getLastName().'</td>';
+                                        echo '<td>'.$reservation->getUser()->getPhone().'</td>';
                                         echo '<td>'.$reservation->getStartDateTime()->format('Y-m-d H:i').'</td>';
                                         echo '<td>'.$reservation->getEndDateTime()->format('Y-m-d H:i').'</td>';
                                         echo '<td>'.$reservation->getCourt()->getName().'</td>';
