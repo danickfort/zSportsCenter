@@ -102,30 +102,6 @@ class SportCenterForm extends Form
 			),
 		));
 
-		$this->add(array(
-			'name' => 'popOver1',
-			'type' => 'Textarea',
-			'options' => array(
-				'label' => 'PopOver 1',
-			),
-			'attributes' => array(
-				'placeholder' => 'PopOver 1',
-				'class' => 'form-control',
-			),
-		));
-		
-		$this->add(array(
-			'name' => 'popOver2',
-			'type' => 'Textarea',
-			'options' => array(
-				'label' => 'PopOver 2',
-			),
-			'attributes' => array(
-				'placeholder' => 'PopOver 2',
-				'class' => 'form-control',
-			),
-		));
-
 		
 		$this->add(array(
 			'name' => 'openingHour',
@@ -178,7 +154,18 @@ class SportCenterForm extends Form
 				'class' => 'form-control',
 			),
 		));
-		
+
+		$this->add(array(
+			'name' => 'defaultHourlyPrice',
+			'type' => 'Text',
+			'options' => array(
+				'label' => 'Default Hourly Price',
+			),
+			'attributes' => array(
+				'placeholder' => 'Default Hourly Price',
+				'class' => 'form-control',
+			),
+		));
 	
 		// Submit button.
 		$this->add(array(

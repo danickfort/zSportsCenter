@@ -71,7 +71,6 @@ class IndexController extends AbstractActionController {
 		$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
 		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
 
-
 		$this->layout()->setVariables(array(
 			'homeActive' => 'active',
 			'contactActive' => '',
@@ -102,7 +101,14 @@ class IndexController extends AbstractActionController {
             $isLoggedIn = 1;
         }
         // index.pthml
-        return new ViewModel(array('sports' => $sports, 'lastReservations' => $lastReservations, 'isLoggedIn' => $isLoggedIn, 'isAdmin' => $isAdmin, 'message' => $this->params()->fromRoute('message'), 'sportCenter' => $sportCenter[0]));
+        return new ViewModel(array(
+        	'sports' => $sports,
+        	'lastReservations' => $lastReservations,
+        	'isLoggedIn' => $isLoggedIn,
+        	'isAdmin' => $isAdmin,
+        	'message' => $this->params()->fromRoute('message'),
+        	'sportCenter' => $sportCenter[0],
+        ));
     }
 	
 	public function signupAction() {
@@ -240,8 +246,7 @@ class IndexController extends AbstractActionController {
 				$sportCenterForm->get('phone')->setAttribute('value', $sportCenter->getPhone());
 				$sportCenterForm->get('twitter')->setAttribute('value', $sportCenter->getTwitter());
 				$sportCenterForm->get('facebook')->setAttribute('value', $sportCenter->getFacebook());
-				$sportCenterForm->get('popOver1')->setAttribute('value', $sportCenter->getPopOver1());
-				$sportCenterForm->get('popOver2')->setAttribute('value', $sportCenter->getPopOver2());
+				$sportCenterForm->get('defaultHourlyPrice')->setAttribute('value', $sportCenter->getDefaultHourlyPrice());
 				$sportCenterForm->get('openingHour')->setAttribute('value', $sportCenter->getOpeningHour());
 				$sportCenterForm->get('closingHour')->setAttribute('value', $sportCenter->getClosingHour());
 
@@ -357,7 +362,7 @@ class IndexController extends AbstractActionController {
 					$query = $this->
 					entity()->
 					getEntityManager()->
-					createQuery("UPDATE Application\Model\Entity\SportCenter c SET c.name = ?1, c.address = ?2, c.city = ?3, c.postCode = ?4, c.phone = ?5, c.twitter = ?6, c.facebook = ?7, c.popOver1 = ?8, c.popOver2 = ?9, c.openingHour = ?10, c.closingHour = ?11 WHERE c.id = ?12");
+					createQuery("UPDATE Application\Model\Entity\SportCenter c SET c.name = ?1, c.address = ?2, c.city = ?3, c.postCode = ?4, c.phone = ?5, c.twitter = ?6, c.facebook = ?7, c.openingHour = ?8, c.closingHour = ?9, c.defaultHourlyPrice = ?10 WHERE c.id = ?11");
 
 					$query->setParameter(1, $sportCenter->getName());
 					$query->setParameter(2, $sportCenter->getAddress());
@@ -366,11 +371,10 @@ class IndexController extends AbstractActionController {
 					$query->setParameter(5, $sportCenter->getPhone());
 					$query->setParameter(6, $sportCenter->getTwitter());
 					$query->setParameter(7, $sportCenter->getFacebook());
-					$query->setParameter(8, $sportCenter->getPopOver1());
-					$query->setParameter(9, $sportCenter->getPopOver2());
-					$query->setParameter(10, $sportCenter->getOpeningHour());
-					$query->setParameter(11, $sportCenter->getClosingHour());
-					$query->setParameter(12, $sportCenter->getId());
+					$query->setParameter(8, $sportCenter->getDefaultHourlyPrice());
+					$query->setParameter(9, $sportCenter->getOpeningHour());
+					$query->setParameter(10, $sportCenter->getClosingHour());
+					$query->setParameter(11, $sportCenter->getId());
 
 					$query->getResult();
 				}
