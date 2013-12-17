@@ -84,42 +84,7 @@
                         </table>
                     </div>
                     </div>
-                <?php } else { ?>
-                    <div class="lastReservationsList">
-                            <div class="panel panel-default">
-                            <!-- Default panel contents -->
-                            <div class="panel-heading">Last reservations</div>
-
-                            <!-- Table -->
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nickname</th>
-                                        <th>First name</th>
-                                        <th>Last name</th>
-                                        <th>Start time</th>
-                                        <th>End time</th>
-                                        <th>Court name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    foreach ($this->lastReservations as $reservation) {
-                                        echo '<tr class="userEntry" id=' . $reservation->getId() . '>';
-                                        echo '<td>'.$reservation->getUser()->getNickName().'</td>';
-                                        echo '<td>'.$reservation->getUser()->getFirstName().'</td>';
-                                        echo '<td>'.$reservation->getUser()->getLastName().'</td>';
-                                        echo '<td>'.$reservation->getStartDateTime()->format('Y-m-d H:i').'</td>';
-                                        echo '<td>'.$reservation->getEndDateTime()->format('Y-m-d H:i').'</td>';
-                                        // echo '<td>'.$reservation->getCourt()->getName().'</td>';
-                                    }
-                                    ?>
-                                </tbody>
-                                
-                            </table>
-                        </div>
-                    </div> <?php } ?>
+                <?php } else { ?><?php } ?>
             <img src="/img/1.jpg" class="img-thumbnail" />
             </div>  
             <div>
@@ -201,6 +166,46 @@
         </div>
         <div class="col-md-7">
             <div id='calendar'></div>
+            <?php if ($this->isAdmin)
+            {
+            ?>
+
+                    <div class="lastReservationsList">
+                            <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading">Last reservations</div>
+
+                            <!-- Table -->
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nickname</th>
+                                        <th>First name</th>
+                                        <th>Last name</th>
+                                        <th>Start time</th>
+                                        <th>End time</th>
+                                        <th>Court name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    foreach ($this->lastReservations as $reservation) {
+                                        echo '<tr class="userEntry" id=' . $reservation->getId() . '>';
+                                        echo '<td>'.$reservation->getUser()->getNickName().'</td>';
+                                        echo '<td>'.$reservation->getUser()->getFirstName().'</td>';
+                                        echo '<td>'.$reservation->getUser()->getLastName().'</td>';
+                                        echo '<td>'.$reservation->getStartDateTime()->format('Y-m-d H:i').'</td>';
+                                        echo '<td>'.$reservation->getEndDateTime()->format('Y-m-d H:i').'</td>';
+                                        // echo '<td>'.$reservation->getCourt()->getName().'</td>';
+                                    }
+                                    ?>
+                                </tbody>
+                                
+                            </table>
+                        </div>
+                    </div> 
+                    <?php } ?>
         </div>
     </div>
 
