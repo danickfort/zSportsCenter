@@ -371,9 +371,9 @@ class IndexController extends AbstractActionController {
 					$query->setParameter(5, $sportCenter->getPhone());
 					$query->setParameter(6, $sportCenter->getTwitter());
 					$query->setParameter(7, $sportCenter->getFacebook());
-					$query->setParameter(8, $sportCenter->getDefaultHourlyPrice());
-					$query->setParameter(9, $sportCenter->getOpeningHour());
-					$query->setParameter(10, $sportCenter->getClosingHour());
+					$query->setParameter(8, $sportCenter->getOpeningHour());
+					$query->setParameter(9, $sportCenter->getClosingHour());
+					$query->setParameter(10, $sportCenter->getDefaultHourlyPrice());
 					$query->setParameter(11, $sportCenter->getId());
 
 					$query->getResult();

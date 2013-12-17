@@ -402,7 +402,7 @@ use Zend\InputFilter\InputFilterInterface;
                 'validators' => array(
                     array(
                         'name' => 'Digits',
-                    ),
+                    ),  
                 ),
             ));
 
