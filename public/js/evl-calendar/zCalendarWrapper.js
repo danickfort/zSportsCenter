@@ -231,9 +231,10 @@ function zCalendarWrapper(config) {
         }
         var check = $.fullCalendar.formatDate(event.start,'yyyy-MM-dd');
         var today = $.fullCalendar.formatDate(new Date(),'yyyy-MM-dd');
-        if(check < today)
+        if(check < today || isOverlapping(event))
         {
             calendar.fullCalendar('unselect');
+            revertFunc();
         }
         else {
 
