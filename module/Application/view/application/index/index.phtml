@@ -313,8 +313,8 @@
     },
     defaultView:'agendaWeek',
 
-    minTime: 8,
-    maxTime: 21,
+    minTime: <?php echo $sportCenter->getOpeningHour(); ?>,
+    maxTime: <?php echo $sportCenter->getClosingHour(); ?>,
 
     firstDay:1,
     slotMinutes:60,
