@@ -64,7 +64,6 @@
     <div class="row">
         <div class="col-md-5">
             <div id='infobox'>
-                <?php if (!$this->isAdmin) { ?>
                     <div class="row">
                     <div class="col-md-6">
                         <address>
@@ -85,7 +84,6 @@
                         </table>
                     </div>
                     </div>
-                <?php } else { ?><?php } ?>
             <!-- <img src="/img/1.jpg" class="img-thumbnail" /> -->
             </div>  
             <div>
@@ -186,19 +184,20 @@
                                         <th>Last name</th>
                                         <th>Start time</th>
                                         <th>End time</th>
-                                        <th>Court name</th>
+                                        <th>Court</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     foreach ($this->lastReservations as $reservation) {
                                         echo '<tr class="userEntry" id=' . $reservation->getId() . '>';
+                                        echo '<td>'.$reservation->getId().'</td>';
                                         echo '<td>'.$reservation->getUser()->getNickName().'</td>';
                                         echo '<td>'.$reservation->getUser()->getFirstName().'</td>';
                                         echo '<td>'.$reservation->getUser()->getLastName().'</td>';
                                         echo '<td>'.$reservation->getStartDateTime()->format('Y-m-d H:i').'</td>';
                                         echo '<td>'.$reservation->getEndDateTime()->format('Y-m-d H:i').'</td>';
-                                        // echo '<td>'.$reservation->getCourt()->getName().'</td>';
+                                        echo '<td>'.$reservation->getCourt()->getName().'</td>';
                                     }
                                     ?>
                                 </tbody>
