@@ -33,6 +33,7 @@ use Application\Form\NewCourtForm;
 use Application\Form\SportCenterForm;
 use Application\Form\HourlyPriceForm;
 use Application\Form\SportCenterVacationForm;
+use Application\Form\ModifyHourlyPriceForm;
 
 use Application\Form\ReservationForm;
 
@@ -226,8 +227,12 @@ class IndexController extends AbstractActionController {
 		$newCourtForm = new NewCourtForm();
 		$sportCenterForm = new SportCenterForm();
 		$sportCenterVacationForm = new SportCenterVacationForm();
+		$modifyHourlyPriceForm = new ModifyHourlyPriceForm();
 		
 		$sportCenters = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
+		$openingHour = 7;
+		$closingHour = 18;
+		$defaultHourlyPrice = 25;
 
 		if (!$sportCenters) {
 			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('name', 'newSportCenterSubmit');
@@ -254,6 +259,10 @@ class IndexController extends AbstractActionController {
 
 			}
 			$sportCenter = $sportCenters[0];
+
+			$openingHour = $sportCenter->getOpeningHour();
+			$closingHour = $sportCenter->getClosingHour();
+			$defaultHourlyPrice = $sportCenter->getDefaultHourlyPrice();
 
 			$hourlyPriceForm = new HourlyPriceForm(null, $sportCenter->getOpeningHour(), $sportCenter->getClosingHour());
 
@@ -432,6 +441,22 @@ class IndexController extends AbstractActionController {
 					$this->entity()->getEntityManager()->flush();
 				}
 			}
+			// Modify hourly prices for a court
+			else if (isset($request->getPost()->modifyHourlyPriceSubmit)) {
+				$sportCenterActive = '';
+				$usersActive = '';
+				$sportsActive = 'active';
+
+				$id = $request->getPost()->id;
+				$price = $request->getPost()->hourlyPrice;
+
+				$hourlyPrice = $this->entity()->getEntityManager()->find('Application\Model\Entity\HourlyPrice', $id);
+
+				$hourlyPrice->setHourlyPrice($price);
+
+				$this->entity()->getEntityManager()->persist($hourlyPrice);
+				$this->entity()->getEntityManager()->flush();
+			}
 		}
 
 		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
@@ -452,12 +477,16 @@ class IndexController extends AbstractActionController {
 			'usersActive' => $usersActive,
 			'sportsActive' => $sportsActive,
 			'sports' => $sports,
+			'openingHour' => $openingHour,
+			'closingHour' => $closingHour,
+			'defaultHourlyPrice' => $defaultHourlyPrice,
 			'users' => $users,
 			'newSportForm' => $newSportForm,
 			'newCourtForm' => $newCourtForm,
 			'sportCenterForm' => $sportCenterForm,
 			'hourlyPriceForm' => $hourlyPriceForm,
 			'sportCenterVacationForm' => $sportCenterVacationForm,
+			'modifyHourlyPriceForm' => $modifyHourlyPriceForm,
 			'message' => $this->params()->fromRoute('message'),
 			));
 	}

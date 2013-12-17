@@ -169,6 +169,7 @@
                                 'id' => $court->getId(),
                                 'name' => $court->getName(),
                                 'description' => $court->getDescription(),
+                                'hourlyPrices' => $court->getHourlyPrices(),
                                 );
                         }, $sport->getCourts()->toArray());
 
@@ -216,9 +217,51 @@
                             echo $that->form()->openTag($that->hourlyPriceForm);
                             displayForm($that->hourlyPriceForm, $that);
                             echo $that->form()->closeTag();
+                            /* Hourly Prices */
+                            $hourlyPrices = $court['hourlyPrices'];
+
+                            echo '<table class="table table-striped">';
+                            $hourlyPriceArray = array();
+                            foreach ($hourlyPrices as $hourlyPrice) {
+                                $hourlyPriceArray[$hourlyPrice->getTime()] = array('price' => $hourlyPrice->getHourlyPrice(),
+                                                                                   'id' => $hourlyPrice->getId(),);
+                            }
+
+                            for ($i = $that->openingHour; $i < $that->closingHour; $i++) {
+                                echo '<tr>';
+                                echo '<td>'.($i < 10 ? ('0'.$i) : $i).':00 - '.(($i + 1) < 10 ? ('0'.($i + 1)) : $i + 1).':00</td>';
+                                if (isset($hourlyPriceArray[$i])) {
+                                    echo '<td>';
+
+                                    $that->modifyHourlyPriceForm->prepare();
+                                    echo $that->form()->openTag($that->modifyHourlyPriceForm);
+                                    $that->modifyHourlyPriceForm->get('id')->setAttribute('value', $hourlyPriceArray[$i]['id']);
+                                    echo $that->formElement($that->modifyHourlyPriceForm->get('id'));
+                                    echo '<div class="row">';
+                                    echo '<div class="col-md-6">';
+                                    $that->modifyHourlyPriceForm->get('hourlyPrice')->setAttribute('value', $hourlyPriceArray[$i]['price']);
+                                    echo $that->formElement($that->modifyHourlyPriceForm->get('hourlyPrice'));
+                                    echo '</div>';
+                                    echo '<div class="col-md-6">';
+                                    echo $that->formElement($that->modifyHourlyPriceForm->get('modifyHourlyPriceSubmit'));
+                                    echo '</div>';
+                                    echo '</div>';
+                                    echo $that->form()->closeTag();
+
+                                    echo '</td>';
+                                } else {
+                                    echo '<td><em>'.$that->defaultHourlyPrice.' .-</em></td>';
+                                }
+                                echo '</tr>';
+                            }
+                            echo '</table>';
+
+                            /* Hourly Prices End */
                             echo '</div>';
                             /* TODO END */
+
                             echo '</div>';
+                            
                             echo '</div>';
                         }
                         echo '<div class="tab-pane'.$active.'" id="newCourt'.removeSpaces($sport->getName()).'">';
