@@ -233,6 +233,7 @@ class IndexController extends AbstractActionController {
 		$openingHour = 7;
 		$closingHour = 18;
 		$defaultHourlyPrice = 25;
+		$holidays = array();
 
 		if (!$sportCenters) {
 			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('name', 'newSportCenterSubmit');
@@ -263,6 +264,7 @@ class IndexController extends AbstractActionController {
 			$openingHour = $sportCenter->getOpeningHour();
 			$closingHour = $sportCenter->getClosingHour();
 			$defaultHourlyPrice = $sportCenter->getDefaultHourlyPrice();
+			$holidays = $sportCenter->getHolidays();
 
 			$hourlyPriceForm = new HourlyPriceForm(null, $sportCenter->getOpeningHour(), $sportCenter->getClosingHour());
 
@@ -480,6 +482,7 @@ class IndexController extends AbstractActionController {
 			'openingHour' => $openingHour,
 			'closingHour' => $closingHour,
 			'defaultHourlyPrice' => $defaultHourlyPrice,
+			'holidays' => $holidays,
 			'users' => $users,
 			'newSportForm' => $newSportForm,
 			'newCourtForm' => $newCourtForm,

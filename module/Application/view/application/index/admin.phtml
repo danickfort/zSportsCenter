@@ -103,6 +103,27 @@
                             displayForm($that->sportCenterVacationForm, $that);
                             echo $that->form()->closeTag();
                             echo '</div>';
+                            echo '<div>';
+                            echo '<table class="table table-striped">';
+                            echo '<tr><th>Vaccation Name</th><th>Start Date</th><th>Stop Date</th><th>Removing</th></tr>';
+                            foreach ($that->holidays as $holiday) {
+                                echo '<tr>';
+                                echo '<td>';
+                                echo $holiday->getName();
+                                echo '</td>';
+                                echo '<td>';
+                                echo $holiday->getStartDate()->format('d-m-Y');
+                                echo '</td>';
+                                echo '<td>';
+                                echo $holiday->getEndDate()->format('d-m-Y');
+                                echo '</td>';
+                                echo '<td>';
+                                echo '<span class="label label-danger"><span class="glyphicon glyphicon-remove" actions="" data-id="'.$holiday->getId().'"></span></span>';
+                                echo '</td>';;
+                                echo '</tr>';
+                            }
+                            echo '</table>';
+                            echo '</div>';
                         ?>
                         </div>
                     </div>
@@ -135,7 +156,7 @@
                                         echo '<td>'.$user->getLastName().'</td>';
                                         echo '<td>'.$user->getPhone().'</td>';
                                         echo '<td>'.$user->getAddress().'</td>';
-                                        echo '<td><span class="glyphicon glyphicon-remove" action="removeUser" data-id="'.$user->getId().'"></span></td></tr>';
+                                        echo '<td><span class="label label-danger"><span class="glyphicon glyphicon-remove" action="removeUser" data-id="'.$user->getId().'"></span></span></td></tr>';
                                     }
                                     ?>
                                 </tbody>
