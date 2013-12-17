@@ -781,7 +781,7 @@ class IndexController extends AbstractActionController {
 
     	$success = false;
     	$ts      = $this->params()->fromPost('ts', 0);
-    	$courtId      = $this->params()->fromPost('courtId', 0);
+    	$courtId = $this->params()->fromPost('courtId', 0);
     	$id = 0;
         $message = 'Bad request';
 
@@ -802,8 +802,7 @@ class IndexController extends AbstractActionController {
         }
 
         if ($request->isPost()) {
-            // TODO : add court & user data to $form
-            //$form->setData($request->getPost());
+        	
             $form->setData($request->getPost());
 
             $court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', $courtId);
@@ -833,7 +832,8 @@ class IndexController extends AbstractActionController {
         return new JsonModel(array(
                 'message' => $message,
                 'success' => $success,
-                'ts' => $ts
+                'ts' => $ts,
+                'courtId' => $courtId
             )
         );
     }	

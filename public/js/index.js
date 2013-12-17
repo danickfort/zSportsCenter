@@ -8,9 +8,12 @@ $(document).ready(function() {
     	$('#calendar').fullCalendar('addEventSource', '/index/get-reservation?courtId=' + dataId);
     	$('#calendar').fullCalendar('rerenderEvents');
     	courtId = dataId;
+
+        changeCourtIdCalendar(courtId);
     });
     courtId = $("li.court.active").attr("data-id");
     $('#calendar').fullCalendar('removeEvents');
     $('#calendar').fullCalendar('addEventSource', '/index/get-reservation?courtId=' + courtId);
     $('#calendar').fullCalendar('rerenderEvents');
+
 });

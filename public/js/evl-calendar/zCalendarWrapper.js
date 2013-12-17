@@ -48,6 +48,9 @@ function zCalendarWrapper(config) {
     var isLoggedIn = config.isLoggedIn;
     delete config.isLoggedIn;
 
+    var courtId = config.courtId;
+    delete config.courtId;
+
     /**
      * List of urls used to get/update/delete event(s)
      * For example:
@@ -99,7 +102,7 @@ function zCalendarWrapper(config) {
         snapMinutes: 15,
         defaultEventMinutes: 45,
         select: function (startDate, endDate, allDay, jsEvent, view) {
-            if (isLoggedIn==1) createEvent(startDate, endDate, allDay, jsEvent, view);
+            if (isLoggedIn==1) createEvent(startDate, endDate, allDay, jsEvent, view, courtId);
             else calendar.fullCalendar('unselect');
         },
         eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
@@ -145,7 +148,7 @@ function zCalendarWrapper(config) {
     /**
      * @private
      */
-    function createEvent(startDate, endDate, allDay, jsEvent, view) {
+    function createEvent(startDate, endDate, allDay, jsEvent, view, courtId) {
         var ts = new Date().getTime();
 
         var check = $.fullCalendar.formatDate(startDate,'yyyy-MM-dd HH:mm');
@@ -165,13 +168,14 @@ function zCalendarWrapper(config) {
             if (confirmed) {
                 startDate = $.fullCalendar.formatDate(startDate, format);
                 endDate = $.fullCalendar.formatDate(endDate, format);
-
+                console.log("court is" + courtId)
                 $.ajax({
                     url: api.add,
                     data: {
                         start: startDate,
                         end: endDate,
-                        ts: ts
+                        ts: ts,
+                        courtId: courtId
                     },
                     type: "POST",
                     success: function (response) {
