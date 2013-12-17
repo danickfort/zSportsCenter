@@ -500,7 +500,7 @@ class IndexController extends AbstractActionController {
 			$namesCourt = array();
 			// deleting courts
 			foreach($courts as $court) {
-				$namesCourt[] = $court->getName();
+				$namesCourt[] = str_replace(' ', '', $court->getName());
 				$idCourt = $court->getId();
 
 				// delete hourly prices for the current court
@@ -536,7 +536,7 @@ class IndexController extends AbstractActionController {
 			$result = $query->getResult();
 			
 			return new JsonModel(array(
-				'sportName' => $sportName,
+				'sportName' => str_replace(' ', '', $sportName),
 				'namesCourt' => $namesCourt,
 			));
 		}
@@ -589,7 +589,7 @@ class IndexController extends AbstractActionController {
 			
 			// return court name
 			return new JsonModel(array(
-				'nameCourt' => $nameCourt,
+				'nameCourt' => str_replace(' ', '', $nameCourt),
 			));
 		}
 	}
