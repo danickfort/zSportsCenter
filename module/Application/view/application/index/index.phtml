@@ -123,7 +123,7 @@
             <!-- <img src="/img/1.jpg" class="img-thumbnail" /> -->
             </div>  
             <div>
-                <h2>Choice Your Sport</h2>
+                <h2>Choose your sport</h2>
                 <ul class="nav nav-tabs">
                     <?php
                         $active = ' class="active"';
@@ -168,7 +168,8 @@
                         foreach ($courts as $court) {
                             echo '<div class="tab-pane'.$active.'" id="'.removeSpaces($court['name']).'" data-id="'.$court['id'].'">';
                             $active = '';
-                            echo '<h3>Hourly Price</h3>';
+                            echo '<h3>Hourly prices</h3>';
+                            echo '<p>'.$court['description'].'</p>';
                             echo '<table class="table table-striped">';
                             $hourlyPriceArray = array();
                             foreach ($court['hourlyPrices'] as $hourlyPrice) {
@@ -176,17 +177,17 @@
                             }
 
                             for ($i = $this->sportCenter->getOpeningHour(); $i < $this->sportCenter->getClosingHour(); $i++) {
+
                                 echo '<tr>';
                                 echo '<td>'.($i < 10 ? ('0'.$i) : $i).':00 - '.(($i + 1) < 10 ? ('0'.($i + 1)) : $i + 1).':00</td>';
                                 if (isset($hourlyPriceArray[$i])) {
                                     echo '<td>'.$hourlyPriceArray[$i].' .-</td>';
                                 } else {
-                                    echo '<td><em>20 .-</em></td>';
+                                    echo '<td><em>'.$this->sportCenter->getDefaultHourlyPrice().'</em></td>';
                                 }
                                 echo '</tr>';
                             }
                             echo '</table>';
-                            echo '<p>'.$court['description'].'</p>';
                             echo '</div>';
                         }
                         $active = '';
