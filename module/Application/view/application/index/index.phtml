@@ -165,6 +165,32 @@
             </div>
         </div>
         <div class="col-md-7">
+        <?php
+        if ($this->isAdmin) {
+            $vacations = $this->sportCenter->getHolidays();
+            echo '<div>';
+            echo '<table class="table table-striped">';
+            echo '<tr><th>Vacation Name</th><th>Start Date</th><th>Stop Date</th><th>Removing</th></tr>';
+            foreach ($vacations as $vacation) {
+            echo '<tr>';
+            echo '<td>';
+            echo $vacation->getName();
+            echo '</td>';
+            echo '<td>';
+            echo $vacation->getStartDate()->format('d-m-Y');
+            echo '</td>';
+            echo '<td>';
+            echo $vacation->getEndDate()->format('d-m-Y');
+            echo '</td>';
+            echo '<td>';
+            echo '<span class="label label-danger"><span class="glyphicon glyphicon-remove" action="removeVacation" data-id="'.$vacation->getId().'"></span></span>';
+            echo '</td>';;
+            echo '</tr>';
+            }
+            echo '</table>';
+            echo '</div>';
+        }
+        ?>
             <div id='calendar'></div>
             <?php if ($this->isAdmin)
             {

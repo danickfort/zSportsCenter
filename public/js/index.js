@@ -16,4 +16,40 @@ $(document).ready(function() {
     $('#calendar').fullCalendar('addEventSource', '/index/get-reservation?courtId=' + courtId);
     $('#calendar').fullCalendar('rerenderEvents');
 
+    $(".glyphicon-remove").click(function() {
+
+        var action = $(this).attr("action");
+        var id = $(this).attr("data-id");
+
+        if (action == "removeVacation") {
+            $.ajax({
+                url: "/index/removeVacation",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    code: "removeVacation",
+                    id: id
+                },
+                success: function(json) {
+                    bootbox.confirm("Are you sure ?", function(result) {
+                        if (result) {
+                            // confirmation
+                            $.ajax({
+                                url: "/index/removeVacation",
+                                type: "GET",
+                                dataType: "JSON",
+                                data: {
+                                    code: "confirm",
+                                    id: json.idVacation
+                                },
+                                success: function(json) {
+                                    bootbox.alert("Vacation Delete !");
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
 });
