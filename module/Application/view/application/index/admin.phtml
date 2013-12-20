@@ -6,19 +6,23 @@ $this->headScript()->appendFile($this->basePath() . '/js/bootstrap/bootbox.min.j
 $this->headScript()->appendFile($this->basePath() . '/js/admin.js');
 ?>
 <?php
+<<<<<<< HEAD
 if ($this->message == 'error' || $this->message == 'notloggedin') {
     $this->headStyle()->prependStyle($this->basePath() . '/css/signin.css');
     ?>
+=======
+    if ($this->message == 'error' || $this->message == 'notloggedin') {
+    $this->headLink()->prependStylesheet($this->basePath() . '/css/signin.css');
+
+?>
+>>>>>>> 39bdf3f5fa412dabdb80aa6255f4a41bf2602f80
     <div class="alert alert-danger"><?php echo ($this->message=='error') ? 'Wrong login information!' : 'You must login!';?></div>
+
     <form class="form-signin" method="post" action="<?php echo $this->url('home', array('action' => 'signin')); ?>">
         <h2 class="form-signin-heading">Please sign in</h2>
         <input type="text" name="nickname" class="form-control" placeholder="Nickname" required autofocus>
         <input type="password" name="password" class="form-control" placeholder="Password" required>
-        <label class="checkbox">
-            <input type="checkbox" value="remember-me"> Remember me
-        </label>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-
     </form>
     <?php } else {
         switch($this->message) {
