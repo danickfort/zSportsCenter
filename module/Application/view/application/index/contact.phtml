@@ -47,7 +47,8 @@ $lng = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
         </style>
         <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
         <script>
-            function initialize() {
+            function initialize()
+            {
 
                 var map_canvas = document.getElementById('map_canvas');
                 var map_options = {
@@ -56,6 +57,12 @@ $lng = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 }
                 var map = new google.maps.Map(map_canvas, map_options)
+
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(<?php Print($lat); ?>,<?php Print($lng); ?>),
+                    map: map,
+                    title: <?php echo "'".$sportCenter->getName()."'"; ?>
+                });
             }
         google.maps.event.addDomListener(window, 'load', initialize);
         </script>
@@ -72,48 +79,46 @@ $lng = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 <div class="container">
     <?php echo $this->content; ?>
     <hr />
-    <div class="panel panel-info">
+    <div  class="panel panel-info">
         <div class="panel-heading"><h3>Comment nous contacter?</h3></div>
-        <p class="text-left"><?php
-        echo "<h4>";
-        echo $sportCenter->getName();
-        echo "</h4>";
-        ?> 
-        </p>
-        <p class="text-left"><?php
+            <div style="float:left;">
+                <p class="text-left"><?php
+                echo "<h4>";
+                echo $sportCenter->getName();
+                echo "</h4>";
+                ?> 
+                </p>
+                <p class="text-left"><?php
 
-        echo "<h4>";
-        echo $sportCenter->getPostCode();
-        echo " ";
-        echo $sportCenter->getCity();
-        echo "</h4>";
-        ?> 
-        </p>
-        <p class="text-left">
-        <?php 
-        echo "<h4>";
-        echo $sportCenter->getAddress();
-        echo "</h4>";
-        ?>
-        <p/>
-        <p class="text-left">
-        <?php 
-        echo "<h4>";
-        echo "Téléphone: ";
-        echo $sportCenter->getPhone();
-        echo "</h4>";
-        ?>
-        <p/>
-        <p>
-        <a href="https://twitter.com/<?php echo $sportCenter->getTwitter();?>" class="twitter-follow-button" data-show-count="false" data-lang="fr">Suivre <?php echo $sportCenter->getTwitter ?></a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        <div class="fb-like" data-href="https://www.facebook.com/<?php echo $sportCenter->getFacebook();?>" data-width="20" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
-        <p/>
-
-
-        <div id="map_canvas"></div>
-
-
-
-    </div>
+                echo "<h4>";
+                echo $sportCenter->getPostCode();
+                echo " ";
+                echo $sportCenter->getCity();
+                echo "</h4>";
+                ?> 
+                </p>
+                <p class="text-left">
+                <?php 
+                echo "<h4>";
+                echo $sportCenter->getAddress();
+                echo "</h4>";
+                ?>
+                <p/>
+                <p class="text-left">
+                <?php 
+                echo "<h4>";
+                echo "Téléphone: ";
+                echo $sportCenter->getPhone();
+                echo "</h4>";
+                ?>
+                <p/>
+                <p>
+                <a href="https://twitter.com/<?php echo $sportCenter->getTwitter();?>" class="twitter-follow-button" data-show-count="false" data-lang="fr">Suivre <?php echo $sportCenter->getTwitter ?></a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div class="fb-like" data-href="https://www.facebook.com/<?php echo $sportCenter->getFacebook();?>" data-width="20" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
+                <p/>
+            </div>
+            <div style="float:right;" id="map_canvas"></div>
+        </div>
+     
 </div>
