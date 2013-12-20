@@ -872,6 +872,8 @@ class IndexController extends AbstractActionController {
 
         	$calculatedPrice = 0;
 
+        	$isOnVacation = false;
+
         	$startDateTime = new \DateTime($request->getPost()['start']);
         	$endDateTime = new \DateTime($request->getPost()['end']);
 
@@ -905,33 +907,59 @@ class IndexController extends AbstractActionController {
         	//END CALCULATE PRICE
 
         	//CHECK VACATION
+        	$vacations = $this->entity()->getEntityManager()->createQueryBuilder()
+		            ->select('e')
+		            ->from('Application\Model\Entity\Holiday', 'e')
+		            ->getQuery()
+		            ->getResult();
+
+		     foreach ($vacations as $vacation)
+		     {
+		     	$vacationStartDate = $vacation->getStartDate();
+		     	$vacationEndDate = $vacation->getEndDate();
+		     	$vacationEndDate->setDate($vacationEndDate->format('Y'),
+		     		$vacationEndDate->format('m'),
+		     		$vacationEndDate->format('d')+1);
+		     	// No overlap check
+		     	if (($startDateTime >= $vacationStartDate && $startDateTime <= $vacationEndDate)
+		     		&& ($endDateTime >= $vacationStartDate && $endDateTime <= $vacationEndDate))
+				{
+					//is overlapping with a vacation
+					$sucess = false;
+					$message = "The sports center is on holiday from " . $vacationStartDate->format('Y-m-d H:i') . " to " . $vacationEndDate->format('Y-m-d H:i') ."<br/>Please choose another time";
+					$isOnVacation = true;
+					break;
+				}
+		     }
         	
+        	//END CHECK VACATION
+        	if (!$isOnVacation)
+        	{
+	            $form->setData($request->getPost());
 
-        	
-            $form->setData($request->getPost());
+	            $court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', $courtId);
+	            $user = $this->entity()->getEntityManager()->find('Application\Model\Entity\User', $currentUserId);
 
-            $court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', $courtId);
-            $user = $this->entity()->getEntityManager()->find('Application\Model\Entity\User', $currentUserId);
+	            $reservation = new Reservation();
 
-            $reservation = new Reservation();
+	            $reservation->setUser($user);
+	            $reservation->setCourt($court);
 
-            $reservation->setUser($user);
-            $reservation->setCourt($court);
+	            $form->setInputFilter($reservation->getInputFilter());
+	    		if ($form->isValid()) {
 
-            $form->setInputFilter($reservation->getInputFilter());
-    		if ($form->isValid()) {
+	    			$data = $form->getData();
 
-    			$data = $form->getData();
+	    			$reservation->populate($data);
 
-    			$reservation->populate($data);
+	                $this->entity()->getEntityManager()->persist($reservation);
+	                $this->entity()->getEntityManager()->flush();
 
-                $this->entity()->getEntityManager()->persist($reservation);
-                $this->entity()->getEntityManager()->flush();
-
-                $success   = true;
-                $message = 'Réservation ajoutée!';
-                $id = (int)$reservation->getId();
-            }
+	                $success   = true;
+	                $message = 'Réservation ajoutée!';
+	                $id = (int)$reservation->getId();
+	            }
+        	}
         }
 
         return new JsonModel(array(
