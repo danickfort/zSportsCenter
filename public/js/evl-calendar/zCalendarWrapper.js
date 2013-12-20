@@ -180,12 +180,10 @@ function zCalendarWrapper(config) {
                     type: "POST",
                     success: function (response) {
                         if (response.success) {
-                            bootbox.confirm("Le prix s'élève à </br><strong>" + response.calculatedPrice +
-                                ".-</strong><br/>Confirmer la réservation?<br/>"
-                                ,function(confirmed)
+                            bootbox.alert("Le prix s'élève à </br><strong>" + response.calculatedPrice +
+                                ".-</strong><br/>Merci pour votre réservation!<br/>Si vous avez une question/réclamation, veuillez contacter le centre sportif."
+                                ,function()
                                 {
-                                    if(confirmed)
-                                    { 
                                         console.log("Réservation ajoutée!");
                                         var events = calendar.fullCalendar('clientEvents');
 
@@ -204,10 +202,6 @@ function zCalendarWrapper(config) {
                                         ts: ts,
                                         backgroundColor: '#33B5E5'
                                     }, true); // make the event "stick"
-                                    }
-                                    else {                     
-                                        calendar.fullCalendar('unselect');
-                                    }
                                 });
                         } else {
                             bootbox.alert(response.message, function () {
