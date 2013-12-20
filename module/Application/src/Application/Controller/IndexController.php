@@ -848,6 +848,44 @@ class IndexController extends AbstractActionController {
         }
 
         if ($request->isPost()) {
+
+        	$calculatedPrice = 0;
+
+        	$startDateTime = new \DateTime($request->getPost()['start']);
+        	$endDateTime = new \DateTime($request->getPost()['end']);
+
+        	//CALCULATE PRICE
+        	$startValue = $startDateTime->format('G'); // G = hour without leading 0, 24-hour format
+        	$endValue = $endDateTime->format('G');
+
+			$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getSingleResult();
+
+        	foreach(range($startValue,$endValue-1) as $hour) {
+        		$hourlyPrice = null;
+        		$price = 0;
+		        try {
+		        	$hourlyPrice = $this->entity()->getEntityManager()->createQueryBuilder()
+		            ->select('e')
+		            ->from('Application\Model\Entity\HourlyPrice', 'e')
+		            ->setParameter('court',$courtId)
+		            ->where('e.court = :court')
+		            ->setParameter('hour', 8)
+		            ->andWhere('e.time = :hour')
+		            ->getQuery()
+		            ->getSingleResult();
+		        }
+		        catch (\Doctrine\ORM\NoResultException $e)
+		        {
+		        	$price = $sportCenter->getDefaultHourlyPrice();
+		        }
+		        if (is_object($hourlyPrice)) $price = $hourlyPrice->getHourlyPrice();
+		        $calculatedPrice += $price;
+        	}
+        	//END CALCULATE PRICE
+
+        	//CHECK VACATION
+        	
+
         	
             $form->setData($request->getPost());
 
@@ -879,7 +917,8 @@ class IndexController extends AbstractActionController {
                 'message' => $message,
                 'success' => $success,
                 'ts' => $ts,
-                'courtId' => $courtId
+                'courtId' => $courtId,
+                'calculatedPrice' => $calculatedPrice
             )
         );
     }	
