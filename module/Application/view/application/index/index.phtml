@@ -191,13 +191,19 @@
         </div>
         <div class="col-md-7">
         <?php
-        if ($this->isAdmin) {
+        
             $vacations = $this->sportCenter->getHolidays();
             echo '<div>';
             echo '<table class="table table-striped">';
-            echo '<tr><th>Vacation Name</th><th>Start Date</th><th>Stop Date</th><th>Removing</th></tr>';
+            if ($this->isAdmin) {
+                echo '<tr><th>Vacation Name</th><th>Start Date</th><th>Stop Date</th><th>Removing</th></tr>';
+            }
+            else
+            {
+                echo '<tr><th>Vacation Name</th><th>Start Date</th><th>Stop Date</th></tr>';
+            }
             foreach ($vacations as $vacation) {
-            echo '<tr>';
+            echo '<tr class="vacation" id=' . $vacation->getId() . '>';
             echo '<td>';
             echo $vacation->getName();
             echo '</td>';
@@ -207,14 +213,16 @@
             echo '<td>';
             echo $vacation->getEndDate()->format('d-m-Y');
             echo '</td>';
-            echo '<td>';
-            echo '<span class="label label-danger"><span class="glyphicon glyphicon-remove" action="removeVacation" data-id="'.$vacation->getId().'"></span></span>';
-            echo '</td>';;
+            if ($this->isAdmin) {
+                echo '<td>';
+                echo '<span class="label label-danger"><span class="glyphicon glyphicon-remove" action="removeVacation" data-id="'.$vacation->getId().'"></span></span>';
+                echo '</td>';
+            }
             echo '</tr>';
             }
             echo '</table>';
             echo '</div>';
-        }
+        
         ?>
             <?php if ($this->showCalendar) { ?>
                 <div id="calWrapper">

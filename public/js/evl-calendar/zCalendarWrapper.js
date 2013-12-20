@@ -180,17 +180,35 @@ function zCalendarWrapper(config) {
                     type: "POST",
                     success: function (response) {
                         if (response.success) {
-                            bootbox.alert(response.message, function () {
-                            });
-                            var events = calendar.fullCalendar('clientEvents');
+                            bootbox.confirm("Le prix s'élève à </br><strong>" + response.calculatedPrice +
+                                ".-</strong><br/>Confirmer la réservation?<br/>"
+                                ,function(confirmed)
+                                {
+                                    if(confirmed)
+                                    { 
+                                        console.log("Réservation ajoutée!");
+                                        var events = calendar.fullCalendar('clientEvents');
 
-                            for (var i in events) {
-                                if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
-                                    events[i].id = parseInt(response.id);
-                                    console.log(events[i])
-                                    delete events[i].ts;
-                                }
-                            }
+                                        for (var i in events) {
+                                            if (typeof(events[i].ts) !== 'undefined' && events[i].ts == response.ts) {
+                                                events[i].id = parseInt(response.id);
+                                                console.log(events[i])
+                                                delete events[i].ts;
+                                            }
+                                        }
+                                    calendar.fullCalendar('renderEvent', {
+                                        title: "Réservé!!",
+                                        start: startDate,
+                                        end: endDate,
+                                        allDay: allDay,
+                                        ts: ts,
+                                        backgroundColor: '#33B5E5'
+                                    }, true); // make the event "stick"
+                                    }
+                                    else {                     
+                                        calendar.fullCalendar('unselect');
+                                    }
+                                });
                         } else {
                             bootbox.alert(response.message, function () {
                             });
@@ -201,14 +219,6 @@ function zCalendarWrapper(config) {
                         });
                     }
                 });
-                calendar.fullCalendar('renderEvent', {
-                    title: "Réservé!!",
-                    start: startDate,
-                    end: endDate,
-                    allDay: allDay,
-                    ts: ts,
-                    backgroundColor: '#33B5E5'
-                }, true); // make the event "stick"
             }
         });
         calendar.fullCalendar('unselect');

@@ -139,7 +139,8 @@ $(document).ready(function() {
 				}
 			});
 
-		} else if(action == "removeUser")
+		}
+		else if(action == "removeUser")
 		{
 			$('#usersmanager.loading').show();
 			$.ajax({

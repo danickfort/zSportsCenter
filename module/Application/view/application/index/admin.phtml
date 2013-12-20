@@ -150,7 +150,7 @@
                     <?php
                     $active = ' class="active"';
                     foreach ($that->sports as $sport) {
-                        echo '<li'.$active.'>'.'<a href="#'.removeSpaces($sport->getName()).'" data-toggle="tab">'.$sport->getName().' <span class="glyphicon glyphicon-remove" action="removeSport" data-id="'.$sport->getId().'"></span></a>'.'</li>';
+                        echo '<li'.$active.'>'.'<a href="#'.removeSpaces($sport->getName()).'" data-toggle="tab">'.$sport->getName().' <span style="color:#FF4D4D" class="glyphicon glyphicon-remove" action="removeSport" data-id="'.$sport->getId().'"></span></a>'.'</li>';
                         $active = '';
                     }
                     echo '<li'.$active.'><a href="#newSport" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';
@@ -182,7 +182,7 @@
                         echo '<ul class="nav nav-pills nav-stacked">';
                         $active = ' class="active"';
                         foreach ($courts as $court) {
-                            echo '<li'.$active.'>'.'<a href="#'.removeSpaces($court['name']).'" data-toggle="tab">'.$court['name'].' <span class="glyphicon glyphicon-remove" action="removeCourt" data-id="'.$court['id'].'"></span></a>'.'</li>';
+                            echo '<li'.$active.'>'.'<a href="#'.removeSpaces($court['name']).'" data-toggle="tab">'.$court['name'].' <span style="color:#FF4D4D" class="glyphicon glyphicon-remove" action="removeCourt" data-id="'.$court['id'].'"></span></a>'.'</li>';
                             $active = '';
                         }
                         echo '<li'.$active.'><a href="#newCourt'.removeSpaces($sport->getName()).'" data-toggle="tab"><span class="glyphicon glyphicon-plus"></span></a></li>';

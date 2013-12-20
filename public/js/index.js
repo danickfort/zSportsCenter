@@ -51,7 +51,8 @@ $(document).ready(function() {
                                     id: json.idVacation
                                 },
                                 success: function(json) {
-                                    bootbox.alert("Vacation Delete !");
+                                    bootbox.alert("Vacation Deleted !");
+                                    $('.vacation#' + id).hide();
                                 }
                             });
                         }
