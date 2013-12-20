@@ -5,7 +5,7 @@
     ->prependStylesheet($this->basePath() . '/css/bootstrap.css')
     ;
     ?>
-    <div class="alert alert-danger">Wrong log in information!</div>
+    <div class="alert alert-danger message">Wrong log in information!</div>
     <form class="form-signin" method="post" action="<?php echo $this->url('home', array('action' => 'signin')); ?>">
         <h2 class="form-signin-heading">Please sign in</h2>
         <input type="text" name="nickname" class="form-control" placeholder="Nickname" required autofocus>
@@ -16,6 +16,11 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
     </form>
+    <?php } else if ($sportCenter == null) { ?>
+    <div class="alert alert-danger">
+        You need to configure a new <strong>sport center</strong> !<br />
+        <a class="alert-link" href="<?php echo $this->url('home', array('action' => 'admin')); ?>">Go to administration page</a>
+    </div>
     <?php } else { ?>
     <?php
     $basePath = $this->basePath();
@@ -48,7 +53,7 @@
         if ($this->message) {
             switch($this->message) {
                 case "success":
-                    ?><div class="alert alert-success">Logged in !</div><?php
+                    ?><div class="alert alert-success message">Logged in !</div><?php
                     break;
             }
         }
@@ -88,11 +93,17 @@
             </div>  
             <div>
                 <h2>Choose your sport</h2>
+                <?php if (count($this->sports) != 0) { ?>
                 <ul class="nav nav-tabs">
                     <?php
                         $active = ' class="active"';
                         foreach ($this->sports as $sport) {
-                            echo '<li'.$active.' data-id="'. $sport->getCourts()[0]->getId() .'">'.'<a href="#'.removeSpaces($sport->getName()).'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
+                            if (count($sport->getCourts()) != 0) {
+                                $firstIdCourt = $sport->getCourts()[0]->getId();
+                            } else {
+                                $firstIdCourt = -1;
+                            }
+                            echo '<li'.$active.' data-id="'.$firstIdCourt.'">'.'<a href="#'.removeSpaces($sport->getName()).'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
                             $active = '';
                         }
                     ?>
@@ -113,6 +124,7 @@
                                 );
                         }, $sport->getCourts()->toArray());
 
+                        if (count($courts) != 0) {
                         echo '<div class="row">';
                         echo '<div class="col-md-4">';
                         echo '<h3>'.$sport->getName().'</h3>';
@@ -158,10 +170,23 @@
                         echo '</div>'; // fermeture div tab-content
                         echo '</div>'; // fermeture div col-md-10
                         echo '</div>'; // fermeture div row
+                        } else {
+                            echo '<div class="alert alert-danger">';
+                            echo 'You need to configure <strong>courts</strong> !<br />';
+                            echo '<a class="alert-link" href="'.$this->url('home', array('action' => 'admin')).'#sports"'.'>Go to administration page</a>';
+                            echo '</div>';
+                        }
                         echo '</div>'; // fermeture div tab-pane
                     }
                     ?>
                 </div>
+                <?php } else { ?>
+                <!-- Not sports disponible -->
+                <div class="alert alert-danger">
+                    You need to configure <strong>sports</strong> !<br />
+                    <a class="alert-link" href="<?php echo $this->url('home', array('action' => 'admin')) . '#sports'; ?>">Go to administration page</a>
+                </div>
+                <?php } ?>
             </div>
         </div>
         <div class="col-md-7">
@@ -199,7 +224,14 @@
             echo '</div>';
         
         ?>
-            <div id='calendar'></div>
+            <?php if ($this->showCalendar) { ?>
+                <div id='calendar'></div>
+            <?php } else { ?>
+                <div class="alert alert-warning">
+                    To see the <strong>calendar</strong>, you need to configure <strong>courts</strong> !<br />
+                    <a class="alert-link" href="<?php echo $this->url('home', array('action' => 'admin'))."#sports"; ?>">Go to administration page</a>
+                </div>
+            <?php } ?>
             <?php if ($this->isAdmin)
             {
             ?>

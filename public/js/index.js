@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('.alert').fadeOut(4000);
+    $('.message').fadeOut(4000);
 
     $("li").click(function() {
     	var dataId = $(this).attr("data-id");

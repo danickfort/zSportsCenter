@@ -72,6 +72,26 @@ class IndexController extends AbstractActionController {
 		$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getResult();
 		$sports = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\Sport s")->getResult();
 
+		if (count($sportCenter) != 0) {
+			$sportCenter = $sportCenter[0];
+		} else {
+			$sportCenter = null;
+		}
+
+		$showCalendar = false;
+		$sportsCounter = 0;
+		$courtsCounter = 0;
+		if (count($sports) != 0) {
+			foreach ($sports as $sport) {
+				$courtsCounter += count($sport->getCourts());
+			}
+		}
+		if ($courtsCounter != 0) {
+			$showCalendar = true;
+		} else {
+			$showCalendar = false;
+		}
+
 		$this->layout()->setVariables(array(
 			'homeActive' => 'active',
 			'contactActive' => '',
@@ -108,7 +128,8 @@ class IndexController extends AbstractActionController {
         	'isLoggedIn' => $isLoggedIn,
         	'isAdmin' => $isAdmin,
         	'message' => $this->params()->fromRoute('message'),
-        	'sportCenter' => $sportCenter[0],
+        	'sportCenter' => $sportCenter,
+        	'showCalendar' => $showCalendar,
         ));
     }
 	
