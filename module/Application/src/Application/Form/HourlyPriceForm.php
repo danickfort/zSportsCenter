@@ -15,7 +15,7 @@ class HourlyPriceForm extends Form
 
 		// generate select input
 		$valuesOptions = array();
-		for ($i = $timeStart; $i <= $timeStop; $i++) {
+		for ($i = $timeStart; $i < $timeStop; $i++) {
 			$valuesOptions[strval($i)] = "$i:00";
 		}
 
