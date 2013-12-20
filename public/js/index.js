@@ -3,6 +3,14 @@ $(document).ready(function() {
 
     $("li").click(function() {
     	var dataId = $(this).attr("data-id");
+        if (dataId == -1) {
+            $("#calendar").hide();
+            $("#calendarWarning").show();
+        } else {
+            $("#calendarWarning").hide();
+            $("#calendar").show();
+            $('#calendar').fullCalendar('render');
+        }
     	console.log("data-id = " + dataId);
     	$('#calendar').fullCalendar('removeEvents');
     	$('#calendar').fullCalendar('addEventSource', '/index/get-reservation?courtId=' + dataId);
