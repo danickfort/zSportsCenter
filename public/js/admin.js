@@ -68,32 +68,32 @@ $(document).ready(function() {
 									div.remove();
 								}
 							});
-						}
-						else {
-							$('#sportsmanager.loading').hide();
-						}
-					});
-				}
-			});
+}
+else {
+	$('#sportsmanager.loading').hide();
+}
+});
+}
+});
 
-		} else if (action == "removeCourt") {
-			$.ajax({
-				url: "/index/removeCourt",
-				type: "GET",
-				dataType: "JSON",
-				data: {
-					code: "removeCourt",
-					id: id
-				},
-				success: function(json) {
-					var message = 'Deleting reservations:\n';
-					message += '----------------\n';
-					var size = json.usersName.length;
-					for (var i = 0; i < size; i++) {
-						message += json.usersName[i] + '\n';
-					}
-					bootbox.confirm("Are you sure ?", function(result) {
-						if (result) {
+} else if (action == "removeCourt") {
+	$.ajax({
+		url: "/index/removeCourt",
+		type: "GET",
+		dataType: "JSON",
+		data: {
+			code: "removeCourt",
+			id: id
+		},
+		success: function(json) {
+			var message = 'Deleting reservations:\n';
+			message += '----------------\n';
+			var size = json.usersName.length;
+			for (var i = 0; i < size; i++) {
+				message += json.usersName[i] + '\n';
+			}
+			bootbox.confirm("Are you sure ?", function(result) {
+				if (result) {
 							// confirmation
 							$.ajax({
 								url: "/index/removeCourt",
@@ -134,54 +134,54 @@ $(document).ready(function() {
 									div.remove();
 								}
 							});
-						}
-					});
-				}
-			});
+}
+});
+}
+});
 
-		}
-		else if(action == "removeUser")
-		{
-			$('#usersmanager.loading').show();
-			$.ajax({
-				url: "/index/remove-user",
-				type: "POST",
-				dataType: "JSON",
-				data: {
-					id: id,
-					code:"removeUser"
-				},
-				success: function(json) {
-					bootbox.confirm("Are you sure ?", function(result) {
-						if(result) {
-							$.ajax({
-								url: "/index/remove-user",
-								type: "POST",
-								dataType: "JSON",
-								data: {
-									code: "confirm",
-									id: json.idUser
-								},
-								success: function(json) {
-									$('.userEntry#' + id).hide();
-									$('#usersmanager.loading').hide();
-								}
-							});
-						} else {
+}
+else if(action == "removeUser")
+{
+	$('#usersmanager.loading').show();
+	$.ajax({
+		url: "/index/remove-user",
+		type: "POST",
+		dataType: "JSON",
+		data: {
+			id: id,
+			code:"removeUser"
+		},
+		success: function(json) {
+			bootbox.confirm("Are you sure ?", function(result) {
+				if(result) {
+					$.ajax({
+						url: "/index/remove-user",
+						type: "POST",
+						dataType: "JSON",
+						data: {
+							code: "confirm",
+							id: json.idUser
+						},
+						success: function(json) {
+							$('.userEntry#' + id).hide();
 							$('#usersmanager.loading').hide();
 						}
 					});
+				} else {
+					$('#usersmanager.loading').hide();
 				}
-					
 			});
 		}
+		
 	});
+}
+});
 });
 
 $(document).ready(function() {
-var urlz = document.location.toString();
-if (urlz.match('#')) {
-	var n = urlz.split('#')[1];
-    if (n != sports) $('.nav-tabs a[href=#sports]').tab('show') ;
-    $('.nav-tabs a[href=#'+n+']').tab('show') ;
-}});
+	var urlz = document.location.toString();
+	if (urlz.match('#')) {
+		var n = urlz.split('#')[1];
+		if (n != sports) $('.nav-tabs a[href=#sports]').tab('show') ;
+		$('.nav-tabs a[href=#'+n+']').tab('show') ;
+	}});

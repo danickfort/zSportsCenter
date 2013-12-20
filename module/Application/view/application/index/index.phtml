@@ -50,13 +50,13 @@
 
     <!-- Login/Logout message  -->
     <?php
-        if ($this->message) {
-            switch($this->message) {
-                case "success":
-                    ?><div class="alert alert-success message">Logged in !</div><?php
-                    break;
-            }
+    if ($this->message) {
+        switch($this->message) {
+            case "success":
+            ?><div class="alert alert-success message">Logged in !</div><?php
+            break;
         }
+    }
     ?>
 
     <?php
@@ -69,7 +69,7 @@
     <div class="row">
         <div class="col-md-5">
             <div id='infobox'>
-                    <div class="row">
+                <div class="row">
                     <div class="col-md-6">
                         <address>
                             <strong><?php echo $sportCenter->getName(); ?></strong><br />
@@ -88,27 +88,27 @@
                             </tr>
                         </table>
                     </div>
-                    </div>
-            <!-- <img src="/img/1.jpg" class="img-thumbnail" /> -->
+                </div>
+                <!-- <img src="/img/1.jpg" class="img-thumbnail" /> -->
             </div>  
             <div>
                 <h2>Choose your sport</h2>
                 <?php if (count($this->sports) != 0) { ?>
                 <ul class="nav nav-tabs">
                     <?php
-                        $active = ' class="active"';
-                        foreach ($this->sports as $sport) {
-                            if (count($sport->getCourts()) != 0) {
-                                $firstIdCourt = $sport->getCourts()[0]->getId();
-                            } else {
-                                $firstIdCourt = -1;
-                            }
-                            echo '<li'.$active.' data-id="'.$firstIdCourt.'">'.'<a href="#'.removeSpaces($sport->getName()).'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
-                            $active = '';
+                    $active = ' class="active"';
+                    foreach ($this->sports as $sport) {
+                        if (count($sport->getCourts()) != 0) {
+                            $firstIdCourt = $sport->getCourts()[0]->getId();
+                        } else {
+                            $firstIdCourt = -1;
                         }
+                        echo '<li'.$active.' data-id="'.$firstIdCourt.'">'.'<a href="#'.removeSpaces($sport->getName()).'" data-toggle="tab">'.$sport->getName().'</a>'.'</li>';
+                        $active = '';
+                    }
                     ?>
                 </ul>
-                    <div class="tab-content">
+                <div class="tab-content">
                     <?php
                     $active = ' active';
                     foreach ($this->sports as $sport) {
@@ -125,17 +125,17 @@
                         }, $sport->getCourts()->toArray());
 
                         if (count($courts) != 0) {
-                        echo '<div class="row">';
-                        echo '<div class="col-md-4">';
-                        echo '<h3>'.$sport->getName().'</h3>';
-                        echo '<ul class="nav nav-pills nav-stacked">';
-                        $active = ' active';
-                        foreach ($courts as $court) {
-                            echo '<li class="'.$active.' court" data-id="'.$court['id'].'">'.'<a  href="#'.removeSpaces($court['name']).'" data-toggle="tab" >'.$court['name'].'</a>'.'</li>';
+                            echo '<div class="row">';
+                            echo '<div class="col-md-4">';
+                            echo '<h3>'.$sport->getName().'</h3>';
+                            echo '<ul class="nav nav-pills nav-stacked">';
+                            $active = ' active';
+                            foreach ($courts as $court) {
+                                echo '<li class="'.$active.' court" data-id="'.$court['id'].'">'.'<a  href="#'.removeSpaces($court['name']).'" data-toggle="tab" >'.$court['name'].'</a>'.'</li>';
+                                $active = '';
+                            }
                             $active = '';
-                        }
-                        $active = '';
-                        echo '</ul>';
+                            echo '</ul>';
                         echo '</div>'; // fermeture div col-md-2
 
                         echo '<div class="col-md-8">';
@@ -170,12 +170,12 @@
                         echo '</div>'; // fermeture div tab-content
                         echo '</div>'; // fermeture div col-md-10
                         echo '</div>'; // fermeture div row
-                        } else {
-                            echo '<div class="alert alert-danger">';
-                            echo 'You need to configure <strong>courts</strong> !<br />';
-                            echo '<a class="alert-link" href="'.$this->url('home', array('action' => 'admin')).'#sports"'.'>Go to administration page</a>';
-                            echo '</div>';
-                        }
+                    } else {
+                        echo '<div class="alert alert-danger">';
+                        echo 'You need to configure <strong>courts</strong> !<br />';
+                        echo '<a class="alert-link" href="'.$this->url('home', array('action' => 'admin')).'#sports"'.'>Go to administration page</a>';
+                        echo '</div>';
+                    }
                         echo '</div>'; // fermeture div tab-pane
                     }
                     ?>
@@ -190,8 +190,8 @@
             </div>
         </div>
         <div class="col-md-7">
-        <?php
-        
+            <?php
+            
             $vacations = $this->sportCenter->getHolidays();
             echo '<div>';
             echo '<table class="table table-striped">';
@@ -203,191 +203,191 @@
                 echo '<tr><th>Vacation Name</th><th>Start Date</th><th>Stop Date</th></tr>';
             }
             foreach ($vacations as $vacation) {
-            echo '<tr class="vacation" id=' . $vacation->getId() . '>';
-            echo '<td>';
-            echo $vacation->getName();
-            echo '</td>';
-            echo '<td>';
-            echo $vacation->getStartDate()->format('d-m-Y');
-            echo '</td>';
-            echo '<td>';
-            echo $vacation->getEndDate()->format('d-m-Y');
-            echo '</td>';
-            if ($this->isAdmin) {
+                echo '<tr class="vacation" id=' . $vacation->getId() . '>';
                 echo '<td>';
-                echo '<span class="label label-danger"><span class="glyphicon glyphicon-remove" action="removeVacation" data-id="'.$vacation->getId().'"></span></span>';
+                echo $vacation->getName();
                 echo '</td>';
-            }
-            echo '</tr>';
+                echo '<td>';
+                echo $vacation->getStartDate()->format('d-m-Y');
+                echo '</td>';
+                echo '<td>';
+                echo $vacation->getEndDate()->format('d-m-Y');
+                echo '</td>';
+                if ($this->isAdmin) {
+                    echo '<td>';
+                    echo '<span class="label label-danger"><span class="glyphicon glyphicon-remove" action="removeVacation" data-id="'.$vacation->getId().'"></span></span>';
+                    echo '</td>';
+                }
+                echo '</tr>';
             }
             echo '</table>';
             echo '</div>';
-        
-        ?>
+            
+            ?>
             <?php if ($this->showCalendar) { ?>
-                <div id='calendar'></div>
+            <div id='calendar'></div>
             <?php } else { ?>
-                <div class="alert alert-warning">
-                    To see the <strong>calendar</strong>, you need to configure <strong>courts</strong> !<br />
-                    <a class="alert-link" href="<?php echo $this->url('home', array('action' => 'admin'))."#sports"; ?>">Go to administration page</a>
-                </div>
+            <div class="alert alert-warning">
+                To see the <strong>calendar</strong>, you need to configure <strong>courts</strong> !<br />
+                <a class="alert-link" href="<?php echo $this->url('home', array('action' => 'admin'))."#sports"; ?>">Go to administration page</a>
+            </div>
             <?php } ?>
             <?php if ($this->isAdmin)
             {
-            ?>
+                ?>
 
-                    <div style="margin-top:25px" class="lastReservationsList">
-                            <div class="panel panel-default">
-                            <!-- Default panel contents -->
-                            <div class="panel-heading">Last reservations</div>
+                <div style="margin-top:25px" class="lastReservationsList">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">Last reservations</div>
 
-                            <!-- Table -->
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nickname</th>
-                                        <th>Real name</th>
-                                        <th>Phone #</th>
-                                        <th>Start time</th>
-                                        <th>End time</th>
-                                        <th>Court</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    foreach ($this->lastReservations as $reservation) {
-                                        echo '<tr class="userEntry" id=' . $reservation->getId() . '>';
-                                        echo '<td>'.$reservation->getId().'</td>';
-                                        echo '<td>'.$reservation->getUser()->getNickName().'</td>';
-                                        echo '<td>'.$reservation->getUser()->getFirstName(). ' ' .$reservation->getUser()->getLastName().'</td>';
-                                        echo '<td>'.$reservation->getUser()->getPhone().'</td>';
-                                        echo '<td>'.$reservation->getStartDateTime()->format('Y-m-d H:i').'</td>';
-                                        echo '<td>'.$reservation->getEndDateTime()->format('Y-m-d H:i').'</td>';
-                                        echo '<td>'.$reservation->getCourt()->getName().'</td>';
-                                    }
-                                    ?>
-                                </tbody>
-                                
-                            </table>
-                        </div>
-                    </div> 
-                    <?php } ?>
+                        <!-- Table -->
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nickname</th>
+                                    <th>Real name</th>
+                                    <th>Phone #</th>
+                                    <th>Start time</th>
+                                    <th>End time</th>
+                                    <th>Court</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($this->lastReservations as $reservation) {
+                                    echo '<tr class="userEntry" id=' . $reservation->getId() . '>';
+                                    echo '<td>'.$reservation->getId().'</td>';
+                                    echo '<td>'.$reservation->getUser()->getNickName().'</td>';
+                                    echo '<td>'.$reservation->getUser()->getFirstName(). ' ' .$reservation->getUser()->getLastName().'</td>';
+                                    echo '<td>'.$reservation->getUser()->getPhone().'</td>';
+                                    echo '<td>'.$reservation->getStartDateTime()->format('Y-m-d H:i').'</td>';
+                                    echo '<td>'.$reservation->getEndDateTime()->format('Y-m-d H:i').'</td>';
+                                    echo '<td>'.$reservation->getCourt()->getName().'</td>';
+                                }
+                                ?>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                </div> 
+                <?php } ?>
+            </div>
         </div>
-    </div>
 
 
 
-    <?php $this->headScript()->captureStart(); ?>
-    var courtId = 0;
-    var calendarWrapper;
-    $(document).ready(function() {
+        <?php $this->headScript()->captureStart(); ?>
+        var courtId = 0;
+        var calendarWrapper;
+        $(document).ready(function() {
         changeCourtIdCalendar(courtId)
     });
 
     function changeCourtIdCalendar(courtId)
     {
-        $('#calendar').html('');
-        calendarWrapper = new zCalendarWrapper({
+    $('#calendar').html('');
+    calendarWrapper = new zCalendarWrapper({
 
-        isAdmin: <?php echo $this->isAdmin; ?>,
-        courtId: courtId,
-        isLoggedIn: <?php echo $this->isLoggedIn; ?>,
-        container: '#calendar',
-        api: {
-        get: '<?php echo $this->url('home', array(
-            'action'=>'get-reservation',
-            ));?>?courtId=' + courtId,
-        add: '<?php echo $this->url('home', array(
-            'action'=>'add-reservation',
-            ));?>',
-        update: '<?php echo $this->url('home', array(
-            'action'=>'upd-reservation',
-            ));?>',
-        erase: '<?php echo $this->url('home', array(
-            'action'=>'del-reservation',
-            ));?>'
-        },
-        locales: {
-        'Event Title:': '<?php echo $this->translate('Event Title:', 'evl-calendar'); ?>',
-        'Is this okay?': '<?php echo $this->translate('Is this okay?', 'evl-calendar'); ?>',
-        'What do you want to do with event `%s`?': '<?php echo $this->translate('What do you want to do with event `%s`?', 'evl-calendar'); ?>',
-        'Delete': '<?php echo $this->translate('Delete', 'evl-calendar'); ?>',
-        'Edit': '<?php echo $this->translate('Edit', 'evl-calendar'); ?>',
-        'Cancel': '<?php echo $this->translate('Cancel', 'evl-calendar'); ?>'
-        },
-        // localization
-        monthNames: [
-        '<?php echo $this->translate('January', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('February', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('March', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('April', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('May', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('June', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('July', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('August', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('September', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('October', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('November', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('December', 'evl-calendar'); ?>',
-        ],
-        monthNamesShort: [
-        '<?php echo $this->translate('Jan', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Feb', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Mar', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Apr', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('May', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Jun', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Jul', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Aug', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Sep', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Oct', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Nov', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Dec', 'evl-calendar'); ?>'
-        ],
-        dayNames: [
-        '<?php echo $this->translate('Sunday', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Monday', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Tuesday', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Wednesday', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Thursday', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Friday', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Saturday', 'evl-calendar'); ?>'
-        ],
-        dayNamesShort: [
-        '<?php echo $this->translate('Sun', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Mon', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Tue', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Wed', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Thu', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Fri', 'evl-calendar'); ?>',
-        '<?php echo $this->translate('Sat', 'evl-calendar'); ?>'
-        ],
-        buttonText: {
-        today: '<?php echo $this->translate('today', 'evl-calendar'); ?>',
-        month: '<?php echo $this->translate('month', 'evl-calendar'); ?>',
-        week: '<?php echo $this->translate('week', 'evl-calendar'); ?>',
-        day: '<?php echo $this->translate('day', 'evl-calendar'); ?>'
+    isAdmin: <?php echo $this->isAdmin; ?>,
+    courtId: courtId,
+    isLoggedIn: <?php echo $this->isLoggedIn; ?>,
+    container: '#calendar',
+    api: {
+    get: '<?php echo $this->url('home', array(
+        'action'=>'get-reservation',
+        ));?>?courtId=' + courtId,
+    add: '<?php echo $this->url('home', array(
+        'action'=>'add-reservation',
+        ));?>',
+    update: '<?php echo $this->url('home', array(
+        'action'=>'upd-reservation',
+        ));?>',
+    erase: '<?php echo $this->url('home', array(
+        'action'=>'del-reservation',
+        ));?>'
     },
-    allDayText: '<?php echo $this->translate('all-day', 'evl-calendar'); ?>',
+    locales: {
+    'Event Title:': '<?php echo $this->translate('Event Title:', 'evl-calendar'); ?>',
+    'Is this okay?': '<?php echo $this->translate('Is this okay?', 'evl-calendar'); ?>',
+    'What do you want to do with event `%s`?': '<?php echo $this->translate('What do you want to do with event `%s`?', 'evl-calendar'); ?>',
+    'Delete': '<?php echo $this->translate('Delete', 'evl-calendar'); ?>',
+    'Edit': '<?php echo $this->translate('Edit', 'evl-calendar'); ?>',
+    'Cancel': '<?php echo $this->translate('Cancel', 'evl-calendar'); ?>'
+},
+// localization
+monthNames: [
+'<?php echo $this->translate('January', 'evl-calendar'); ?>',
+'<?php echo $this->translate('February', 'evl-calendar'); ?>',
+'<?php echo $this->translate('March', 'evl-calendar'); ?>',
+'<?php echo $this->translate('April', 'evl-calendar'); ?>',
+'<?php echo $this->translate('May', 'evl-calendar'); ?>',
+'<?php echo $this->translate('June', 'evl-calendar'); ?>',
+'<?php echo $this->translate('July', 'evl-calendar'); ?>',
+'<?php echo $this->translate('August', 'evl-calendar'); ?>',
+'<?php echo $this->translate('September', 'evl-calendar'); ?>',
+'<?php echo $this->translate('October', 'evl-calendar'); ?>',
+'<?php echo $this->translate('November', 'evl-calendar'); ?>',
+'<?php echo $this->translate('December', 'evl-calendar'); ?>',
+],
+monthNamesShort: [
+'<?php echo $this->translate('Jan', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Feb', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Mar', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Apr', 'evl-calendar'); ?>',
+'<?php echo $this->translate('May', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Jun', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Jul', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Aug', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Sep', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Oct', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Nov', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Dec', 'evl-calendar'); ?>'
+],
+dayNames: [
+'<?php echo $this->translate('Sunday', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Monday', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Tuesday', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Wednesday', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Thursday', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Friday', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Saturday', 'evl-calendar'); ?>'
+],
+dayNamesShort: [
+'<?php echo $this->translate('Sun', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Mon', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Tue', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Wed', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Thu', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Fri', 'evl-calendar'); ?>',
+'<?php echo $this->translate('Sat', 'evl-calendar'); ?>'
+],
+buttonText: {
+today: '<?php echo $this->translate('today', 'evl-calendar'); ?>',
+month: '<?php echo $this->translate('month', 'evl-calendar'); ?>',
+week: '<?php echo $this->translate('week', 'evl-calendar'); ?>',
+day: '<?php echo $this->translate('day', 'evl-calendar'); ?>'
+},
+allDayText: '<?php echo $this->translate('all-day', 'evl-calendar'); ?>',
 
 
-    header: {
-    left: 'prev,next today',
-    center: 'title',
-                right: 'agendaWeek,agendaDay'
-    },
-    defaultView:'agendaWeek',
+header: {
+left: 'prev,next today',
+center: 'title',
+right: 'agendaWeek,agendaDay'
+},
+defaultView:'agendaWeek',
 
-    minTime: <?php echo $sportCenter->getOpeningHour(); ?>,
-    maxTime: <?php echo $sportCenter->getClosingHour(); ?>,
+minTime: <?php echo $sportCenter->getOpeningHour(); ?>,
+maxTime: <?php echo $sportCenter->getClosingHour(); ?>,
 
-    firstDay:1,
-    slotMinutes:60,
-    snapMinutes:60,
+firstDay:1,
+slotMinutes:60,
+snapMinutes:60,
 
-    height:1000,
-    });
+height:1000,
+});
 }
 <?php $this->headScript()->captureEnd(); ?>
 <?php } ?>

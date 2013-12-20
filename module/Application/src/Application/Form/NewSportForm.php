@@ -13,19 +13,19 @@ class NewSportForm extends Form
 		$this->add(array(
 			'name' => 'id',
 			'type' => 'Hidden',
-		));
+			));
 		
 		$this->add(array(
 			'name' => 'name',
 			'type' => 'Text',
 			'options' => array(
 				'label' => 'Name',
-			),
+				),
 			'attributes' => array(
 				'placeholder' => 'Name',
 				'class' => 'form-control',
-			),
-		));
+				),
+			));
 
 		// Submit button.
 		$this->add(array(

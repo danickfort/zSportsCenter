@@ -22,7 +22,7 @@ class HourlyPriceForm extends Form
 		$this->add(array(
 			'name' => 'id',
 			'type' => 'Hidden',
-		));
+			));
 
 		$this->add(array(
 			'name' => 'startTime',
@@ -31,8 +31,8 @@ class HourlyPriceForm extends Form
 				'label' => 'Start Time',
 				'value_options' => $valuesOptions,
 				'class' => 'form-control',
-			),
-		));
+				),
+			));
 
 		$this->add(array(
 			'name' => 'stopTime',
@@ -41,8 +41,8 @@ class HourlyPriceForm extends Form
 				'label' => 'Stop Time',
 				'value_options' => $valuesOptions,
 				'class' => 'form-control',
-			),
-		));
+				),
+			));
 
 
 		$this->add(array(
@@ -50,13 +50,13 @@ class HourlyPriceForm extends Form
 			'type' => 'Text',
 			'options' => array(
 				'label' => 'Hourly Price',
-			),
+				),
 			'attributes' => array(
 				'placeholder' => 'Hourly Price',
 				'class' => 'form-control',
-			),
-		));
-	
+				),
+			));
+		
 		// Submit button.
 		$this->add(array(
 			'name' => 'hourlyPriceSubmit',
@@ -64,12 +64,12 @@ class HourlyPriceForm extends Form
 			'attributes' => array(
 				'value' => 'Set hourly price',
 				'class' => 'btn btn-primary',
-			),
-		));
+				),
+			));
 
 		$this->add(array(
 			'name' => 'court',
 			'type' => 'Hidden',
-		));
+			));
 	}
 }

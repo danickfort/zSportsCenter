@@ -3,7 +3,7 @@
 namespace Application\Form;
 
 use Zend\Form\Form,
-    Zend\Form\FormInterface;
+Zend\Form\FormInterface;
 use Application\Model\Entity\Reservation;
 
 class ReservationForm extends Form
@@ -18,44 +18,44 @@ class ReservationForm extends Form
             'name' => 'id',
             'attributes' => array(
                 'type' => 'hidden',
-            ),
-        ));
+                ),
+            ));
         $this->add(array(
             'name' => 'ts',
             'attributes' => array(
                 'type' => 'hidden',
-            ),
-        ));
+                ),
+            ));
         $this->add(array(
             'name' => 'start',
             'attributes' => array(
                 'type' => 'text',
-            ),
+                ),
             'options' => array(
                 'label' => 'Starting at',
-            ),
-        ));
+                ),
+            ));
         $this->add(array(
             'name' => 'end',
             'attributes' => array(
                 'type' => 'text',
-            ),
+                ),
             'options' => array(
                 'label' => 'Ending at',
-            ),
-        ));
+                ),
+            ));
         $this->add(array(
             'name' => 'user',
             'attributes' => array(
                 'type' => 'Hidden',
-            ),
-        ));
+                ),
+            ));
         $this->add(array(
             'name' => 'court',
             'attributes' => array(
                 'type' => 'Hidden',
-            ),
-        ));
+                ),
+            ));
     }
 
     /**

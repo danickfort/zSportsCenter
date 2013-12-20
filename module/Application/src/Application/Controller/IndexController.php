@@ -99,11 +99,11 @@ class IndexController extends AbstractActionController {
 			'signupActive' => '',
 			'userAuth' => $this->isUserAuth(),
 			'adminVisible' => $this->isAdministratorUser(),
-		));
+			));
 
 		$isAdmin = 0;
 		$lastReservations = 0;
-        $isLoggedIn = 0;
+		$isLoggedIn = 0;
 
 		if ($this->isAdministratorUser())
 		{
@@ -117,21 +117,21 @@ class IndexController extends AbstractActionController {
 			->getResult();
 		}
 
-        if ($this->isUserAuth())
-        {
-            $isLoggedIn = 1;
-        }
+		if ($this->isUserAuth())
+		{
+			$isLoggedIn = 1;
+		}
         // index.pthml
-        return new ViewModel(array(
-        	'sports' => $sports,
-        	'lastReservations' => $lastReservations,
-        	'isLoggedIn' => $isLoggedIn,
-        	'isAdmin' => $isAdmin,
-        	'message' => $this->params()->fromRoute('message'),
-        	'sportCenter' => $sportCenter,
-        	'showCalendar' => $showCalendar,
-        ));
-    }
+		return new ViewModel(array(
+			'sports' => $sports,
+			'lastReservations' => $lastReservations,
+			'isLoggedIn' => $isLoggedIn,
+			'isAdmin' => $isAdmin,
+			'message' => $this->params()->fromRoute('message'),
+			'sportCenter' => $sportCenter,
+			'showCalendar' => $showCalendar,
+			));
+	}
 	
 	public function signupAction() {
 		$this->setAction('signup');
@@ -162,12 +162,12 @@ class IndexController extends AbstractActionController {
 			'signupActive' => 'active',
 			'userAuth' => $this->isUserAuth(),
 			'adminVisible' => $this->isAdministratorUser(),
-		));
+			));
 		
 		// signup.phtml
 		return new ViewModel(array(
 			'form' => $form,
-		));
+			));
 	}
 	
 	public function signoutAction() {
@@ -538,7 +538,7 @@ class IndexController extends AbstractActionController {
 			return new JsonModel(array(
 				'idSport' => $id,
 				'courts' => $names,
-			));
+				));
 		} else if ($code == "confirm") {
 			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
 			->select("c")
@@ -588,7 +588,7 @@ class IndexController extends AbstractActionController {
 			return new JsonModel(array(
 				'sportName' => str_replace(' ', '', $sportName),
 				'namesCourt' => $namesCourt,
-			));
+				));
 		}
 	}
 
@@ -618,7 +618,7 @@ class IndexController extends AbstractActionController {
 			return new JsonModel(array(
 				'idCourt' => $id,
 				'usersName' => $usersName,
-			));
+				));
 		} else if ($code == "confirm") {
 			$court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', $id);
 			$nameCourt = $court->getName();
@@ -640,7 +640,7 @@ class IndexController extends AbstractActionController {
 			// return court name
 			return new JsonModel(array(
 				'nameCourt' => str_replace(' ', '', $nameCourt),
-			));
+				));
 		}
 	}
 
@@ -652,7 +652,7 @@ class IndexController extends AbstractActionController {
 		if ($code == "removeVacation") {
 			return new JsonModel(array(
 				'idVacation' => $id,
-			));
+				));
 		} else if ($code == "confirm") {
 			// delete the court
 			$query = $this->entity()->getEntityManager()->createQuery("DELETE Application\Model\Entity\Holiday h WHERE h.id = ?1");
@@ -661,7 +661,7 @@ class IndexController extends AbstractActionController {
 			
 			return new JsonModel(array(
 				'idVacation' => $id,
-			));
+				));
 		}
 	}
 
@@ -675,9 +675,9 @@ class IndexController extends AbstractActionController {
 		if($code == "confirm")
 		{
 			$qb = $this->entity()->getEntityManager()->createQueryBuilder()
-				->select("r")
-				->from("Application\Model\Entity\Reservation", "r")
-				->where("r.user = :user");
+			->select("r")
+			->from("Application\Model\Entity\Reservation", "r")
+			->where("r.user = :user");
 			$qb->setParameter('user', $id);
 
 			foreach ($qb->getQuery()->getResult() as $res):
@@ -694,7 +694,7 @@ class IndexController extends AbstractActionController {
 			
 			return new JsonModel(array(
 				'code' => "success"
-			));
+				));
 		}
 		elseif ($code == "removeUser")
 		{
@@ -718,7 +718,7 @@ class IndexController extends AbstractActionController {
 			return new JsonModel(array(
 				'idUser' => $user->getId(),
 				'name' => $user->getNickname(),
-			));
+				));
 		}
 
 	}
@@ -732,10 +732,10 @@ class IndexController extends AbstractActionController {
 
 		$starting_at = date('Y-m-d H:i:s', $start);
 		$ending_at   = date('Y-m-d H:i:s', $end);
-        $records = '';
+		$records = '';
 
-        $userAuthNamespace = new Container('userAuthNamespace');
-        $currentUserId = $userAuthNamespace->id;
+		$userAuthNamespace = new Container('userAuthNamespace');
+		$currentUserId = $userAuthNamespace->id;
 
         //$court = $this->entity()->getEntityManager()->find("Application\Model\Entity\Court", $courtId);
 
@@ -777,232 +777,232 @@ class IndexController extends AbstractActionController {
 
 	public function delReservationAction()
 	{
-        $success = false;
-        $message = 'Bad request';
-        $ts = $this->params()->fromPost('ts', 0);
-        $id = (int)$this->params()->fromPost('id', 0);
+		$success = false;
+		$message = 'Bad request';
+		$ts = $this->params()->fromPost('ts', 0);
+		$id = (int)$this->params()->fromPost('id', 0);
 
-        if (!$this->isAdministratorUser())
-        {
-            return new JsonModel(array(
-                'message' => 'Vous devez être administrateur pour faire ça!',
-                'success' => false,
-            ));
-        }
+		if (!$this->isAdministratorUser())
+		{
+			return new JsonModel(array(
+				'message' => 'Vous devez être administrateur pour faire ça!',
+				'success' => false,
+				));
+		}
 
-        if (!$id || !$ts) {
+		if (!$id || !$ts) {
 
-            return new JsonModel(array(
-                'message' => $message,
-                'success' => false,
-            ));
-        }
+			return new JsonModel(array(
+				'message' => $message,
+				'success' => false,
+				));
+		}
 
-        $request = $this->getRequest();
+		$request = $this->getRequest();
 
-        $qb = $this->entity()->getEntityManager()->createQueryBuilder()
-            ->select('e')
-            ->from('Application\Model\Entity\Reservation', 'e')
-            ->where('e.id = :id');
+		$qb = $this->entity()->getEntityManager()->createQueryBuilder()
+		->select('e')
+		->from('Application\Model\Entity\Reservation', 'e')
+		->where('e.id = :id');
 
-        $qb->setParameter('id', $id);
+		$qb->setParameter('id', $id);
 
-        $query = $qb->getQuery();
+		$query = $qb->getQuery();
 
-        $reservation = '';
-        try {
-            $reservation = $query->getSingleResult(Query::HYDRATE_OBJECT);
-        } catch (\Exception $e) {
-            return false;
-        }
+		$reservation = '';
+		try {
+			$reservation = $query->getSingleResult(Query::HYDRATE_OBJECT);
+		} catch (\Exception $e) {
+			return false;
+		}
 
-        if (!$reservation) {
-            $message = 'Not found';
+		if (!$reservation) {
+			$message = 'Not found';
 
-            return new JsonModel(array(
-                'message' => $message,
-                'success' => false,
-            ));
-        }
+			return new JsonModel(array(
+				'message' => $message,
+				'success' => false,
+				));
+		}
 
-        if ($request->isPost()) {
-            $this->entity()->getEntityManager()->remove($reservation);
-            $this->entity()->getEntityManager()->flush();
+		if ($request->isPost()) {
+			$this->entity()->getEntityManager()->remove($reservation);
+			$this->entity()->getEntityManager()->flush();
 
-            $success = true;
+			$success = true;
             // translate helper
-            $message = 'L\'entrée ' . $id . ' a été supprimée';
-        }
+			$message = 'L\'entrée ' . $id . ' a été supprimée';
+		}
 
-        return new JsonModel(array(
-            'message' => $message,
-            'success' => $success,
-            'ts' => $ts,
-        ));
-    }
+		return new JsonModel(array(
+			'message' => $message,
+			'success' => $success,
+			'ts' => $ts,
+			));
+	}
 
-    public function addReservationAction()
-    {
+	public function addReservationAction()
+	{
 
-    	$request = $this->getRequest();
+		$request = $this->getRequest();
 
-    	$success = false;
-    	$ts      = $this->params()->fromPost('ts', 0);
-    	$courtId = $this->params()->fromPost('courtId', 0);
-    	$id = 0;
-        $message = 'Bad request';
+		$success = false;
+		$ts      = $this->params()->fromPost('ts', 0);
+		$courtId = $this->params()->fromPost('courtId', 0);
+		$id = 0;
+		$message = 'Bad request';
 
-        $form = new ReservationForm();
+		$form = new ReservationForm();
 
-        $userAuthNamespace = new Container('userAuthNamespace');
-        $currentUserId = $userAuthNamespace->id;
+		$userAuthNamespace = new Container('userAuthNamespace');
+		$currentUserId = $userAuthNamespace->id;
 
-        if (!$this->isUserAuth())
-        {
+		if (!$this->isUserAuth())
+		{
 
-        return new JsonModel(array(
-                'message' => 'Connectez-vous avant de réserver!',
-                'success' => $success,
-                'ts' => $ts
-            )
-        );
-        }
+			return new JsonModel(array(
+				'message' => 'Connectez-vous avant de réserver!',
+				'success' => $success,
+				'ts' => $ts
+				)
+			);
+		}
 
-        if ($request->isPost()) {
+		if ($request->isPost()) {
 
-        	$calculatedPrice = 0;
+			$calculatedPrice = 0;
 
-        	$isOnVacation = false;
+			$isOnVacation = false;
 
-        	$startDateTime = new \DateTime($request->getPost()['start']);
-        	$endDateTime = new \DateTime($request->getPost()['end']);
+			$startDateTime = new \DateTime($request->getPost()['start']);
+			$endDateTime = new \DateTime($request->getPost()['end']);
 
         	//CALCULATE PRICE
         	$startValue = $startDateTime->format('G'); // G = hour without leading 0, 24-hour format
         	$endValue = $endDateTime->format('G');
 
-			$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getSingleResult();
+        	$sportCenter = $this->entity()->getEntityManager()->createQuery("SELECT s FROM Application\Model\Entity\SportCenter s")->getSingleResult();
 
         	foreach(range($startValue,$endValue-1) as $hour) {
         		$hourlyPrice = null;
         		$price = 0;
-		        try {
-		        	$hourlyPrice = $this->entity()->getEntityManager()->createQueryBuilder()
-		            ->select('e')
-		            ->from('Application\Model\Entity\HourlyPrice', 'e')
-		            ->setParameter('court',$courtId)
-		            ->where('e.court = :court')
-		            ->setParameter('hour', 8)
-		            ->andWhere('e.time = :hour')
-		            ->getQuery()
-		            ->getSingleResult();
-		        }
-		        catch (\Doctrine\ORM\NoResultException $e)
-		        {
-		        	$price = $sportCenter->getDefaultHourlyPrice();
-		        }
-		        if (is_object($hourlyPrice)) $price = $hourlyPrice->getHourlyPrice();
-		        $calculatedPrice += $price;
+        		try {
+        			$hourlyPrice = $this->entity()->getEntityManager()->createQueryBuilder()
+        			->select('e')
+        			->from('Application\Model\Entity\HourlyPrice', 'e')
+        			->setParameter('court',$courtId)
+        			->where('e.court = :court')
+        			->setParameter('hour', 8)
+        			->andWhere('e.time = :hour')
+        			->getQuery()
+        			->getSingleResult();
+        		}
+        		catch (\Doctrine\ORM\NoResultException $e)
+        		{
+        			$price = $sportCenter->getDefaultHourlyPrice();
+        		}
+        		if (is_object($hourlyPrice)) $price = $hourlyPrice->getHourlyPrice();
+        		$calculatedPrice += $price;
         	}
         	//END CALCULATE PRICE
 
         	//CHECK VACATION
         	$vacations = $this->entity()->getEntityManager()->createQueryBuilder()
-		            ->select('e')
-		            ->from('Application\Model\Entity\Holiday', 'e')
-		            ->getQuery()
-		            ->getResult();
+        	->select('e')
+        	->from('Application\Model\Entity\Holiday', 'e')
+        	->getQuery()
+        	->getResult();
 
-		     foreach ($vacations as $vacation)
-		     {
-		     	$vacationStartDate = $vacation->getStartDate();
-		     	$vacationEndDate = $vacation->getEndDate();
-		     	$vacationEndDate->setDate($vacationEndDate->format('Y'),
-		     		$vacationEndDate->format('m'),
-		     		$vacationEndDate->format('d')+1);
+        	foreach ($vacations as $vacation)
+        	{
+        		$vacationStartDate = $vacation->getStartDate();
+        		$vacationEndDate = $vacation->getEndDate();
+        		$vacationEndDate->setDate($vacationEndDate->format('Y'),
+        			$vacationEndDate->format('m'),
+        			$vacationEndDate->format('d')+1);
 		     	// No overlap check
-		     	if (($startDateTime >= $vacationStartDate && $startDateTime <= $vacationEndDate)
-		     		&& ($endDateTime >= $vacationStartDate && $endDateTime <= $vacationEndDate))
-				{
+        		if (($startDateTime >= $vacationStartDate && $startDateTime <= $vacationEndDate)
+        			&& ($endDateTime >= $vacationStartDate && $endDateTime <= $vacationEndDate))
+        		{
 					//is overlapping with a vacation
-					$sucess = false;
-					$message = "The sports center is on holiday from " . $vacationStartDate->format('Y-m-d H:i') . " to " . $vacationEndDate->format('Y-m-d H:i') ."<br/>Please choose another time";
-					$isOnVacation = true;
-					break;
-				}
-		     }
+        			$sucess = false;
+        			$message = "The sports center is on holiday from " . $vacationStartDate->format('Y-m-d H:i') . " to " . $vacationEndDate->format('Y-m-d H:i') ."<br/>Please choose another time";
+        			$isOnVacation = true;
+        			break;
+        		}
+        	}
         	
         	//END CHECK VACATION
         	if (!$isOnVacation)
         	{
-	            $form->setData($request->getPost());
+        		$form->setData($request->getPost());
 
-	            $court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', $courtId);
-	            $user = $this->entity()->getEntityManager()->find('Application\Model\Entity\User', $currentUserId);
+        		$court = $this->entity()->getEntityManager()->find('Application\Model\Entity\Court', $courtId);
+        		$user = $this->entity()->getEntityManager()->find('Application\Model\Entity\User', $currentUserId);
 
-	            $reservation = new Reservation();
+        		$reservation = new Reservation();
 
-	            $reservation->setUser($user);
-	            $reservation->setCourt($court);
+        		$reservation->setUser($user);
+        		$reservation->setCourt($court);
 
-	            $form->setInputFilter($reservation->getInputFilter());
-	    		if ($form->isValid()) {
+        		$form->setInputFilter($reservation->getInputFilter());
+        		if ($form->isValid()) {
 
-	    			$data = $form->getData();
+        			$data = $form->getData();
 
-	    			$reservation->populate($data);
+        			$reservation->populate($data);
 
-	                $this->entity()->getEntityManager()->persist($reservation);
-	                $this->entity()->getEntityManager()->flush();
+        			$this->entity()->getEntityManager()->persist($reservation);
+        			$this->entity()->getEntityManager()->flush();
 
-	                $success   = true;
-	                $message = 'Réservation ajoutée!';
-	                $id = (int)$reservation->getId();
-	            }
+        			$success   = true;
+        			$message = 'Réservation ajoutée!';
+        			$id = (int)$reservation->getId();
+        		}
         	}
         }
 
         return new JsonModel(array(
-                'message' => $message,
-                'success' => $success,
-                'ts' => $ts,
-                'courtId' => $courtId,
-                'calculatedPrice' => $calculatedPrice
-            )
+        	'message' => $message,
+        	'success' => $success,
+        	'ts' => $ts,
+        	'courtId' => $courtId,
+        	'calculatedPrice' => $calculatedPrice
+        	)
         );
     }	
 
     public function updReservationAction()
     {
     	$request = $this->getRequest();
-        $success = false;
-        $message = 'Bad request';
-        $ts = $this->params()->fromPost('ts', 0);
-        $id = (int)$this->params()->fromPost('id', 0);
-        $start = $this->params()->fromPost('start',0);
-        $end = $this->params()->fromPost('end',0);
+    	$success = false;
+    	$message = 'Bad request';
+    	$ts = $this->params()->fromPost('ts', 0);
+    	$id = (int)$this->params()->fromPost('id', 0);
+    	$start = $this->params()->fromPost('start',0);
+    	$end = $this->params()->fromPost('end',0);
 
-        if (!$this->isAdministratorUser())
-        {
-            return new JsonModel(array(
-                'message' => 'Vous devez être administrateur pour faire ça!',
-                'success' => false,
-            ));
-        }
+    	if (!$this->isAdministratorUser())
+    	{
+    		return new JsonModel(array(
+    			'message' => 'Vous devez être administrateur pour faire ça!',
+    			'success' => false,
+    			));
+    	}
 
-        if ($request->isPost()) {
-            $reservation = $this->entity()->getEntityManager()->find('Application\Model\Entity\Reservation', $id);
-            $reservation->setStartDateTime(new \DateTime($start));
-            $reservation->setEndDateTime(new \DateTime($end));
-			$this->entity()->getEntityManager()->flush();
+    	if ($request->isPost()) {
+    		$reservation = $this->entity()->getEntityManager()->find('Application\Model\Entity\Reservation', $id);
+    		$reservation->setStartDateTime(new \DateTime($start));
+    		$reservation->setEndDateTime(new \DateTime($end));
+    		$this->entity()->getEntityManager()->flush();
 
-			$message = 'Réservation mise à jour !';
-        }
+    		$message = 'Réservation mise à jour !';
+    	}
 
-        return new JsonModel(array(
-            'message' => $message,
-            'success' => false,
-        ));
+    	return new JsonModel(array(
+    		'message' => $message,
+    		'success' => false,
+    		));
     }
 
 }

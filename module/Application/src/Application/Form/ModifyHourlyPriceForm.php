@@ -16,7 +16,7 @@ class ModifyHourlyPriceForm extends Form
 		$this->add(array(
 			'name' => 'id',
 			'type' => 'Hidden',
-		));
+			));
 
 
 		$this->add(array(
@@ -28,9 +28,9 @@ class ModifyHourlyPriceForm extends Form
 			'attributes' => array(
 				'placeholder' => 'Hourly Price',
 				'class' => 'form-control',
-			),
-		));
-	
+				),
+			));
+		
 		// Submit button.
 		$this->add(array(
 			'name' => 'modifyHourlyPriceSubmit',
@@ -38,7 +38,7 @@ class ModifyHourlyPriceForm extends Form
 			'attributes' => array(
 				'value' => 'Modify',
 				'class' => 'btn btn-primary',
-			),
-		));
+				),
+			));
 	}
 }
