@@ -233,7 +233,6 @@ class IndexController extends AbstractActionController {
 		$openingHour = 7;
 		$closingHour = 18;
 		$defaultHourlyPrice = 25;
-		$holidays = array();
 
 		if (!$sportCenters) {
 			$sportCenterForm->get('newSportCenterSubmit')->setAttribute('name', 'newSportCenterSubmit');
@@ -264,7 +263,6 @@ class IndexController extends AbstractActionController {
 			$openingHour = $sportCenter->getOpeningHour();
 			$closingHour = $sportCenter->getClosingHour();
 			$defaultHourlyPrice = $sportCenter->getDefaultHourlyPrice();
-			$holidays = $sportCenter->getHolidays();
 
 			$hourlyPriceForm = new HourlyPriceForm(null, $sportCenter->getOpeningHour(), $sportCenter->getClosingHour());
 
@@ -482,7 +480,6 @@ class IndexController extends AbstractActionController {
 			'openingHour' => $openingHour,
 			'closingHour' => $closingHour,
 			'defaultHourlyPrice' => $defaultHourlyPrice,
-			'holidays' => $holidays,
 			'users' => $users,
 			'newSportForm' => $newSportForm,
 			'newCourtForm' => $newCourtForm,
@@ -626,9 +623,26 @@ class IndexController extends AbstractActionController {
 		}
 	}
 
+	public function removeVacationAction()
+	{
+		$code = $this->params()->fromQuery('code',0);
+		$id = $this->params()->fromQuery('id',0);
 
-
-
+		if ($code == "removeVacation") {
+			return new JsonModel(array(
+				'idVacation' => $id,
+			));
+		} else if ($code == "confirm") {
+			// delete the court
+			$query = $this->entity()->getEntityManager()->createQuery("DELETE Application\Model\Entity\Holiday h WHERE h.id = ?1");
+			$query->setParameter(1, $id);
+			$result = $query->getResult();
+			
+			return new JsonModel(array(
+				'idVacation' => $id,
+			));
+		}
+	}
 
 	public function removeUserAction()
 	{

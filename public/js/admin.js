@@ -25,54 +25,54 @@ $(document).ready(function() {
 					for (var i = 0; i < size; i++) {
 						message += json.courts[i] + '\n';
 					}
-					var result = confirm(message);
-					if (result) {
-						// confirmation
-						$.ajax({
-							url: "/index/removeSport",
-							type: "GET",
-							dataType: "JSON",
-							data: {
-								code: "confirm",
-								id: json.idSport
-							},
-							success: function(json) {
-								$('#sportsmanager.loading').hide();
-								console.log(json.sportName);
-								var li = $("a[href='#" + json.sportName + "']").parent();
-								var div = $("#" +  json.sportName);
+					bootbox.confirm("Are you sure ?", function(result) {
+						if (result) {
+							// confirmation
+							$.ajax({
+								url: "/index/removeSport",
+								type: "GET",
+								dataType: "JSON",
+								data: {
+									code: "confirm",
+									id: json.idSport
+								},
+								success: function(json) {
+									$('#sportsmanager.loading').hide();
+									console.log(json.sportName);
+									var li = $("a[href='#" + json.sportName + "']").parent();
+									var div = $("#" +  json.sportName);
 
-								var prevLi = li.prev();
-								var prevDiv = div.prev();
+									var prevLi = li.prev();
+									var prevDiv = div.prev();
 
-								console.log("prevLi: " + prevLi);
-								console.log("prevDiv: " + prevDiv);
+									console.log("prevLi: " + prevLi);
+									console.log("prevDiv: " + prevDiv);
 
-								if ($.isEmptyObject(prevLi)) {
-									console.log("prevLi");
-									prevLi.addClass("active");
-								} else {
-									console.log("nextLi");
-									li.next().addClass("active");
+									if ($.isEmptyObject(prevLi)) {
+										console.log("prevLi");
+										prevLi.addClass("active");
+									} else {
+										console.log("nextLi");
+										li.next().addClass("active");
+									}
+
+									if ($.isEmptyObject(prevDiv)) {
+										console.log("prevDiv");
+										prevDiv.addClass("active");
+									} else {
+										console.log("nextDiv");
+										div.next().addClass("active");
+									}
+
+									li.remove();
+									div.remove();
 								}
-
-								if ($.isEmptyObject(prevDiv)) {
-									console.log("prevDiv");
-									prevDiv.addClass("active");
-								} else {
-									console.log("nextDiv");
-									div.next().addClass("active");
-								}
-
-								li.remove();
-								div.remove();
-							}
-						});
-					}
-					else
-					{
-						$('#sportsmanager.loading').hide();
-					}
+							});
+						}
+						else {
+							$('#sportsmanager.loading').hide();
+						}
+					});
 				}
 			});
 
@@ -92,93 +92,84 @@ $(document).ready(function() {
 					for (var i = 0; i < size; i++) {
 						message += json.usersName[i] + '\n';
 					}
-					var result = confirm(message);
-					if (result) {
-						// confirmation
-						$.ajax({
-							url: "/index/removeCourt",
-							type: "GET",
-							dataType: "JSON",
-							data: {
-								code: "confirm",
-								id: json.idCourt
-							},
-							success: function(json) {
-								console.log(json.nameCourt);
-								var li = $("a[href='#" + json.nameCourt + "']").parent();
-								var div = $("#" +  json.nameCourt);
+					bootbox.confirm("Are you sure ?", function(result) {
+						if (result) {
+							// confirmation
+							$.ajax({
+								url: "/index/removeCourt",
+								type: "GET",
+								dataType: "JSON",
+								data: {
+									code: "confirm",
+									id: json.idCourt
+								},
+								success: function(json) {
+									console.log(json.nameCourt);
+									var li = $("a[href='#" + json.nameCourt + "']").parent();
+									var div = $("#" +  json.nameCourt);
 
-								var prevLi = li.prev();
-								var prevDiv = div.prev();
+									var prevLi = li.prev();
+									var prevDiv = div.prev();
 
-								console.log("prevLi: " + prevLi);
-								console.log("prevDiv: " + prevDiv);
+									console.log("prevLi: " + prevLi);
+									console.log("prevDiv: " + prevDiv);
 
-								if ($.isEmptyObject(prevLi)) {
-									console.log("prevLi");
-									prevLi.addClass("active");
-								} else {
-									console.log("nextLi");
-									li.next().addClass("active");
+									if ($.isEmptyObject(prevLi)) {
+										console.log("prevLi");
+										prevLi.addClass("active");
+									} else {
+										console.log("nextLi");
+										li.next().addClass("active");
+									}
+
+									if ($.isEmptyObject(prevDiv)) {
+										console.log("prevDiv");
+										prevDiv.addClass("active");
+									} else {
+										console.log("nextDiv");
+										div.next().addClass("active");
+									}
+
+									li.remove();
+									div.remove();
 								}
-
-								if ($.isEmptyObject(prevDiv)) {
-									console.log("prevDiv");
-									prevDiv.addClass("active");
-								} else {
-									console.log("nextDiv");
-									div.next().addClass("active");
-								}
-
-								li.remove();
-								div.remove();
-							}
-						});
-					}
+							});
+						}
+					});
 				}
 			});
 
 		} else if(action == "removeUser")
 		{
 			$('#usersmanager.loading').show();
-			$.ajax(
-			{
+			$.ajax({
 				url: "/index/remove-user",
 				type: "POST",
 				dataType: "JSON",
-				data:
-				{
+				data: {
 					id: id,
 					code:"removeUser"
 				},
-				success: function(json)
-				{
-					var message = 'Deleting user:\n';
-					message += '----------------\n';
-					var result = confirm(message);
-					if(result)
-					{
-						$.ajax(
-						{
-							url: "/index/remove-user",
-							type: "POST",
-							dataType: "JSON",
-							data:
-							{
-								code: "confirm",
-								id: json.idUser
-							},
-							success: function(json)
-							{
-								$('.userEntry#' + id).hide();
-								$('#usersmanager.loading').hide();
-							}
-						});
-					}
-					else
-					{
-						$('#usersmanager.loading').hide();
-					}
+				success: function(json) {
+					bootbox.confirm("Are you sure ?", function(result) {
+						if(result) {
+							$.ajax({
+								url: "/index/remove-user",
+								type: "POST",
+								dataType: "JSON",
+								data: {
+									code: "confirm",
+									id: json.idUser
+								},
+								success: function(json) {
+									$('.userEntry#' + id).hide();
+									$('#usersmanager.loading').hide();
+								}
+							});
+						} else {
+							$('#usersmanager.loading').hide();
+						}
+					});
 				}
 					
 			});

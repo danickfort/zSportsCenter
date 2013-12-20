@@ -1,6 +1,8 @@
 
 <?php
     // JQuery for administrator page.
+    $this->headScript()->appendFile($this->basePath() . '/js/bootstrap.min.jss');
+    $this->headScript()->appendFile($this->basePath() . '/js/bootstrap/bootbox.min.js');
     $this->headScript()->appendFile($this->basePath() . '/js/admin.js');
 ?>
 <?php
@@ -102,27 +104,6 @@
                             echo $that->form()->openTag($that->sportCenterVacationForm);
                             displayForm($that->sportCenterVacationForm, $that);
                             echo $that->form()->closeTag();
-                            echo '</div>';
-                            echo '<div>';
-                            echo '<table class="table table-striped">';
-                            echo '<tr><th>Vaccation Name</th><th>Start Date</th><th>Stop Date</th><th>Removing</th></tr>';
-                            foreach ($that->holidays as $holiday) {
-                                echo '<tr>';
-                                echo '<td>';
-                                echo $holiday->getName();
-                                echo '</td>';
-                                echo '<td>';
-                                echo $holiday->getStartDate()->format('d-m-Y');
-                                echo '</td>';
-                                echo '<td>';
-                                echo $holiday->getEndDate()->format('d-m-Y');
-                                echo '</td>';
-                                echo '<td>';
-                                echo '<span class="label label-danger"><span class="glyphicon glyphicon-remove" actions="" data-id="'.$holiday->getId().'"></span></span>';
-                                echo '</td>';;
-                                echo '</tr>';
-                            }
-                            echo '</table>';
                             echo '</div>';
                         ?>
                         </div>
