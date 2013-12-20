@@ -967,7 +967,8 @@ class IndexController extends AbstractActionController {
         	'success' => $success,
         	'ts' => $ts,
         	'courtId' => $courtId,
-        	'calculatedPrice' => $calculatedPrice
+        	'calculatedPrice' => $calculatedPrice,
+        	'id' => $id
         	)
         );
     }	

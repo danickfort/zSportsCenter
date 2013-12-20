@@ -200,6 +200,7 @@ function zCalendarWrapper(config) {
                                         end: endDate,
                                         allDay: allDay,
                                         ts: ts,
+                                        id: response.id,
                                         backgroundColor: '#33B5E5'
                                     }, true); // make the event "stick"
                                 });
