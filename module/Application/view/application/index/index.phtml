@@ -217,7 +217,13 @@
         }
         ?>
             <?php if ($this->showCalendar) { ?>
-                <div id='calendar'></div>
+                <div id="calWrapper">
+                    <div id='calendar'></div>
+                    <div class="alert alert-warning" style="display: none" id="calendarWarning">
+                        To see the <strong>calendar</strong>, you need to configure <strong>courts</strong> !<br />
+                    <a class="alert-link" href="<?php echo $this->url('home', array('action' => 'admin'))."#sports"; ?>">Go to administration page</a>
+                </div>
+                </div>
             <?php } else { ?>
                 <div class="alert alert-warning">
                     To see the <strong>calendar</strong>, you need to configure <strong>courts</strong> !<br />
